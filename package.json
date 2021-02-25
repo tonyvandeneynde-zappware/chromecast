@@ -2,13 +2,13 @@
   "name": "chromecast-receiver-heroku",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "dependencies": {
     "express": "^4.17.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node index.js"
+    "test": "node app.js"
   },
   "author": "",
   "license": "ISC"
