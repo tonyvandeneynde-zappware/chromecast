@@ -1,0 +1,449 @@
+@font-face {
+  font-family: FontSansThin;
+  src: url("../fonts/PFBeauSansPro-Light.woff") format("woff");
+  font-style: normal;
+  font-weight: normal; }
+
+@font-face {
+  font-family: FontSans;
+  src: url("../fonts/PFBeauSansPro-Bbook.woff") format("woff");
+  font-style: normal;
+  font-weight: normal; }
+
+@font-face {
+  font-family: FontSansBold;
+  src: url("../fonts/PFBeauSansPro-Bold.woff") format("woff");
+  font-style: normal;
+  font-weight: normal; }
+
+* {
+  display: block;
+  visibility: visible; }
+
+script {
+  display: none; }
+
+touch-controls {
+  display: none !important; }
+
+body {
+  width: 100%;
+  height: 100%;
+  font-size: 10.666666666666667px;
+  /* leave this to (720/1080)*16px because this is also set in sympli.io as 'em'-coordinates base */ }
+
+p {
+  vertical-align: top;
+  font-size: 21px;
+  margin: 0; }
+
+/* NOTE: all coordinates in sympli.io are in xhdpi. */
+h1 {
+  position: absolute;
+  color: #f17b24;
+  top: 45%;
+  width: 100%;
+  text-align: center;
+  display: none; }
+
+.TextContainer {
+  vertical-align: text-top; }
+
+track {
+  top: 500px;
+  width: 100%;
+  text-align: center; }
+
+.accelerated, .PlaybackBanner #progressBar #progressMarker {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000; }
+
+iframe#splash {
+  width: inherit;
+  height: inherit;
+  border: 0px;
+  display: none; }
+
+img#splash {
+  content: url(../images/windlogobeta_large.svg);
+  position: absolute;
+  top: 300px;
+  left: 504px;
+  height: 57px;
+  width: 271px;
+  display: none; }
+
+#loader.lds-ellipsis {
+  display: none;
+  position: absolute;
+  top: 300px;
+  left: 608px;
+  width: 64px;
+  height: 64px;
+  opacity: 0.9; }
+
+.lds-ellipsis div {
+  position: absolute;
+  top: 27px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fafafa;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0); }
+
+.lds-ellipsis div:nth-child(1) {
+  left: 6px;
+  animation: lds-ellipsis1 0.5s infinite; }
+
+.lds-ellipsis div:nth-child(2) {
+  left: 6px;
+  animation: lds-ellipsis2 0.5s infinite; }
+
+.lds-ellipsis div:nth-child(3) {
+  left: 26px;
+  animation: lds-ellipsis2 0.5s infinite; }
+
+.lds-ellipsis div:nth-child(4) {
+  left: 45px;
+  animation: lds-ellipsis3 0.5s infinite; }
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0); }
+  100% {
+    transform: scale(1); } }
+
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1); }
+  100% {
+    transform: scale(0); } }
+
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0); }
+  100% {
+    transform: translate(19px, 0); } }
+
+.Background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: opacity; }
+
+.Buffering #loader, .Black #loader {
+  display: block; }
+
+.Buffering #trickplay, .Black #trickplay {
+  display: none; }
+
+.Black .Background, .Error .Background {
+  background-color: #0c1a20; }
+
+.Error #loader, .Error #trickplay, .Blocked #loader, .Blocked #trickplay, .Locked #loader, .Locked #trickplay {
+  display: none; }
+
+.Splash:not(.Message) .Background #splash {
+  display: block; }
+
+.Splash:not(.Message) .Background #trickplay {
+  display: none; }
+
+.Statistics {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 120px;
+  width: 100%;
+  text-align: center;
+  background-image: linear-gradient(0deg, transparent 0%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0.5) 100%); }
+  .Statistics p {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    font-family: Roboto, Helvetica, sans-serif;
+    font-size: 13px;
+    color: #ededed;
+    opacity: 0.7; }
+
+.Splash .Statistics,
+.Error .Statistics {
+  display: none; }
+
+.Overlay {
+  position: absolute;
+  transition: opacity 0.3s ease;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  background-image: linear-gradient(-180deg, rgba(0, 0, 0, 0.28) 0%, rgba(0, 0, 0, 0.75) 100%); }
+
+/* Probably we need to center horizontally *and* vertically. Currently it is limited to one line. */
+.DisplayIcon {
+  display: none;
+  position: absolute;
+  top: 160px;
+  left: 598px;
+  height: 85px;
+  width: 85px; }
+
+.DisplayTitle {
+  position: absolute;
+  top: 251px;
+  left: 171px;
+  height: 100px;
+  width: 938px;
+  text-align: center;
+  display: table; }
+  .DisplayTitle p {
+    display: table-cell;
+    vertical-align: bottom;
+    font-family: FontSansBold;
+    font-size: 48px;
+    color: #0094d9; }
+
+.DisplayDescription {
+  position: absolute;
+  top: 368px;
+  left: 280px;
+  height: 200px;
+  width: 720px;
+  text-align: center; }
+  .DisplayDescription p {
+    font-family: FontSans;
+    font-size: 20px;
+    line-height: 26px;
+    color: #c8c8c8; }
+
+.BitRate {
+  position: absolute;
+  top: 67px;
+  height: 33px;
+  width: 100%;
+  text-align: center; }
+  .BitRate p {
+    font-family: Roboto, Helvetica, sans-serif;
+    font-size: 27px;
+    color: #ededed;
+    opacity: 0.5; }
+
+video {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%; }
+
+.Blocked .Background, .Locked .Background {
+  background-color: #0c1a20; }
+
+.Blocked .DisplayIcon, .Locked .DisplayIcon {
+  background-image: url(../images/icon_lock.png);
+  display: block; }
+
+.Blocked .PlaybackBanner, .Locked .PlaybackBanner {
+  opacity: 0; }
+
+.Error.Message .Background {
+  background-color: #0c1a20; }
+
+.Error.Message .DisplayIcon {
+  background-image: url(../images/icon_alert.png);
+  display: block; }
+
+.Error.Message .DisplayTitle p {
+  color: #b4191e; }
+
+.Error.Message .PlaybackBanner {
+  opacity: 0; }
+
+#container, body.Splash #background {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 1280px;
+  height: 720px; }
+
+body:not(.Splash) #background {
+  transform: none !important;
+  top: 0px !important;
+  left: 0px !important; }
+
+.PlaybackBanner {
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  width: 1280px;
+  height: 720px;
+  opacity: 1;
+  transition: opacity 0.3s ease; }
+  .PlaybackBanner .ChannelLogo {
+    position: absolute;
+    top: auto;
+    bottom: 528px;
+    height: auto;
+    width: 100%;
+    left: 0px; }
+    .PlaybackBanner .ChannelLogo img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      height: auto;
+      width: auto;
+      vertical-align: bottom; }
+  .PlaybackBanner .ChannelTitle {
+    position: absolute;
+    top: 205px;
+    left: 139px;
+    height: 64px;
+    width: 1001px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center; }
+    .PlaybackBanner .ChannelTitle p {
+      font-family: FontSans;
+      font-size: 19px;
+      color: #c8c8c8;
+      opacity: 0.7; }
+  .PlaybackBanner #eventDateTime {
+    position: absolute;
+    width: 1280px;
+    height: 720px; }
+    .PlaybackBanner #eventDateTime .TopLine {
+      display: none; }
+    .PlaybackBanner #eventDateTime .Title {
+      position: absolute;
+      top: auto;
+      bottom: 213px;
+      left: 139px;
+      height: auto;
+      width: 1001px; }
+      .PlaybackBanner #eventDateTime .Title p {
+        font-family: FontSansBold;
+        font-size: 40px;
+        color: #0094d9;
+        text-align: center; }
+    .PlaybackBanner #eventDateTime .BottomLine p {
+      font-size: 18px;
+      font-family: Roboto, Helvetica, sans-serif;
+      color: #c8c8c8; }
+    .PlaybackBanner #eventDateTime .BottomLine #bottomLeft {
+      position: absolute;
+      top: 644px;
+      left: 144px;
+      height: 23px;
+      width: 105px;
+      text-align: left; }
+    .PlaybackBanner #eventDateTime .BottomLine #bottomRight {
+      position: absolute;
+      top: 644px;
+      left: auto;
+      right: 144px;
+      height: 23px;
+      width: 105px;
+      text-align: right; }
+  .PlaybackBanner #progressBar {
+    position: absolute;
+    top: 639px;
+    left: 144px;
+    height: 2px;
+    width: 992px; }
+    .PlaybackBanner #progressBar #progressBackground {
+      position: absolute;
+      width: inherit;
+      height: inherit;
+      background-color: rgba(230, 230, 230, 0.45); }
+    .PlaybackBanner #progressBar #progressForeground {
+      height: inherit;
+      background-color: #0094d9;
+      position: absolute; }
+    .PlaybackBanner #progressBar #progressBuffer {
+      position: absolute;
+      height: inherit;
+      background-color: #0094d9;
+      opacity: 1; }
+    .PlaybackBanner #progressBar #progressMarker {
+      position: absolute;
+      top: -28px;
+      height: 35px;
+      width: 2px;
+      background-image: linear-gradient(-180deg, rgba(230, 230, 230, 0) 0%, rgba(230, 230, 230, 0) 65%, #e6e6e6 66%, #e6e6e6 100%);
+      font-size: 18px;
+      font-family: Roboto, Helvetica, sans-serif;
+      color: #c8c8c8;
+      text-align: left;
+      text-indent: -34px; }
+    .PlaybackBanner #progressBar #progressPlaying {
+      position: absolute;
+      height: inherit;
+      background-color: #0094d9;
+      opacity: 1; }
+
+.PLTV #trickplayContainer, .VOD #trickplayContainer, .STARTOVER #trickplayContainer, .CUTV #trickplayContainer, .NPVR #trickplayContainer, .LIVETV #trickplayContainer {
+  position: absolute;
+  top: inherit;
+  left: inherit;
+  height: inherit;
+  width: inherit; }
+  .PLTV #trickplayContainer #live, .VOD #trickplayContainer #live, .STARTOVER #trickplayContainer #live, .CUTV #trickplayContainer #live, .NPVR #trickplayContainer #live, .LIVETV #trickplayContainer #live {
+    display: none;
+    vertical-align: middle;
+    font-family: FontSans;
+    font-size: 15px;
+    color: #eeeeee;
+    text-align: center;
+    background-color: #0094d9;
+    top: 640px;
+    position: absolute;
+    left: 99px;
+    padding: 4px;
+    padding-top: 5px;
+    padding-bottom: 3px; }
+  .PLTV #trickplayContainer #trickplay, .VOD #trickplayContainer #trickplay, .STARTOVER #trickplayContainer #trickplay, .CUTV #trickplayContainer #trickplay, .NPVR #trickplayContainer #trickplay, .LIVETV #trickplayContainer #trickplay {
+    position: absolute;
+    top: 295px;
+    left: 592px;
+    height: auto;
+    width: auto; }
+  .PLTV #trickplayContainer #trickplay.Pause, .VOD #trickplayContainer #trickplay.Pause, .STARTOVER #trickplayContainer #trickplay.Pause, .CUTV #trickplayContainer #trickplay.Pause, .NPVR #trickplayContainer #trickplay.Pause, .LIVETV #trickplayContainer #trickplay.Pause {
+    content: url(../images/icon_pauze.png); }
+  .PLTV #trickplayContainer #trickplay.Play, .VOD #trickplayContainer #trickplay.Play, .STARTOVER #trickplayContainer #trickplay.Play, .CUTV #trickplayContainer #trickplay.Play, .NPVR #trickplayContainer #trickplay.Play, .LIVETV #trickplayContainer #trickplay.Play {
+    content: url(../images/icon_play.png); }
+
+.LIVETV #progressForeground {
+  display: block;
+  background-color: #0094d9; }
+
+.LIVETV .PlaybackBanner:not(.ready) .ProgressBar, .LIVETV .PlaybackBanner:not(.ready) #live, .LIVETV .PlaybackBanner:not(.ready) #eventDateTime {
+  opacity: 0; }
+
+.PlaybackBanner #progressBuffer {
+  display: none; }
+
+.PlaybackBanner #progressPlaying {
+  display: block; }
+
+.LIVETV #trickplayContainer #live, .PLTV.live #trickplayContainer #live, .STARTOVER.live #trickplayContainer #live, .NPVR.live #trickplayContainer #live {
+  display: table-cell; }
+
+.LIVETV .PlaybackBanner #progressBuffer, .PLTV.live .PlaybackBanner #progressBuffer, .STARTOVER.live .PlaybackBanner #progressBuffer, .NPVR.live .PlaybackBanner #progressBuffer {
+  display: block; }
+
+.LIVETV .PlaybackBanner #progressPlaying, .PLTV.live .PlaybackBanner #progressPlaying, .STARTOVER.live .PlaybackBanner #progressPlaying, .NPVR.live .PlaybackBanner #progressPlaying {
+  display: none; }
+
+.VOD .PlaybackBanner:not(.ready) .ProgressMarker, .CUTV .PlaybackBanner:not(.ready) .ProgressMarker, .NPVR .PlaybackBanner:not(.ready) .ProgressMarker, .STARTOVER .PlaybackBanner:not(.ready) .ProgressMarker {
+  opacity: 0; }
+
+.deactivated {
+  display: none !important; }
+
+.hidden {
+  opacity: 0 !important; }
