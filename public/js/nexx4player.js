@@ -645,22 +645,39 @@ com.zappware.chromecast.Nexx4Player = (function () {
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
                 if (this.isTimeshiftEnabled(media)) {
-                    var playbackInfo = media._playbackInfo;
+                    const playbackInfo = media._playbackInfo;
                     DEBUG && assert(!(playbackInfo instanceof Promise), "playbackInfo should not be a Promise!");
 
+                    const minPositions = [];
+                    const liveSeekableRange = playerManager.getLiveSeekableRange();
+
+                    if (liveSeekableRange && liveSeekableRange.end > liveSeekableRange.start) {
+                        let bufferStart = com.zappware.chromecast.util.getCurrentTime() - (liveSeekableRange.end - liveSeekableRange.start);
+                        if (media._offsetToLive) bufferStart += media._offsetToLive;
+                        bufferStart && minPositions.push(bufferStart);
+                    }
+
                     if (playbackInfo.maximumBufferSize) {
-                        media._positionInfo.minPosition = media._positionInfo.maxPosition - playbackInfo.maximumBufferSize;
-                        media._positionInfo.curPosition = Math.max(Math.min(this._getCurrentPosition(media) || Number.MAX_SAFE_INTEGER, media._positionInfo.maxPosition), media._positionInfo.minPosition);
-                        return;
+                        const maxBufferStart = media._positionInfo.maxPosition - playbackInfo.maximumBufferSize;
+                        maxBufferStart && minPositions.push(maxBufferStart);
                     }
 
                     if (playbackInfo.streamStart) {
-                        var streamStart = new Date(playbackInfo.streamStart).getTime()/1000;
-                        if (streamStart) {
-                            media._positionInfo.minPosition = streamStart;
-                            media._positionInfo.curPosition = Math.max(Math.min(this._getCurrentPosition(media) || Number.MAX_SAFE_INTEGER, media._positionInfo.maxPosition), media._positionInfo.minPosition);
-                            return;
+                        const streamStart = new Date(playbackInfo.streamStart).getTime() / 1000;
+                        streamStart && minPositions.push(streamStart);
+                    }
+
+                    if (minPositions.length > 0) {
+                        media._positionInfo.minPosition = Math.max(...minPositions);
+                        media._positionInfo.curPosition = Math.max(Math.min(this._getCurrentPosition(media) || Number.MAX_SAFE_INTEGER, media._positionInfo.maxPosition), media._positionInfo.minPosition);
+
+                        if (this._state === com.zappware.chromecast.PlayerState.PAUSED && 
+                            media._positionInfo.curPosition <= media._positionInfo.minPosition) {
+                                DEBUG && log('Auto-resuming at start of TSB')
+                                playerManager.play();
                         }
+
+                        return;
                     }
                 }
                 // While starting PLTV, assume maxPosition = 'now' and minPosition = 'in the past'
@@ -882,9 +899,10 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
                 if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV) {
                     // In LIVETV, try to keep up with the live point by seeking to EOS
+                    // Subtract 10 seconds from EOS, else we risk running too close to the live point which causes the player to endlessly stall (SDA1A-60)
                     var seekableRange = playerManager.getLiveSeekableRange();
                     if (seekableRange && seekableRange.end) {
-                        _seekTo = seekableRange.end;
+                        _seekTo = seekableRange.end - 10;
                     }
                 }
 
