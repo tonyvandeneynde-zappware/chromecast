@@ -85,7 +85,11 @@
 
   logAdsBlocks = () => { console.log('adsHandler - Ads Blocks', adsBlocks) }
 
+  /* return the public functions */
+  return {
+    validateRequestedPlaybackPosition: validateRequestedPlaybackPosition
+  }
   
-}());
+}())
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
