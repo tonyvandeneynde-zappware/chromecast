@@ -3,7 +3,6 @@
  * reproduced, copied, modified or adapted, without the prior written consent of
  * Zappware.
  **/
- import _ from 'lodash'
 
  com.zappware.chromecast.adshandler = (function () {
   const adPolicy = {
