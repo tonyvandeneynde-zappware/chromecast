@@ -48,8 +48,6 @@
   validateRequestedPlaybackPosition = (time) => {
     console.log('adsHandler - Validating requested playback position', time, '...')
     let updatedTime = time
-    console.log('playerManager.getCurrentTimeSec():', playerManager.getCurrentTimeSec())
-    console.log('com.zappware.chromecast.util.getCurrentTime():', com.zappware.chromecast.util.getCurrentTime())
 
 
     if (adPolicy) {
@@ -64,7 +62,7 @@
       } else { // skipping allowed
         // check if the requested time is in an ads block and from which direction it is entered
         const activeAdsBlock = getAdsBlockForTime(time)
-        const jumpedBackward = time < com.zappware.chromecast.util.getCurrentTime()
+        const jumpedBackward = time < playerManager.getCurrentTimeSec()
 
         if (activeAdsBlock) {
           if (jumpedBackward && adPolicy.allow_backward_into_ad) {
