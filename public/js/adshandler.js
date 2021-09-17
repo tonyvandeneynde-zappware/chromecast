@@ -11,7 +11,13 @@
     allow_backward: true, // allow going backward during an ad block
     allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
   }
-  const adsBlocks = [{
+  const adsBlocks = [
+                    {
+                      adId: 'ad0',
+                      startTime: 320,
+                      endTime: 420,
+                      type: 'SCTE35'
+                    },{
                       adId: 'ad1',
                       startTime: 600,
                       endTime: 700,
@@ -42,6 +48,9 @@
   validateRequestedPlaybackPosition = (time) => {
     console.log('adsHandler - Validating requested playback position', time, '...')
     let updatedTime = time
+    console.log('playerManager.getCurrentTimeSec():', playerManager.getCurrentTimeSec())
+    console.log('com.zappware.chromecast.util.getCurrentTime():', com.zappware.chromecast.util.getCurrentTime())
+
 
     if (adPolicy) {
       // skipping not allowed
@@ -55,7 +64,7 @@
       } else { // skipping allowed
         // check if the requested time is in an ads block and from which direction it is entered
         const activeAdsBlock = getAdsBlockForTime(time)
-        const jumpedBackward = time < player.currentTime()
+        const jumpedBackward = time < com.zappware.chromecast.util.getCurrentTime()
 
         if (activeAdsBlock) {
           if (jumpedBackward && adPolicy.allow_backward_into_ad) {

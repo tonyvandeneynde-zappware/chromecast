@@ -357,7 +357,6 @@ com.zappware.chromecast.Player = (function () {
                 case com.zappware.chromecast.PlayerState.STOPPED:
                     return;
                 case com.zappware.chromecast.PlayerState.SEEKING:
-                    console.log('=-0=-0=0=-0-= SEEKING:')
                     if (this._reloadAndSeekInProgressForPosition) {
                         // Another _reloadAndSeekRequest is pending -> it is sufficient to update
                         this._reloadAndSeekInProgressForPosition = position;
