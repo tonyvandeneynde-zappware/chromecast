@@ -11,7 +11,7 @@
     allow_backward: true, // allow going backward during an ad block
     allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
   }
-  const adsblocks = [{
+  const adsBlocks = [{
                       adId: 'ad1',
                       startTime: 600,
                       endTime: 700,
