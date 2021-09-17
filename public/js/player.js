@@ -348,6 +348,7 @@ com.zappware.chromecast.Player = (function () {
 
         // setPosition ////////////////////////////////////////////////////////////////////////////////
         setPosition(position, resumeState) {
+            console.log('-09=0=-0=00=-0=- player.setPosition:')
             var mediaInfo = playerManager.getMediaInformation();
             switch(this._state) {
                 case com.zappware.chromecast.PlayerState.LOADING:
@@ -356,6 +357,7 @@ com.zappware.chromecast.Player = (function () {
                 case com.zappware.chromecast.PlayerState.STOPPED:
                     return;
                 case com.zappware.chromecast.PlayerState.SEEKING:
+                    console.log('=-0=-0=0=-0-= SEEKING:')
                     if (this._reloadAndSeekInProgressForPosition) {
                         // Another _reloadAndSeekRequest is pending -> it is sufficient to update
                         this._reloadAndSeekInProgressForPosition = position;
@@ -378,6 +380,8 @@ com.zappware.chromecast.Player = (function () {
             if (this.getMaxPosition() > this.getMinPosition()) {
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
+
+            position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(position)
 
             // Fix the requested position in the _positionInfo to avoid positions jumping back and forth
             if (mediaInfo._positionInfo) {
