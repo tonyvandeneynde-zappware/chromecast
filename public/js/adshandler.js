@@ -15,18 +15,7 @@
                     {
                       adId: 'ad0',
                       startTime: 320,
-                      endTime: 420,
-                      type: 'SCTE35'
-                    },{
-                      adId: 'ad1',
-                      startTime: 600,
-                      endTime: 700,
-                      type: 'SCTE35'
-                    },
-                    {
-                      adId: 'ad2',
-                      startTime: 800,
-                      endTime: 900,
+                      endTime: 330,
                       type: 'SCTE35'
                     },
                     {
