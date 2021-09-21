@@ -137,7 +137,8 @@
   /* return the public functions */
   return {
     validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
-    isAdPlaying: isAdPlaying
+    isAdPlaying: isAdPlaying,
+    checkAdEnterExit: checkAdEnterExit
   }
   
 }())
