@@ -106,7 +106,7 @@
   removeAdsBlock = (adsBlockToRemove) => {
     console.log('adsHandler - Removing ads block with startTime', adsBlockToRemove.startTime)
     _.remove(adsBlocks, (adsBlock) => {
-      return adsBlock.id === adsBlockToRemove.id
+      return adsBlock.adId === adsBlockToRemove.adId
     })
     activeAd = null
   }
