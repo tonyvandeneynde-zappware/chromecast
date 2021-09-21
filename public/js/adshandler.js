@@ -105,16 +105,16 @@
 
   handleAdsBlockEnterEvent = (adsBlock) => {
     activeAd = adsBlock
-    console.log(LOGLEVELS.CUSTOMER, 'adsHandler - Entered SCTE35 ad block:', adsBlock)
+    console.log('adsHandler - Entered SCTE35 ad block:', adsBlock)
   }
 
   handleAdsBlockExitEvent = (adsBlock) => {
-    console.log(LOGLEVELS.CUSTOMER, 'adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
+    console.log('adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
     this.removeAdsBlock(adsBlock)
   }
 
   removeAdsBlock = (adsBlockToRemove) => {
-    console.log(LOGLEVELS.CUSTOMER, 'adsHandler - Removing ads block with startTime', adsBlockToRemove.startTime)
+    console.log('adsHandler - Removing ads block with startTime', adsBlockToRemove.startTime)
     _.remove(adsBlocks, (adsBlock) => {
       return adsBlock.id === adsBlockToRemove.id
     })
