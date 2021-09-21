@@ -96,6 +96,7 @@
     if (activeAd && !newActiveAd) {
       handleAdsBlockExitEvent(activeAd)
     }
+    return
   }
 
   isAdsBlockPlaying = () => {
