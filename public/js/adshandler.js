@@ -71,7 +71,8 @@
 
   checkAdEnterExit = () => {
     const currentTime = playerManager.getCurrentTimeSec()
-    // console.log('-=0=0=-00=0- checkAdEnterExit:', currentTime)
+    console.log('-=0=0=-00=0- checkAdEnterExit:', currentTime)
+    console.log('adsBlocks:', adsBlocks)
     let newActiveAd = null
     adsBlocks.forEach(ad => {
       if (currentTime >= ad.startTime && currentTime <= ad.endTime) {
