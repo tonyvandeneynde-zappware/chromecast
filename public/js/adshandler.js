@@ -42,6 +42,8 @@
                       type: 'SCTE35'
                     }]
 
+  const activeAd = null
+
   //
   // Check if the playback position needs to be forced to the start of an ads block.
   //
@@ -78,6 +80,46 @@
     return updatedTime
   }
 
+  checkAdEnterExit = () => {
+    const currentTime = playerManager.getCurrentTimeSec()
+    // console.log('-=0=0=-00=0- checkAdEnterExit:', currentTime)
+    let newActiveAd = null
+    adsBlocks.forEach(ad => {
+      if (currentTime >= ad.startTime && currentTime <= ad.endTime) {
+        newActiveAd = ad
+      }
+    });
+    if (!activeAd && newActiveAd || (activeAd && newActiveAd && activeAd.id !== newActiveAd.id)) {
+      // new adblock entered
+      handleAdsBlockEnterEvent(newActiveAd)
+    }
+    if (activeAd && !newActiveAd) {
+      handleAdsBlockExitEvent(activeAd)
+    }
+  }
+
+  isAdsBlockPlaying = () => {
+    return !!activeAd
+  }
+
+  handleAdsBlockEnterEvent = (adsBlock) => {
+    activeAd = adsBlock
+    console.log(LOGLEVELS.CUSTOMER, 'adsHandler - Entered SCTE35 ad block:', adsBlock)
+  }
+
+  handleAdsBlockExitEvent = (adsBlock) => {
+    console.log(LOGLEVELS.CUSTOMER, 'adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
+    this.removeAdsBlock(adsBlock)
+  }
+
+  removeAdsBlock = (adsBlockToRemove) => {
+    console.log(LOGLEVELS.CUSTOMER, 'adsHandler - Removing ads block with startTime', adsBlockToRemove.startTime)
+    _.remove(adsBlocks, (adsBlock) => {
+      return adsBlock.id === adsBlockToRemove.id
+    })
+    activeAd = null
+  }
+
   //
   // AD BLOCK HELPERS
   //
@@ -94,7 +136,8 @@
 
   /* return the public functions */
   return {
-    validateRequestedPlaybackPosition: validateRequestedPlaybackPosition
+    validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
+    isAdPlaying: isAdPlaying
   }
   
 }())

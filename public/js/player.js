@@ -524,7 +524,8 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _updatePositionInfo(media) {
-            console.log('0-=-0-=00=00=00=0=-0=--= _updatePositionInfo:', _updatePositionInfo)
+            console.log('0-=-0-=00=00=00=0=-0=--= _updatePositionInfo:')
+            com.zappware.chromecast.adshandler.checkAdEnterExit()
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
 
@@ -550,6 +551,8 @@ com.zappware.chromecast.Player = (function () {
                 }
                 media._positionInfo.maxPosition = (seekableRange) ? seekableRange.end : playerManager.getDurationSec();
             }
+
+            com.zappware.chromecast.adshandler.checkAdEnterExit()
         }
 
         // getPosition ////////////////////////////////////////////////////////////////////////////////
