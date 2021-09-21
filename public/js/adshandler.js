@@ -100,6 +100,7 @@
 
   handleAdsBlockExitEvent = (adsBlock) => {
     console.log('adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
+    activeAd = null
     this.removeAdsBlock(adsBlock)
   }
 
