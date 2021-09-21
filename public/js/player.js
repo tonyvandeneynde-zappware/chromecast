@@ -438,6 +438,8 @@ com.zappware.chromecast.Player = (function () {
                 return this.isTimeshiftEnabled(mediaInfo);
             }
 
+            if (com.zappware.chromecast.adshandler.isAdsBlockPlaying) return false;
+
             return true;
         }
 

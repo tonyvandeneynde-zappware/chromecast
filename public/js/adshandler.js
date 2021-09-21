@@ -25,7 +25,7 @@
                       type: 'SCTE35'
                     },
                     {
-                      adId: 'ad1',
+                      adId: 'ad2',
                       startTime: 1200,
                       endTime: 1300,
                       type: 'SCTE35'
