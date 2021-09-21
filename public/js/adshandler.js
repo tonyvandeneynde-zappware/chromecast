@@ -42,7 +42,7 @@
                       type: 'SCTE35'
                     }]
 
-  const activeAd = null
+  let activeAd = null
 
   //
   // Check if the playback position needs to be forced to the start of an ads block.
