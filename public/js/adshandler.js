@@ -90,7 +90,7 @@
   }
 
   isAdsBlockPlaying = () => {
-    return !!activeAd
+    return activeAd !== null
   }
 
   handleAdsBlockEnterEvent = (adsBlock) => {
