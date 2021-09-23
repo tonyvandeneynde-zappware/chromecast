@@ -28,7 +28,7 @@
 
   let activeAd = null
 
-  const adPolicy = null
+  let adPolicy = null
 
   //
   // AD RESTRICTIONS
