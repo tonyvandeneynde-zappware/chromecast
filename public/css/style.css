@@ -195,19 +195,16 @@ img#splash {
 
 .AdInfo {
   position: absolute;
-  top: 471px;
+  top: 67px;
   left: 148px;
-  height: 32px;
-  width: 259px;
+  height: 67px;
   text-align: left;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-align: left; }
   .AdInfo p {
     font-family: FontSans;
-    font-size: 18px;
-    color: rgba(220, 220, 220, 0.5); }
+    font-size: 35px;
+    color: rgba(0, 0, 0, 0); }
 
 .BitRate {
   position: absolute;
