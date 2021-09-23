@@ -50,20 +50,20 @@
       if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
         // This is temp fix to align all platforms
 
-        adPolicy = {
+        /*adPolicy = {
           allow_skip: true, // allow jumping over an ad block entirely
           allow_forward: false, // allow going forward during an ad block
           allow_backward: true, // allow going backward during an ad block
           allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
-        }
+        }*/
 
         // This is what is should be eventually
-        /*adPolicy = {
+        adPolicy = {
           allow_skip: false, // allow jumping over an ad block entirely
           allow_forward: false, // allow going forward during an ad block
           allow_backward: true, // allow going backward during an ad block
           allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
-        }*/
+        }
       } else {
         this.adPolicy = undefined
       }
