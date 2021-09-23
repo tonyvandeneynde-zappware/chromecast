@@ -159,7 +159,7 @@
   showAdSkippingMessage = () => {
     if (document.querySelector('#adInfo').innerText === '')
     {
-      document.querySelector('#adInfo').innerText = 'test ad skipping not allowed';
+      document.querySelector('#adInfo').innerText = com.zappware.chromecast.globaltext.getString('blockSkipAd');
       setTimeout(() => {
         document.querySelector('#adInfo').innerText = '';
       }, 7000);
