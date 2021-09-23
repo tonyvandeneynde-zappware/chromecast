@@ -11,7 +11,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
         playChannel: {
             "operationName":"playChannel",
             "variables":{ input: undefined },
-            "query":"mutation playChannel($input: PlayChannelInput!) {\n  playChannel(input: $input) {\n    playbackInfo {\n      sessionId\n      url\n      channel {\n        id\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation playChannel($input: PlayChannelInput!) {\n  playChannel(input: $input) {\n    playbackInfo {\n      sessionId\n      url\n    adPlaybackRestrictions\n      channel {\n        id\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         pauseLiveChannel: {
             "operationName":"pauseLiveChannel",
@@ -263,6 +263,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             // Acquire the url and ... happy streaming!
             media._playbackInfo = this._acquirePlaybackInfo(query, media)
             .then(function(playbackInfo) {
+                console.log('playbackInfo:', playbackInfo)
                 com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adplaybackRestrictions)
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned
