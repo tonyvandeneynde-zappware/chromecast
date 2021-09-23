@@ -265,7 +265,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             .then(function(playbackInfo) {
                 console.log('playbackInfo:', playbackInfo)
                 // com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adplaybackRestrictions)
-                com.zappware.chromecast.adshandler.setAdPolicy('BLOCK_SKIP_AND_FAST_FORWARD')
+                com.zappware.chromecast.adshandler.setAdPolicy(['BLOCK_SKIP_AND_FAST_FORWARD'])
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned
                                                         // session id as replaceSessionId (WINPUB-1604)
@@ -563,7 +563,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             .then(function(playbackInfo) {
                 if (playbackInfo && playbackInfo.url) {
                     // com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adplaybackRestrictions)
-                    com.zappware.chromecast.adshandler.setAdPolicy('BLOCK_SKIP_AND_FAST_FORWARD')
+                    com.zappware.chromecast.adshandler.setAdPolicy(['BLOCK_SKIP_AND_FAST_FORWARD'])
                     media.contentUrl = playbackInfo.url;
                     media._playingStartedAt = com.zappware.chromecast.util.getCurrentTime();
                     media._playbackInfo = playbackInfo;
