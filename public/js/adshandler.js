@@ -157,10 +157,13 @@
   }
 
   showAdSkippingMessage = () => {
-    document.querySelector('#adInfo').innerText = 'test ad skipping not allowed';
-    setTimeout(() => {
-      document.querySelector('#adInfo').innerText = '';
-    }, 7000);
+    if (document.querySelector('#adInfo').innerText === '')
+    {
+      document.querySelector('#adInfo').innerText = 'test ad skipping not allowed';
+      setTimeout(() => {
+        document.querySelector('#adInfo').innerText = '';
+      }, 7000);
+    }
   }
 
   getAdPolicy = () => this.adPolicy
