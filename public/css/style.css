@@ -278,6 +278,21 @@ body:not(.Splash) #background {
             font-size: convert(27px);
             color: rgba(220, 220, 220, 0.5);
         }*/ }
+  .PlaybackBanner .AdInfo {
+    position: absolute;
+    top: 471px;
+    left: 148px;
+    height: 32px;
+    width: 259px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left; }
+    .PlaybackBanner .AdInfo p {
+      font-family: FontSans;
+      font-size: 18px;
+      color: rgba(220, 220, 220, 0.5); }
   .PlaybackBanner #eventDateTime {
     position: absolute;
     width: 1280px;

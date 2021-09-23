@@ -129,7 +129,7 @@
   canSeek = (position) => {
     const currentTime = playerManager.getCurrentTimeSec()
     if (activeAd && position > currentTime ) {
-      document.querySelector('#channelTitle').innerText = 'test test channelTitle';
+      document.querySelector('#adInfo').innerText = 'test test channelTitle';
       // com.zappware.chromecast.receiver.setDisplayMessage({
       //     title: 'test test ad stuff',
       //     description: 'test test ad stuff description',
