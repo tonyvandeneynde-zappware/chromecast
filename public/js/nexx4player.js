@@ -263,6 +263,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             // Acquire the url and ... happy streaming!
             media._playbackInfo = this._acquirePlaybackInfo(query, media)
             .then(function(playbackInfo) {
+                com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adplaybackRestrictions)
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned
                                                         // session id as replaceSessionId (WINPUB-1604)

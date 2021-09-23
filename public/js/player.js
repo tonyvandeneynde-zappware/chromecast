@@ -367,7 +367,7 @@ com.zappware.chromecast.Player = (function () {
                     break;
             }
 
-            if (!this.canSeek(mediaInfo)) {
+            if (!this.canSeek(mediaInfo, position)) {
                 DEBUG && log("setPosition(" + position + ") ignored: setPosition not supported.");
                 return;
             }
@@ -430,7 +430,7 @@ com.zappware.chromecast.Player = (function () {
         }
 
         // canSeek //////////////////////////////////////////////////////////////////////////////////
-        canSeek(mediaInfo) {
+        canSeek(mediaInfo, position) {
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
@@ -438,9 +438,7 @@ com.zappware.chromecast.Player = (function () {
                 return this.isTimeshiftEnabled(mediaInfo);
             }
 
-            if (com.zappware.chromecast.adshandler.isAdsBlockPlaying()) return false;
-
-            return true;
+            return com.zappware.chromecast.adshandler.canSeek(position)
         }
 
         // canJump //////////////////////////////////////////////////////////////////////////////////

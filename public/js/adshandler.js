@@ -5,33 +5,70 @@
  **/
 
  com.zappware.chromecast.adshandler = (function () {
-  const adPolicy = {
-    allow_skip: false, // allow jumping over an ad block entirely
-    allow_forward: false, // allow going forward during an ad block
-    allow_backward: true, // allow going backward during an ad block
-    allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
-  }
   const adsBlocks = [
-                    {
-                      adId: 'ad0',
-                      startTime: 320,
-                      endTime: 330,
-                      type: 'SCTE35'
-                    },
-                    {
-                      adId: 'ad1',
-                      startTime: 1000,
-                      endTime: 1100,
-                      type: 'SCTE35'
-                    },
-                    {
-                      adId: 'ad2',
-                      startTime: 1200,
-                      endTime: 1300,
-                      type: 'SCTE35'
-                    }]
+    {
+      adId: 'ad0',
+      startTime: 320,
+      endTime: 330,
+      type: 'SCTE35'
+    },
+    {
+      adId: 'ad1',
+      startTime: 1000,
+      endTime: 1100,
+      type: 'SCTE35'
+    },
+    {
+      adId: 'ad2',
+      startTime: 1200,
+      endTime: 1300,
+      type: 'SCTE35'
+    }
+  ]
 
   let activeAd = null
+
+  const adPolicy = null
+
+  //
+  // AD RESTRICTIONS
+  //
+
+  /**
+  * Specifies if any restrictions apply to the ads that are in this playback session.
+  * Any AdPlaybackRestriction scenario that is included in this list is not allowed to be performed during ads in this playback session.
+  * If empty or null, no restrictions are applicable.
+  * Note: additional AdPlaybackRestriction types can be added in the future.
+  *  In order to remain backward compatible,
+  * clients must be able to ignore unknown AdPlaybackResctriction scenarios.
+  * BLOCK_SKIP_AND_FAST_FORWARD => Indicates that fast forwarding through ads and skipping in ads is not allowed.
+  */
+   setAdPolicy = (adPlayBackRestrictions) => {
+    console.log('-090-9-099 adPlayBackRestrictions:', adPlayBackRestrictions)
+    this.activeAd = null
+    _.map(adPlayBackRestrictions, res => {
+      if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
+        // This is temp fix to align all platforms
+
+        adPolicy = {
+          allow_skip: true, // allow jumping over an ad block entirely
+          allow_forward: false, // allow going forward during an ad block
+          allow_backward: true, // allow going backward during an ad block
+          allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
+        }
+
+        // This is what is should be eventually
+        /*adPolicy = {
+          allow_skip: false, // allow jumping over an ad block entirely
+          allow_forward: false, // allow going forward during an ad block
+          allow_backward: true, // allow going backward during an ad block
+          allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
+        }*/
+      } else {
+        this.adPolicy = undefined
+      }
+    })
+  }
 
   //
   // Check if the playback position needs to be forced to the start of an ads block.
@@ -89,13 +126,24 @@
     return
   }
 
-  isAdsBlockPlaying = () => {
-    return activeAd !== null
+  canSeek = (position) => {
+    const currentTime = playerManager.getCurrentTimeSec()
+    if (activeAd && position > currentTime ) {
+      com.zappware.chromecast.receiver.setDisplayMessage({
+          title: 'test test ad stuff',
+          description: 'test test ad stuff description'
+      });
+      return false
+    }
+      
+    return true
   }
 
   handleAdsBlockEnterEvent = (adsBlock) => {
-    activeAd = adsBlock
-    console.log('adsHandler - Entered SCTE35 ad block:', adsBlock)
+    if (adPolicy) {
+      activeAd = adsBlock
+      console.log('adsHandler - Entered SCTE35 ad block:', adsBlock)
+    }
   }
 
   handleAdsBlockExitEvent = (adsBlock) => {
@@ -111,6 +159,10 @@
     })
     activeAd = null
   }
+
+  getAdPolicy = () => this.adPolicy
+
+  hasAdPolicy = () => this.adPolicy !== undefined
 
   //
   // AD BLOCK HELPERS
@@ -129,8 +181,9 @@
   /* return the public functions */
   return {
     validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
-    isAdsBlockPlaying: isAdsBlockPlaying,
-    checkAdEnterExit: checkAdEnterExit
+    canSeek: canSeek,
+    checkAdEnterExit: checkAdEnterExit,
+    setAdPolicy: setAdPolicy
   }
   
 }())
