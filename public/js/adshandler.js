@@ -131,7 +131,8 @@
     if (activeAd && position > currentTime ) {
       com.zappware.chromecast.receiver.setDisplayMessage({
           title: 'test test ad stuff',
-          description: 'test test ad stuff description'
+          description: 'test test ad stuff description',
+          background: 'black'
       });
       return false
     }
