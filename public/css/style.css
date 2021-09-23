@@ -205,7 +205,8 @@ img#splash {
     font-family: FontSans;
     font-size: 35px;
     color: white;
-    background-color: black; }
+    background-color: black;
+    padding: 0 10px; }
 
 .BitRate {
   position: absolute;
