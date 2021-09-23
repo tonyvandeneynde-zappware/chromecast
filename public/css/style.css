@@ -205,7 +205,8 @@ img#splash {
   .AdInfo p {
     font-family: FontSans;
     font-size: 35px;
-    color: black; }
+    color: white;
+    background-color: black; }
 
 .BitRate {
   position: absolute;
