@@ -129,15 +129,9 @@
   canSeek = (position) => {
     const currentTime = playerManager.getCurrentTimeSec()
     if (activeAd && position > currentTime ) {
-      document.querySelector('#adInfo').innerText = 'test ad skipping not allowed';
-      // com.zappware.chromecast.receiver.setDisplayMessage({
-      //     title: 'test test ad stuff',
-      //     description: 'test test ad stuff description',
-      //     background: 'black'
-      // });
+      showAdSkippingMessage()
       return false
     }
-      
     return true
   }
 
@@ -160,6 +154,13 @@
       return adsBlock.adId === adsBlockToRemove.adId
     })
     activeAd = null
+  }
+
+  showAdSkippingMessage = () => {
+    document.querySelector('#adInfo').innerText = 'test ad skipping not allowed';
+    setTimeout(() => {
+      document.querySelector('#adInfo').innerText = '';
+    }, 7000);
   }
 
   getAdPolicy = () => this.adPolicy
