@@ -5,30 +5,33 @@
  **/
 
  com.zappware.chromecast.adshandler = (function () {
-  const adsBlocks = [
-    {
-      adId: 'ad0',
-      startTime: 320,
-      endTime: 330,
-      type: 'SCTE35'
-    },
-    {
-      adId: 'ad1',
-      startTime: 1000,
-      endTime: 1100,
-      type: 'SCTE35'
-    },
-    {
-      adId: 'ad2',
-      startTime: 1200,
-      endTime: 1300,
-      type: 'SCTE35'
-    }
-  ]
+  // const adsBlocks = [
+  //   {
+  //     adId: 'ad0',
+  //     startTime: 320,
+  //     endTime: 330
+  //   },
+  //   {
+  //     adId: 'ad1',
+  //     startTime: 1000,
+  //     endTime: 1100
+  //   },
+  //   {
+  //     adId: 'ad2',
+  //     startTime: 1200,
+  //     endTime: 1300
+  //   }
+  // ]
 
   let activeAd = null
 
   let adPolicy = null
+
+  let adsBlocks = []
+
+  addAdsBlock('ad0', 320, 330)
+  addAdsBlock('ad1', 1000, 1100)
+  addAdsBlock('ad2', 1200, 1300)
 
   //
   // AD RESTRICTIONS
@@ -166,9 +169,30 @@
     }
   }
 
-  getAdPolicy = () => this.adPolicy
+  addAdsBlock = (adId, startTime, endTime) => {
+    const nextId = (adsBlocks.length === 0 ? 0 : _.last(adsBlocks).id + 1)
+    const newAdsBlock = {
+      id: nextId,
+      adId: adId,
+      startTime: startTime,
+      endTime: endTime
+    }
 
-  hasAdPolicy = () => this.adPolicy !== undefined
+    // ignore ad blocks with duration 0.
+    if (startTime === endTime) {
+      console.log('adsHandler - Ignored new ad block since the duration is 0.', newAdsBlock)
+      return
+    }
+
+    // ignore if already in the list.
+    const alreadyExisting = findAdsBlock(startTime, endTime, adId)
+    if (alreadyExisting) {
+      console.log('adsHandler - Ignored new ad block: already in the list.', alreadyExisting)
+      return
+    }
+    adsBlocks.push(newAdsBlock)
+    console.log('adsHandler - Added ad block to the list', newAdsBlock)
+  }
 
   //
   // AD BLOCK HELPERS
@@ -189,7 +213,8 @@
     validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
     canSeek: canSeek,
     checkAdEnterExit: checkAdEnterExit,
-    setAdPolicy: setAdPolicy
+    setAdPolicy: setAdPolicy,
+    addAdsBlock: addAdsBlock
   }
   
 }())
