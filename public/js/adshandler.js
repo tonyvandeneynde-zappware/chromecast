@@ -207,7 +207,6 @@
   getCurrentTimeSec = () => {
     let currentTime
     mediaInfo = playerManager.getMediaInformation()
-    console.log('mediaInfo:', mediaInfo)
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
       mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
       currentTime = com.zappware.chromecast.util.getCurrentTime()
