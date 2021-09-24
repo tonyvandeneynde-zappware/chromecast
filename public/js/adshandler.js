@@ -29,10 +29,6 @@
 
   let adsBlocks = []
 
-  addAdsBlock('ad0', 320, 330)
-  addAdsBlock('ad1', 1000, 1100)
-  addAdsBlock('ad2', 1200, 1300)
-
   //
   // AD RESTRICTIONS
   //
@@ -46,32 +42,32 @@
   * clients must be able to ignore unknown AdPlaybackResctriction scenarios.
   * BLOCK_SKIP_AND_FAST_FORWARD => Indicates that fast forwarding through ads and skipping in ads is not allowed.
   */
-   setAdPolicy = (adPlayBackRestrictions) => {
-    console.log('-090-9-099 adPlayBackRestrictions:', adPlayBackRestrictions)
-    this.activeAd = null
-    _.map(adPlayBackRestrictions, res => {
-      if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
-        // This is temp fix to align all platforms
+  setAdPolicy = (adPlayBackRestrictions) => {
+  console.log('-090-9-099 adPlayBackRestrictions:', adPlayBackRestrictions)
+  this.activeAd = null
+  _.map(adPlayBackRestrictions, res => {
+    if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
+      // This is temp fix to align all platforms
 
-        /*adPolicy = {
-          allow_skip: true, // allow jumping over an ad block entirely
-          allow_forward: false, // allow going forward during an ad block
-          allow_backward: true, // allow going backward during an ad block
-          allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
-        }*/
+      /*adPolicy = {
+        allow_skip: true, // allow jumping over an ad block entirely
+        allow_forward: false, // allow going forward during an ad block
+        allow_backward: true, // allow going backward during an ad block
+        allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
+      }*/
 
-        // This is what is should be eventually
-        adPolicy = {
-          allow_skip: false, // allow jumping over an ad block entirely
-          allow_forward: false, // allow going forward during an ad block
-          allow_backward: true, // allow going backward during an ad block
-          allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
-        }
-      } else {
-        this.adPolicy = undefined
+      // This is what is should be eventually
+      adPolicy = {
+        allow_skip: false, // allow jumping over an ad block entirely
+        allow_forward: false, // allow going forward during an ad block
+        allow_backward: true, // allow going backward during an ad block
+        allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
       }
-    })
-  }
+    } else {
+      this.adPolicy = undefined
+    }
+  })
+}
 
   //
   // Check if the playback position needs to be forced to the start of an ads block.
@@ -169,13 +165,14 @@
     }
   }
 
-  addAdsBlock = (adId, startTime, endTime) => {
+  addAdsBlock = (adId, startTime, endTime, adType) => {
     const nextId = (adsBlocks.length === 0 ? 0 : _.last(adsBlocks).id + 1)
     const newAdsBlock = {
       id: nextId,
       adId: adId,
       startTime: startTime,
-      endTime: endTime
+      endTime: endTime,
+      type: adType
     }
 
     // ignore ad blocks with duration 0.
@@ -207,6 +204,10 @@
   getAdsBlockForTime = (time) => _.find(adsBlocks, (adsBlock) => (adsBlock.startTime <= time && time <= adsBlock.endTime))
 
   logAdsBlocks = () => { console.log('adsHandler - Ads Blocks', adsBlocks) }
+
+  addAdsBlock('ad0', 320, 330)
+  addAdsBlock('ad1', 1000, 1100)
+  addAdsBlock('ad2', 1200, 1300)
 
   /* return the public functions */
   return {
