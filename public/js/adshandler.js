@@ -198,7 +198,7 @@
     return _.find(adsBlocks, (adsBlock) => (time > adsBlock.startTime))
   }
 
-  findAdsBlock = (startTime, endTime, adId) => _.find(adsBlocks, (adsBlock) => ((!adId || adsBlock.adId === adId) && adsBlock.startTime === startTime && adsBlock.endTime === endTime))
+  findAdsBlock = (startTime, endTime, adId) => lodash.find(adsBlocks, (adsBlock) => ((!adId || adsBlock.adId === adId) && adsBlock.startTime === startTime && adsBlock.endTime === endTime))
 
   getAdsBlockForTime = (time) => _.find(adsBlocks, (adsBlock) => (adsBlock.startTime <= time && time <= adsBlock.endTime))
 
