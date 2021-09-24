@@ -196,10 +196,6 @@
     return currentTime
   }
 
-  addAdsBlock('ad0', 320, 330)
-  addAdsBlock('ad1', 1000, 1100)
-  addAdsBlock('ad2', 1200, 1300)
-
   /* return the public functions */
   return {
     validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,

@@ -546,7 +546,6 @@ com.zappware.chromecast.Player = (function () {
                 }
                 media._positionInfo.maxPosition = (seekableRange) ? seekableRange.end : playerManager.getDurationSec();
             }
-
             com.zappware.chromecast.adshandler.checkAdEnterExit()
         }
 
