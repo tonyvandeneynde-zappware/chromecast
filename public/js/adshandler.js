@@ -88,8 +88,7 @@
         }
       } else { // skipping allowed
         // check if the requested time is in an ads block and from which direction it is entered
-        const activeAdsBlock = getAdsBlockForTime(time)
-        const jumpedBackward = time < playerManager.getCurrentTimeSec()
+        const jumpedBackward = getCurrentTimeSec()
 
         if (activeAdsBlock) {
           if (jumpedBackward && adPolicy.allow_backward_into_ad) {
@@ -106,7 +105,7 @@
   }
 
   checkAdEnterExit = () => {
-    const currentTime = playerManager.getCurrentTimeSec()
+    const currentTime = getCurrentTimeSec()
     console.log('-=0=0=-00=0- checkAdEnterExit:', currentTime)
     console.log('adsBlocks:', adsBlocks)
     let newActiveAd = null
@@ -126,7 +125,7 @@
   }
 
   canSeek = (position) => {
-    const currentTime = playerManager.getCurrentTimeSec()
+    const currentTime = getCurrentTimeSec()
     if (activeAd && position > currentTime ) {
       showAdSkippingMessage()
       return false
@@ -204,6 +203,16 @@
   getAdsBlockForTime = (time) => _.find(adsBlocks, (adsBlock) => (adsBlock.startTime <= time && time <= adsBlock.endTime))
 
   logAdsBlocks = () => { console.log('adsHandler - Ads Blocks', adsBlocks) }
+
+  getCurrentTimeSec = () => {
+    let currentTime
+    if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV || media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+      currentTime = com.zappware.chromecast.util.getCurrentTime()
+    } else {
+      currentTime = playerManager.getCurrentTimeSec()
+    }
+    return currentTime
+  }
 
   addAdsBlock('ad0', 320, 330)
   addAdsBlock('ad1', 1000, 1100)

@@ -379,8 +379,6 @@ com.zappware.chromecast.Player = (function () {
             if (this.getMaxPosition() > this.getMinPosition()) {
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
-
-            console.log('-=0=-0=-0-=0=-0=0=-0-= com.zappware.chromecast.adshandler:', com.zappware.chromecast.adshandler)
             position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(position)
 
             // Fix the requested position in the _positionInfo to avoid positions jumping back and forth
