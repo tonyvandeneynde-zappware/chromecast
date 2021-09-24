@@ -72,7 +72,7 @@
   //
   // Check if the playback position needs to be forced to the start of an ads block.
   //
-  validateRequestedPlaybackPosition = (time) => {
+  validateRequestedPlaybackPosition = (time, media) => {
     console.log('adsHandler - Validating requested playback position', time, '...')
     let updatedTime = time
 
@@ -206,7 +206,10 @@
 
   getCurrentTimeSec = () => {
     let currentTime
-    if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV || media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+    mediaInfo = playerManager.getMediaInformation()
+    console.log('mediaInfo:', mediaInfo)
+    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
       currentTime = com.zappware.chromecast.util.getCurrentTime()
     } else {
       currentTime = playerManager.getCurrentTimeSec()
