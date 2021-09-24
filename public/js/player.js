@@ -348,7 +348,6 @@ com.zappware.chromecast.Player = (function () {
 
         // setPosition ////////////////////////////////////////////////////////////////////////////////
         setPosition(position, resumeState) {
-            console.log('-09=0=-0=00=-0=- player.setPosition:')
             var mediaInfo = playerManager.getMediaInformation();
             switch(this._state) {
                 case com.zappware.chromecast.PlayerState.LOADING:
@@ -522,7 +521,6 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _updatePositionInfo(media) {
-            console.log('0-=-0-=00=00=00=0=-0=--= _updatePositionInfo:')
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
 

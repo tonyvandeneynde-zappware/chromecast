@@ -5,23 +5,6 @@
  **/
 
  com.zappware.chromecast.adshandler = (function () {
-  // const adsBlocks = [
-  //   {
-  //     adId: 'ad0',
-  //     startTime: 320,
-  //     endTime: 330
-  //   },
-  //   {
-  //     adId: 'ad1',
-  //     startTime: 1000,
-  //     endTime: 1100
-  //   },
-  //   {
-  //     adId: 'ad2',
-  //     startTime: 1200,
-  //     endTime: 1300
-  //   }
-  // ]
 
   let activeAd = null
 
@@ -43,7 +26,6 @@
   * BLOCK_SKIP_AND_FAST_FORWARD => Indicates that fast forwarding through ads and skipping in ads is not allowed.
   */
   setAdPolicy = (adPlayBackRestrictions) => {
-  console.log('-090-9-099 adPlayBackRestrictions:', adPlayBackRestrictions)
   this.activeAd = null
   _.map(adPlayBackRestrictions, res => {
     if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
@@ -106,8 +88,6 @@
 
   checkAdEnterExit = () => {
     const currentTime = getCurrentTimeSec()
-    console.log('-=0=0=-00=0- checkAdEnterExit:', currentTime)
-    console.log('adsBlocks:', adsBlocks)
     let newActiveAd = null
     adsBlocks.forEach(ad => {
       if (currentTime >= ad.startTime && currentTime <= ad.endTime) {
