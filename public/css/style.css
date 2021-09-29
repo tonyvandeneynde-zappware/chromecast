@@ -193,6 +193,21 @@ img#splash {
     font-size: 19px;
     color: gainsboro; }
 
+.AdInfo {
+  position: absolute;
+  top: 67px;
+  left: 148px;
+  height: 67px;
+  text-align: left;
+  white-space: nowrap;
+  text-align: left; }
+  .AdInfo p {
+    font-family: FontSans;
+    font-size: 35px;
+    color: white;
+    background-color: black;
+    padding: 0 10px; }
+
 .BitRate {
   position: absolute;
   top: 33px;

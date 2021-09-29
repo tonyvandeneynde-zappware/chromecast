@@ -75,16 +75,16 @@ com.zappware.chromecast.manifestParserHelper = (function () {
            let durationSeconds = duration.substring(minutesSearch +1 , secondsSearch)
            let durationMinutesToSeconds = convertMinutesToSeconds(durationMinutes)
            let totalDuration = parseFloat(durationMinutesToSeconds) + parseFloat(durationSeconds)
-           let endTime = totalDuration + parseFloat(adStartTime)
-           let adsId  = eventStream.Event[0].id
-           let adsType = 'TYPE_SCTE35'
+           let adEndTime = totalDuration + parseFloat(adStartTime)
+           let adId  = eventStream.Event[0].id
+           let adType = 'TYPE_SCTE35'
 
            return {
-               adsId,
+               adId,
                adStartTime,
-               endTime,
+               adEndTime,
                totalDuration,
-               adsType
+               adType
            }
         }
 
@@ -100,7 +100,6 @@ com.zappware.chromecast.manifestParserHelper = (function () {
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.open( "GET", url, false );
             xmlHttp.send( null );
-            console.log('xmlHttp.responseText', xmlHttp.responseText)
             return xmlHttp.responseText;
         }
 
