@@ -38,8 +38,7 @@ const GLOBALTEXT =
                 formatDurationLong: "HH:mm:ss",
                 formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
                 formatProgressLong: "HH:mm:ss",
-                formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+                formatProgressLongAMPM: "h:mm:ss\xa0A" // Use NO-BREAK SPACE to avoid collapsing space
             },
             'german': {
                 contentLockedTitle: "PIN eingeben",
@@ -60,8 +59,7 @@ const GLOBALTEXT =
                 formatDurationLong: "HH:mm:ss",
                 formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
                 formatProgressLong: "HH:mm:ss",
-                formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+                formatProgressLongAMPM: "h:mm:ss\xa0A" // Use NO-BREAK SPACE to avoid collapsing space
             },
             'croatian': {
                 contentLockedTitle: "Enter PIN",
@@ -82,8 +80,7 @@ const GLOBALTEXT =
                 formatDurationLong: "HH:mm:ss",
                 formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
                 formatProgressLong: "HH:mm:ss",
-                formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+                formatProgressLongAMPM: "h:mm:ss\xa0A" // Use NO-BREAK SPACE to avoid collapsing space
             },
             'slovenian': {
                 contentLockedTitle: "Enter PIN",
@@ -104,8 +101,7 @@ const GLOBALTEXT =
                 formatDurationLong: "HH:mm:ss",
                 formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
                 formatProgressLong: "HH:mm:ss",
-                formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+                formatProgressLongAMPM: "h:mm:ss\xa0A" // Use NO-BREAK SPACE to avoid collapsing space
             },
             'bulgarian': {
                 contentLockedTitle: "Enter PIN",
@@ -126,8 +122,7 @@ const GLOBALTEXT =
                 formatDurationLong: "HH:mm:ss",
                 formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
                 formatProgressLong: "HH:mm:ss",
-                formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+                formatProgressLongAMPM: "h:mm:ss\xa0A" // Use NO-BREAK SPACE to avoid collapsing space
             }
         }
     };
