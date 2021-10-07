@@ -448,7 +448,10 @@ com.zappware.chromecast.receiver = (function () {
                         if (profileId && previousProfileId) {
                             if (profileId !== previousProfileId) {
                                 console.log('-090-9-09-09-09-9- profile changed')
-                                com.zappware.chromecast.player.shutdown()
+                                setTimeout(() => window.close(), 2000);
+                                // User feedback
+                                com.zappware.chromecast.receiver.onBuffering(true);
+                                return com.zappware.chromecast.player.shutdown();
                             }
                         }
                         break;
