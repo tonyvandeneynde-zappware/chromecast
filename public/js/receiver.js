@@ -447,6 +447,7 @@ com.zappware.chromecast.receiver = (function () {
                                 setTimeout(() => window.close(), 2000);
                                 com.zappware.chromecast.receiver.onBuffering(true);
                                 com.zappware.chromecast.player.shutdown();
+                                return
                             }
                         }
                         break;
