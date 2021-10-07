@@ -404,7 +404,6 @@ com.zappware.chromecast.receiver = (function () {
      */
     function setConfig(params) {
         DEBUG && log("setConfig(" + JSON.stringify(params) + ")");
-        console.log('0-9-9-09-09-09-09-9-909- setConfig:')
 
         // Iterate over the params provided:
         for (var property in params) {
@@ -413,12 +412,9 @@ com.zappware.chromecast.receiver = (function () {
                 var value = (params[property] !== "DEFAULT") ?
                     params[property] : defaultConfig[property];
                 var previousValue = config[property];
-                
+
                 config[property] = value;
-                console.log('property:', property)
-                console.log('value:', value)
-                console.log('previousValue:', previousValue)
-                
+
                 switch (property) {
                     case 'language':
                         if (value !== com.zappware.chromecast.globaltext.getLanguage()) {
@@ -444,12 +440,10 @@ com.zappware.chromecast.receiver = (function () {
                         break;
                     case 'customData':
                         const { profileId } = value
-                        const previousProfileId = previousValue.profileId
+                        const { previousProfileId } = previousValue
                         if (profileId && previousProfileId) {
                             if (profileId !== previousProfileId) {
-                                console.log('-090-9-09-09-09-9- profile changed')
                                 setTimeout(() => window.close(), 2000);
-                                // User feedback
                                 com.zappware.chromecast.receiver.onBuffering(true);
                                 return com.zappware.chromecast.player.shutdown();
                             }
