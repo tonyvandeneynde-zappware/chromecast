@@ -440,7 +440,7 @@ com.zappware.chromecast.receiver = (function () {
                         break;
                     case 'customData':
                         const { profileId } = value
-                        const { previousProfileId } = previousValue
+                        const { profileId: previousProfileId } = previousValue
                         if (profileId && previousProfileId) {
                             if (profileId !== previousProfileId) {
                                 setTimeout(() => window.close(), 2000);
