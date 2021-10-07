@@ -404,6 +404,7 @@ com.zappware.chromecast.receiver = (function () {
      */
     function setConfig(params) {
         DEBUG && log("setConfig(" + JSON.stringify(params) + ")");
+        console.log('0-9-9-09-09-09-09-9-909- setConfig:')
 
         // Iterate over the params provided:
         for (var property in params) {
@@ -438,7 +439,7 @@ com.zappware.chromecast.receiver = (function () {
                             _currentEventUpdated(currentEvent);
                         }
                         break;
-                    case 'config':
+                    case 'profileId':
                         if (value !== previousValue) {
                             console.log('-090-9-09-09-09-9- profile changed')
                             com.zappware.chromecast.Nexx4Player.shutdown()
