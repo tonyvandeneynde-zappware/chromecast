@@ -442,10 +442,14 @@ com.zappware.chromecast.receiver = (function () {
                             _currentEventUpdated(currentEvent);
                         }
                         break;
-                    case 'profileId':
-                        if (value !== previousValue) {
-                            console.log('-090-9-09-09-09-9- profile changed')
-                            com.zappware.chromecast.Nexx4Player.shutdown()
+                    case 'customData':
+                        const { profileId } = customData
+                        if (profileId) {
+                            const previousProfileId = previousValue.profileId
+                            if (profileId !== previousProfileId) {
+                                console.log('-090-9-09-09-09-9- profile changed')
+                                com.zappware.chromecast.Nexx4Player.shutdown()
+                            }
                         }
                         break;
                     case 'playback':
