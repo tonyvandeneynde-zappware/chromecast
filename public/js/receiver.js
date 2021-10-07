@@ -413,9 +413,12 @@ com.zappware.chromecast.receiver = (function () {
                 var value = (params[property] !== "DEFAULT") ?
                     params[property] : defaultConfig[property];
                 var previousValue = config[property];
-
+                
                 config[property] = value;
-
+                console.log('property:', property)
+                console.log('value:', value)
+                console.log('previousValue:', previousValue)
+                
                 switch (property) {
                     case 'language':
                         if (value !== com.zappware.chromecast.globaltext.getLanguage()) {
