@@ -443,7 +443,7 @@ com.zappware.chromecast.receiver = (function () {
                         }
                         break;
                     case 'customData':
-                        const { profileId } = customData
+                        const { profileId } = value
                         if (profileId) {
                             const previousProfileId = previousValue.profileId
                             if (profileId !== previousProfileId) {
