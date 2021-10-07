@@ -438,6 +438,12 @@ com.zappware.chromecast.receiver = (function () {
                             _currentEventUpdated(currentEvent);
                         }
                         break;
+                    case 'config':
+                        if (value !== previousValue) {
+                            console.log('-090-9-09-09-09-9- profile changed')
+                            com.zappware.chromecast.Nexx4Player.shutdown()
+                        }
+                        break;
                     case 'playback':
                     case 'qos':
                         config[property] = _setConfig(property, params[property], previousValue);
