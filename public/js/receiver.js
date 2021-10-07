@@ -444,11 +444,11 @@ com.zappware.chromecast.receiver = (function () {
                         break;
                     case 'customData':
                         const { profileId } = value
-                        if (profileId) {
-                            const previousProfileId = previousValue.profileId
+                        const previousProfileId = previousValue.profileId
+                        if (profileId && previousProfileId) {
                             if (profileId !== previousProfileId) {
                                 console.log('-090-9-09-09-09-9- profile changed')
-                                com.zappware.chromecast.Nexx4Player.shutdown()
+                                com.zappware.chromecast.player.shutdown()
                             }
                         }
                         break;
