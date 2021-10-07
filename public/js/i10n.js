@@ -34,8 +34,7 @@ const GLOBALTEXT =
                 formatDurationShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0-mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
                 formatDurationLong: "-HH:mm:ss",
                 formatTimeAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                formatDateAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+                formatDateAMPM: "h:mm\xa0A" // Use NO-BREAK SPACE to avoid collapsing space
             },
             'greek': {
                 contentLockedTitle: "Εισαγωγή PIN",
@@ -59,8 +58,7 @@ const GLOBALTEXT =
                 formatDurationShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0-mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
                 formatDurationLong: "-HH:mm:ss",
                 formatTimeAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                formatDateAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+                formatDateAMPM: "h:mm\xa0A" // Use NO-BREAK SPACE to avoid collapsing space
             }
         }
     };

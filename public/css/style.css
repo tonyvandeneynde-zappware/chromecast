@@ -220,21 +220,6 @@ img#splash {
     line-height: 26px;
     color: #c8c8c8; }
 
-.AdInfo {
-  position: absolute;
-  top: 133px;
-  left: 296px;
-  height: 133px;
-  text-align: left;
-  white-space: nowrap;
-  text-align: left; }
-  .AdInfo p {
-    font-family: FontSans;
-    font-size: 69px;
-    color: white;
-    background-color: black;
-    padding: 0 10px; }
-
 .BitRate {
   position: absolute;
   top: 67px;

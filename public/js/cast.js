@@ -322,7 +322,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
             DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "_onCustomEvent(" + JSON.stringify(data)+ ")");
 
             var action = data.action.substring(3);
-            console.log('-09-09-090-9-09-9-09-09 action:', action)
             var actionType  = data.action.substring(0, 3); // get or set
             var promise, params;
 

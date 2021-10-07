@@ -443,9 +443,10 @@ com.zappware.chromecast.receiver = (function () {
                         const { profileId: previousProfileId } = previousValue
                         if (profileId && previousProfileId) {
                             if (profileId !== previousProfileId) {
+                                // Close the receiver app with a small delay to allow session cleanup.
                                 setTimeout(() => window.close(), 2000);
                                 com.zappware.chromecast.receiver.onBuffering(true);
-                                return com.zappware.chromecast.player.shutdown();
+                                com.zappware.chromecast.player.shutdown();
                             }
                         }
                         break;

@@ -4,21 +4,6 @@
  * Zappware.
  **/
 
- var WIND_CONFIG_BRANCH1 = {
-  graphqlEndpoint: 'https://client.branch1.sdscloud.zappware.com/secure/v1/graphql',
-  awsIdentityPoolId: 'eu-west-1:3414929c-c29a-4b14-8959-d6669ec3a50f',
-  awsDomain: 'cboauth.eu.auth0.com',
-  awsRegion: 'eu-west-1',
-  awsAuthenticationType: 'AWS_IAM',
-  pathLic: 'https://lic.drmtoday.com/license-proxy-headerauth/drmtoday/RightsManager.asmx?assetId=$ASSET_ID$',
-  broadpeakHeartbeatInterval: 20, // in seconds
-  jwtToken: '',
-  deviceId: '',
-  householdId: '',
-  aesEncKey: '',
-  aesInitVector: ''
-};
-
  const WIND_CONFIG_DEV = {
   graphqlEndpoint: 'https://client.dev.cbo.zappware.com/secure/v1/graphql',
   awsIdentityPoolId: 'eu-west-1:fdc21ef4-4982-4102-bd18-d8508b9839a9',
