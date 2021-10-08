@@ -438,19 +438,6 @@ com.zappware.chromecast.receiver = (function () {
                             _currentEventUpdated(currentEvent);
                         }
                         break;
-                    case 'customData':
-                        const { profileId } = value
-                        const { profileId: previousProfileId } = previousValue
-                        if (profileId && previousProfileId) {
-                            if (profileId !== previousProfileId) {
-                                // Close the receiver app with a small delay to allow session cleanup.
-                                setTimeout(() => window.close(), 2000);
-                                com.zappware.chromecast.receiver.onBuffering(true);
-                                com.zappware.chromecast.player.shutdown();
-                                return
-                            }
-                        }
-                        break;
                     case 'playback':
                     case 'qos':
                         config[property] = _setConfig(property, params[property], previousValue);

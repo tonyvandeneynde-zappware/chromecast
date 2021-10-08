@@ -9,56 +9,125 @@
 
 const GLOBALTEXT =
     {
-        default: 'eng',
-        map: { 'gre': 'greek', 'ell': 'greek', 'eng': 'english'},
+        default: 'deu',
+        map: {
+            'deu': 'german',
+            'ger': 'german',
+            'eng': 'english',
+            'hrv': 'croatian',
+            'slv': 'slovenian',
+            'bul': 'bulgarian'
+        },
         strings: {
             'english': {
                 contentLockedTitle: "Enter PIN",
-                contentLockedDescription: "Content locked for parental rating reasons<BR>(enter PIN on WIND VISION app)",
+                contentLockedDescription: "Content locked for parental rating reasons<BR>(enter PIN on TV app)",
                 contentBlockedTitle: "",
-                contentBlockedDescription: "This program is not available.",
+                contentBlockedDescription: "This program is currently not available because of regional content rights.",
                 onErrorTitle: "Oops!",
-                onErrorDescription: "Something unexpected went wrong (code: $CODE$).<BR>Please try again.",
+                onErrorDescription: "Something unexpected went wrong (code: $CODE$).<BR><BR>Please try again.",
                 activateAppTitle: "Activate TV App",
                 activateAppDescription: "Please activate the TV-app to continue watching.",
-                novaStreamingProhibitedTitle: "Oops!",
-                novaStreamingProhibitedDescription: "Casting is not available for this channel.",
                 bitrate: "Bitrate",
-                ////////////////////////////////////////////////////////////////////////////
-                formatNoTime: "",
+                formatNoTime: "--:--",
                 formatTime: "HH:mm",
-                formatProgressShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDate: "HH:mm",
+                formatTimeAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDateAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationLong: "HH:mm:ss",
+                formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
                 formatProgressLong: "HH:mm:ss",
                 formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                formatDate: "HH:mm",
-                formatDurationShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0-mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
-                formatDurationLong: "-HH:mm:ss",
-                formatTimeAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                formatDateAMPM: "h:mm\xa0A" // Use NO-BREAK SPACE to avoid collapsing space
+                blockSkipAd: "Forward skipping is not allowed during ad breaks."
             },
-            'greek': {
-                contentLockedTitle: "Εισαγωγή PIN",
-                contentLockedDescription: "Μη επιτρεπτή θέαση λόγω γονικού ελέγχου<BR>(εισαγωγή PIN στην εφαρμογή WIND VISION)",
+            'german': {
+                contentLockedTitle: "PIN eingeben",
+                contentLockedDescription: "Inhalt wurde aus Gründen der Altersfreigabe gesperrt<BR>(PIN in der TV-App eingeben)",
                 contentBlockedTitle: "",
-                contentBlockedDescription: "Το πρόγραμμα δεν είναι διαθέσιμο.",
-                onErrorTitle: "Ουπς!",
-                onErrorDescription: "Προσωρινό πρόβλημα(κωδικός: $CODE$).<BR>Προσπάθησε ξανά.",
-                activateAppTitle: "Ενεργοποιήστε την εφαρμογή WIND VISION",
-                activateAppDescription: "Ενεργοποιήστε την εφαρμογή τηλεόρασης στην κινητή συσκευή για να συνεχίσετε να παρακολουθείτε.",
-                novaStreamingProhibitedTitle: "Ουπς!",
-                novaStreamingProhibitedDescription: "Η μετάδοση μέσω cast δεν είναι διαθέσιμη σε αυτό το κανάλι.",
-                bitrate: "Ταχύτητα",
-                ////////////////////////////////////////////////////////////////////////////
-                formatNoTime: "",
+                contentBlockedDescription: "Diese Sendung ist aufgrund begrenzter regionaler Inhaltsrechte nicht verfügbar.",
+                onErrorTitle: "Hoppla!",
+                onErrorDescription: "Etwas ist schief gelaufen (code: $CODE$).<BR><BR>Versuchen Sie es bitte erneut.",
+                activateAppTitle: "TV-App aktivieren",
+                activateAppDescription: "Bitte aktivieren Sie die TV-App auf dem Mobilgerät, um weiterzusehen.",
+                bitrate: "Bitrate",
+                formatNoTime: "--:--",
                 formatTime: "HH:mm",
-                formatProgressShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDate: "HH:mm",
+                formatTimeAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDateAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationLong: "HH:mm:ss",
+                formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
                 formatProgressLong: "HH:mm:ss",
                 formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+            },
+            'croatian': {
+                contentLockedTitle: "Enter PIN",
+                contentLockedDescription: "Content locked for parental rating reasons<BR>(enter PIN on TV app)",
+                contentBlockedTitle: "",
+                contentBlockedDescription: "Odabrani program trenutno nije dostupan zbog regionalnih prava na sadržaj.",
+                onErrorTitle: "Oops!",
+                onErrorDescription: "Something unexpected went wrong (code: $CODE$).<BR><BR>Please try again.",
+                activateAppTitle: "Activate TV App",
+                activateAppDescription: "Please activate the TV-app to continue watching.",
+                bitrate: "Bitrate",
+                formatNoTime: "--:--",
+                formatTime: "HH:mm",
                 formatDate: "HH:mm",
-                formatDurationShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0-mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
-                formatDurationLong: "-HH:mm:ss",
                 formatTimeAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
-                formatDateAMPM: "h:mm\xa0A" // Use NO-BREAK SPACE to avoid collapsing space
+                formatDateAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationLong: "HH:mm:ss",
+                formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatProgressLong: "HH:mm:ss",
+                formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+            },
+            'slovenian': {
+                contentLockedTitle: "Enter PIN",
+                contentLockedDescription: "Content locked for parental rating reasons<BR>(enter PIN on TV app)",
+                contentBlockedTitle: "",
+                contentBlockedDescription: "Ta program trenutno ni na voljo, ker nimamo ustreznih pravic za predvajanje te oddaje v tej regiji.",
+                onErrorTitle: "Oops!",
+                onErrorDescription: "Something unexpected went wrong (code: $CODE$).<BR><BR>Please try again.",
+                activateAppTitle: "Activate TV App",
+                activateAppDescription: "Please activate the TV-app to continue watching.",
+                bitrate: "Bitrate",
+                formatNoTime: "--:--",
+                formatTime: "HH:mm",
+                formatDate: "HH:mm",
+                formatTimeAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDateAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationLong: "HH:mm:ss",
+                formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatProgressLong: "HH:mm:ss",
+                formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                blockSkipAd: "Forward skipping is not allowed during ad breaks."
+            },
+            'bulgarian': {
+                contentLockedTitle: "Enter PIN",
+                contentLockedDescription: "Content locked for parental rating reasons<BR>(enter PIN on TV app)",
+                contentBlockedTitle: "",
+                contentBlockedDescription: "Понастоящем тази програма не е налична поради регионални права за излъчване на съдържание.",
+                onErrorTitle: "Oops!",
+                onErrorDescription: "Something unexpected went wrong (code: $CODE$).<BR><BR>Please try again.",
+                activateAppTitle: "Activate TV App",
+                activateAppDescription: "Please activate the TV-app to continue watching.",
+                bitrate: "Bitrate",
+                formatNoTime: "--:--",
+                formatTime: "HH:mm",
+                formatDate: "HH:mm",
+                formatTimeAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDateAMPM: "h:mm\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationShort: "\xa0\xa0\xa0\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatDurationLong: "HH:mm:ss",
+                formatProgressShort: "\xa0\xa0\xa0\xa0mm:ss", // Use NO-BREAK SPACE to avoid collapsing space
+                formatProgressLong: "HH:mm:ss",
+                formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
+                blockSkipAd: "Forward skipping is not allowed during ad breaks."
             }
         }
     };

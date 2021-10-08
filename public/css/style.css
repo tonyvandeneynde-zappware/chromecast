@@ -1,18 +1,36 @@
 @font-face {
   font-family: FontSansThin;
-  src: url("../fonts/PFBeauSansPro-Light.woff") format("woff");
+  src: url("../fonts/A1SansV51-Light.woff") format("woff");
   font-style: normal;
   font-weight: normal; }
 
 @font-face {
   font-family: FontSans;
-  src: url("../fonts/PFBeauSansPro-Bbook.woff") format("woff");
+  src: url("../fonts/A1SansV51-Regular.woff") format("woff");
   font-style: normal;
   font-weight: normal; }
 
 @font-face {
   font-family: FontSansBold;
-  src: url("../fonts/PFBeauSansPro-Bold.woff") format("woff");
+  src: url("../fonts/A1SansV51-Bold.woff") format("woff");
+  font-style: normal;
+  font-weight: normal; }
+
+@font-face {
+  font-family: FontSerif;
+  src: url("../fonts/A1SerifV51-Regular.woff") format("woff");
+  font-style: normal;
+  font-weight: normal; }
+
+@font-face {
+  font-family: FontSerifBold;
+  src: url("../fonts/A1SerifV51-Bold.woff") format("woff");
+  font-style: normal;
+  font-weight: normal; }
+
+@font-face {
+  font-family: WebIcons;
+  src: url("../fonts/A1_WebIcons.woff") format("woff");
   font-style: normal;
   font-weight: normal; }
 
@@ -33,14 +51,16 @@ body {
   /* leave this to (720/1080)*16px because this is also set in sympli.io as 'em'-coordinates base */ }
 
 p {
+  font-family: TTFont;
   vertical-align: top;
-  font-size: 21px;
+  font-size: 11px;
   margin: 0; }
 
-/* NOTE: all coordinates in sympli.io are in xhdpi. */
+/* NOTE: all coordinates in sympli.io are in 1920x1080. */
 h1 {
   position: absolute;
   color: #f17b24;
+  font-family: TTFont;
   top: 45%;
   width: 100%;
   text-align: center;
@@ -54,11 +74,6 @@ track {
   width: 100%;
   text-align: center; }
 
-.accelerated, .PlaybackBanner #progressBar #progressMarker {
-  transform: translate3d(0, 0, 0);
-  backface-visibility: hidden;
-  perspective: 1000; }
-
 iframe#splash {
   width: inherit;
   height: inherit;
@@ -66,65 +81,33 @@ iframe#splash {
   display: none; }
 
 img#splash {
-  content: url(../images/windlogobeta_large.svg);
+  content: url(../images/a1_logo_tranparent.png);
   position: absolute;
-  top: 300px;
-  left: 504px;
-  height: 57px;
-  width: 271px;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: none; }
 
-#loader.lds-ellipsis {
-  display: none;
-  position: absolute;
-  top: 300px;
-  left: 608px;
-  width: 64px;
-  height: 64px;
-  opacity: 0.9; }
-
-.lds-ellipsis div {
-  position: absolute;
-  top: 27px;
-  width: 9px;
-  height: 9px;
+#loader {
+  border: 5px solid white;
+  border-bottom-color: transparent;
   border-radius: 50%;
-  background: #fafafa;
-  animation-timing-function: cubic-bezier(0, 1, 1, 0); }
+  animation: 0.8s loader-03 linear infinite;
+  position: absolute;
+  top: 338px;
+  left: 618px;
+  height: 44px;
+  width: 44px;
+  visibility: hidden;
+  opacity: 0.8; }
 
-.lds-ellipsis div:nth-child(1) {
-  left: 6px;
-  animation: lds-ellipsis1 0.5s infinite; }
-
-.lds-ellipsis div:nth-child(2) {
-  left: 6px;
-  animation: lds-ellipsis2 0.5s infinite; }
-
-.lds-ellipsis div:nth-child(3) {
-  left: 26px;
-  animation: lds-ellipsis2 0.5s infinite; }
-
-.lds-ellipsis div:nth-child(4) {
-  left: 45px;
-  animation: lds-ellipsis3 0.5s infinite; }
-
-@keyframes lds-ellipsis1 {
+@keyframes loader-03 {
   0% {
-    transform: scale(0); }
+    transform: rotate(0deg); }
   100% {
-    transform: scale(1); } }
-
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1); }
-  100% {
-    transform: scale(0); } }
-
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0); }
-  100% {
-    transform: translate(19px, 0); } }
+    transform: rotate(360deg); } }
 
 .Background {
   width: 100%;
@@ -135,22 +118,18 @@ img#splash {
   background-color: opacity; }
 
 .Buffering #loader, .Black #loader {
-  display: block; }
-
-.Buffering #trickplay, .Black #trickplay {
-  display: none; }
+  visibility: visible; }
 
 .Black .Background, .Error .Background {
-  background-color: #0c1a20; }
+  background-color: black; }
 
-.Error #loader, .Error #trickplay, .Blocked #loader, .Blocked #trickplay, .Locked #loader, .Locked #trickplay {
-  display: none; }
+.Error #loader, .Blocked #loader, .Locked #loader {
+  visibility: hidden; }
 
-.Splash:not(.Message) .Background #splash {
-  display: block; }
-
-.Splash:not(.Message) .Background #trickplay {
-  display: none; }
+.Splash:not(.Message) .Background {
+  background-color: gray; }
+  .Splash:not(.Message) .Background #splash {
+    display: block; }
 
 .Statistics {
   position: absolute;
@@ -164,14 +143,10 @@ img#splash {
     position: absolute;
     top: 20px;
     width: 100%;
-    font-family: Roboto, Helvetica, sans-serif;
     font-size: 13px;
+    font-family: FontSansThin;
     color: #ededed;
     opacity: 0.7; }
-
-.Splash .Statistics,
-.Error .Statistics {
-  display: none; }
 
 .Overlay {
   position: absolute;
@@ -187,25 +162,24 @@ img#splash {
 .DisplayIcon {
   display: none;
   position: absolute;
-  top: 160px;
-  left: 598px;
+  top: 169px;
+  left: 597px;
   height: 85px;
-  width: 85px; }
+  width: 85px;
+  text-align: center;
+  color: gray; }
 
 .DisplayTitle {
   position: absolute;
   top: 251px;
   left: 171px;
-  height: 100px;
+  height: 53px;
   width: 938px;
-  text-align: center;
-  display: table; }
+  text-align: center; }
   .DisplayTitle p {
-    display: table-cell;
-    vertical-align: bottom;
-    font-family: FontSansBold;
-    font-size: 48px;
-    color: #0094d9; }
+    font-family: FontSerifBold;
+    font-size: 51px;
+    color: gray; }
 
 .DisplayDescription {
   position: absolute;
@@ -216,19 +190,32 @@ img#splash {
   text-align: center; }
   .DisplayDescription p {
     font-family: FontSans;
-    font-size: 20px;
-    line-height: 26px;
-    color: #c8c8c8; }
+    font-size: 19px;
+    color: gainsboro; }
+
+.AdInfo {
+  position: absolute;
+  top: 67px;
+  left: 148px;
+  height: 67px;
+  text-align: left;
+  white-space: nowrap;
+  text-align: left; }
+  .AdInfo p {
+    font-family: FontSans;
+    font-size: 35px;
+    color: white;
+    background-color: black;
+    padding: 0 10px; }
 
 .BitRate {
   position: absolute;
-  top: 67px;
-  height: 33px;
+  top: 33px;
+  height: 17px;
   width: 100%;
   text-align: center; }
   .BitRate p {
-    font-family: Roboto, Helvetica, sans-serif;
-    font-size: 27px;
+    font-size: 13px;
     color: #ededed;
     opacity: 0.5; }
 
@@ -240,27 +227,26 @@ video {
   height: 100%; }
 
 .Blocked .Background, .Locked .Background {
-  background-color: #0c1a20; }
+  background-color: gray; }
 
 .Blocked .DisplayIcon, .Locked .DisplayIcon {
-  background-image: url(../images/icon_lock.png);
+  text-align: center;
+  font-size: 85px;
   display: block; }
 
-.Blocked .PlaybackBanner, .Locked .PlaybackBanner {
-  opacity: 0; }
+.Blocked .DisplayIcon:before, .Locked .DisplayIcon:before {
+  content: "\ba"; }
 
 .Error.Message .Background {
-  background-color: #0c1a20; }
+  background-color: #1a1a1a; }
 
 .Error.Message .DisplayIcon {
-  background-image: url(../images/icon_alert.png);
+  text-align: center;
+  font-size: 85px;
   display: block; }
 
-.Error.Message .DisplayTitle p {
-  color: #b4191e; }
-
-.Error.Message .PlaybackBanner {
-  opacity: 0; }
+.Error.Message .DisplayIcon:before {
+  content: "\2d"; }
 
 #container, body.Splash #background {
   position: absolute;
@@ -285,33 +271,28 @@ body:not(.Splash) #background {
   .PlaybackBanner .ChannelLogo {
     position: absolute;
     top: auto;
-    bottom: 528px;
+    bottom: 255px;
+    left: 136px;
     height: auto;
-    width: 100%;
-    left: 0px; }
-    .PlaybackBanner .ChannelLogo img {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      height: auto;
-      width: auto;
-      vertical-align: bottom; }
+    width: auto; }
   .PlaybackBanner .ChannelTitle {
-    position: absolute;
-    top: 205px;
-    left: 139px;
-    height: 64px;
-    width: 1001px;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center; }
-    .PlaybackBanner .ChannelTitle p {
-      font-family: FontSans;
-      font-size: 19px;
-      color: #c8c8c8;
-      opacity: 0.7; }
+    display: none;
+    /*        position: absolute;
+        top: convert(707px);
+        left: convert(222px);
+        height: convert(48px);
+        width: convert(389px);
+        text-align: left;
+        white-space: nowrap;            
+        overflow: hidden;
+        text-overflow: ellipsis;            
+        text-align: left;
+        
+        p {
+            font-family: FontSans;
+            font-size: convert(27px);
+            color: rgba(220, 220, 220, 0.5);
+        }*/ }
   .PlaybackBanner #eventDateTime {
     position: absolute;
     width: 1280px;
@@ -321,126 +302,134 @@ body:not(.Splash) #background {
     .PlaybackBanner #eventDateTime .Title {
       position: absolute;
       top: auto;
-      bottom: 213px;
-      left: 139px;
+      bottom: 115px;
+      left: 136px;
       height: auto;
-      width: 1001px; }
+      width: 933px; }
       .PlaybackBanner #eventDateTime .Title p {
-        font-family: FontSansBold;
-        font-size: 40px;
-        color: #0094d9;
-        text-align: center; }
+        font-family: FontSerifBold;
+        font-size: 37px;
+        color: gainsboro; }
     .PlaybackBanner #eventDateTime .BottomLine p {
-      font-size: 18px;
-      font-family: Roboto, Helvetica, sans-serif;
-      color: #c8c8c8; }
+      font-size: 19px;
+      font-family: FontSans;
+      color: gainsboro; }
     .PlaybackBanner #eventDateTime .BottomLine #bottomLeft {
       position: absolute;
-      top: 644px;
-      left: 144px;
-      height: 23px;
-      width: 105px;
+      top: 617px;
+      left: 136px;
+      height: 31px;
+      width: 64px;
       text-align: left; }
     .PlaybackBanner #eventDateTime .BottomLine #bottomRight {
       position: absolute;
-      top: 644px;
-      left: auto;
-      right: 144px;
-      height: 23px;
-      width: 105px;
-      text-align: right; }
+      top: 617px;
+      left: 1093px;
+      height: 31px;
+      width: 64px;
+      text-align: left; }
   .PlaybackBanner #progressBar {
     position: absolute;
-    top: 639px;
-    left: 144px;
-    height: 2px;
-    width: 992px; }
+    top: 629px;
+    left: 225px;
+    height: 3px;
+    width: 853px; }
     .PlaybackBanner #progressBar #progressBackground {
       position: absolute;
       width: inherit;
       height: inherit;
-      background-color: rgba(230, 230, 230, 0.45); }
+      background-color: gainsboro;
+      opacity: 0.3; }
     .PlaybackBanner #progressBar #progressForeground {
       height: inherit;
-      background-color: #0094d9;
       position: absolute; }
     .PlaybackBanner #progressBar #progressBuffer {
       position: absolute;
       height: inherit;
-      background-color: #0094d9;
+      background-color: gainsboro;
       opacity: 1; }
-    .PlaybackBanner #progressBar #progressMarker {
-      position: absolute;
-      top: -28px;
-      height: 35px;
-      width: 2px;
-      background-image: linear-gradient(-180deg, rgba(230, 230, 230, 0) 0%, rgba(230, 230, 230, 0) 65%, #e6e6e6 66%, #e6e6e6 100%);
-      font-size: 18px;
-      font-family: Roboto, Helvetica, sans-serif;
-      color: #c8c8c8;
-      text-align: left;
-      text-indent: -34px; }
     .PlaybackBanner #progressBar #progressPlaying {
       position: absolute;
       height: inherit;
-      background-color: #0094d9;
+      background-color: #da291c;
       opacity: 1; }
+    .PlaybackBanner #progressBar #progressMarker {
+      position: absolute;
+      top: 11px;
+      height: 17px;
+      width: 1px;
+      font-size: 19px;
+      font-family: FontSans;
+      color: rgba(220, 220, 220, 0.6);
+      text-align: left;
+      text-indent: -34px; }
 
-.PLTV #trickplayContainer, .VOD #trickplayContainer, .STARTOVER #trickplayContainer, .CUTV #trickplayContainer, .NPVR #trickplayContainer, .LIVETV #trickplayContainer {
-  position: absolute;
-  top: inherit;
-  left: inherit;
-  height: inherit;
-  width: inherit; }
-  .PLTV #trickplayContainer #live, .VOD #trickplayContainer #live, .STARTOVER #trickplayContainer #live, .CUTV #trickplayContainer #live, .NPVR #trickplayContainer #live, .LIVETV #trickplayContainer #live {
-    display: none;
-    vertical-align: middle;
-    font-family: FontSans;
-    font-size: 15px;
-    color: #eeeeee;
-    text-align: center;
-    background-color: #0094d9;
-    top: 640px;
-    position: absolute;
-    left: 99px;
-    padding: 4px;
-    padding-top: 5px;
-    padding-bottom: 3px; }
-  .PLTV #trickplayContainer #trickplay, .VOD #trickplayContainer #trickplay, .STARTOVER #trickplayContainer #trickplay, .CUTV #trickplayContainer #trickplay, .NPVR #trickplayContainer #trickplay, .LIVETV #trickplayContainer #trickplay {
-    position: absolute;
-    top: 295px;
-    left: 592px;
-    height: auto;
-    width: auto; }
-  .PLTV #trickplayContainer #trickplay.Pause, .VOD #trickplayContainer #trickplay.Pause, .STARTOVER #trickplayContainer #trickplay.Pause, .CUTV #trickplayContainer #trickplay.Pause, .NPVR #trickplayContainer #trickplay.Pause, .LIVETV #trickplayContainer #trickplay.Pause {
-    content: url(../images/icon_pauze.png); }
-  .PLTV #trickplayContainer #trickplay.Play, .VOD #trickplayContainer #trickplay.Play, .STARTOVER #trickplayContainer #trickplay.Play, .CUTV #trickplayContainer #trickplay.Play, .NPVR #trickplayContainer #trickplay.Play, .LIVETV #trickplayContainer #trickplay.Play {
-    content: url(../images/icon_play.png); }
+i {
+  font-family: WebIcons;
+  speak: none;
+  font-style: normal;
+  font-weight: 400;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased; }
 
-.LIVETV #progressForeground {
-  display: block;
-  background-color: #0094d9; }
-
-.LIVETV .PlaybackBanner:not(.ready) .ProgressBar, .LIVETV .PlaybackBanner:not(.ready) #live, .LIVETV .PlaybackBanner:not(.ready) #eventDateTime {
-  opacity: 0; }
-
-.PlaybackBanner #progressBuffer {
+.PLTV #progressForeground, .VOD #progressForeground, .STARTOVER #progressForeground, .CUTV #progressForeground, .NPVR #progressForeground {
   display: none; }
 
-.PlaybackBanner #progressPlaying {
-  display: block; }
+.PlaybackBanner:not(.ready) .ProgressMarker {
+  opacity: 0; }
+
+.LIVETV #progressForeground {
+  background-color: #6295ac; }
+
+.LIVETV #progressPlaying, .LIVETV #progressBuffer {
+  display: none; }
+
+#trickplayContainer {
+  overflow: hidden;
+  position: absolute;
+  top: 551px;
+  left: 67px;
+  height: 93px;
+  width: 59px; }
+  #trickplayContainer #trickplay {
+    height: 59px;
+    font-size: 59px;
+    color: gainsboro;
+    text-align: center;
+    margin-bottom: 5px; }
+  #trickplayContainer #trickplay:before {
+    content: "\ac"; }
+  #trickplayContainer #trickplay.Pause:before {
+    content: "\f4"; }
+  #trickplayContainer #live {
+    display: none;
+    vertical-align: middle;
+    font-family: FontSansBold;
+    font-size: 16px;
+    color: #eeeeee;
+    text-align: center;
+    background-color: #6295ac;
+    padding: 4px;
+    width: inherit; }
+
+.VOD .PlaybackBanner .ProgressBuffer, .CUTV .PlaybackBanner .ProgressBuffer, .NPVR .PlaybackBanner .ProgressBuffer {
+  display: none; }
+
+.VOD .PlaybackBanner #progressBar, .NPVR .PlaybackBanner #progressBar {
+  left: 136px;
+  width: 853px; }
+
+.VOD .PlaybackBanner #eventDateTime .BottomLine #bottomRight, .NPVR .PlaybackBanner #eventDateTime .BottomLine #bottomRight {
+  left: 1009px;
+  width: 240px; }
+
+.VOD .PlaybackBanner #progressBar #progressBuffer, .CUTV .PlaybackBanner #progressBar #progressBuffer, .NPVR .PlaybackBanner #progressBar #progressBuffer, .STARTOVER .PlaybackBanner #progressBar #progressBuffer {
+  background-color: #6295ac; }
 
 .LIVETV #trickplayContainer #live, .PLTV.live #trickplayContainer #live, .STARTOVER.live #trickplayContainer #live, .NPVR.live #trickplayContainer #live {
   display: table-cell; }
-
-.LIVETV .PlaybackBanner #progressBuffer, .PLTV.live .PlaybackBanner #progressBuffer, .STARTOVER.live .PlaybackBanner #progressBuffer, .NPVR.live .PlaybackBanner #progressBuffer {
-  display: block; }
-
-.LIVETV .PlaybackBanner #progressPlaying, .PLTV.live .PlaybackBanner #progressPlaying, .STARTOVER.live .PlaybackBanner #progressPlaying, .NPVR.live .PlaybackBanner #progressPlaying {
-  display: none; }
-
-.VOD .PlaybackBanner:not(.ready) .ProgressMarker, .CUTV .PlaybackBanner:not(.ready) .ProgressMarker, .NPVR .PlaybackBanner:not(.ready) .ProgressMarker, .STARTOVER .PlaybackBanner:not(.ready) .ProgressMarker {
-  opacity: 0; }
 
 .deactivated {
   display: none !important; }

@@ -11,12 +11,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
         playChannel: {
             "operationName":"playChannel",
             "variables":{ input: undefined },
-            "query":"mutation playChannel($input: PlayChannelInput!) {\n  playChannel(input: $input) {\n    playbackInfo {\n      sessionId\n      url\n      channel {\n        id\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation playChannel($input: PlayChannelInput!) {\n  playChannel(input: $input) {\n    playbackInfo {\n      sessionId\n      url\n    adPlaybackRestrictions\n      channel {\n        id\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         pauseLiveChannel: {
             "operationName":"pauseLiveChannel",
             "variables":{ input: undefined },
-            "query":"mutation pauseLiveChannel($input: PauseLiveChannelInput!) {\n  pauseLiveChannel(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      playbackRestrictions {\n        message\n        __typename\n      }\n      event {\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      streamStart\n      streamEnd\n      maximumBufferSize\n      endOfStreamBehaviour\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation pauseLiveChannel($input: PauseLiveChannelInput!) {\n  pauseLiveChannel(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n    adPlaybackRestrictions\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      playbackRestrictions {\n        message\n        __typename\n      }\n      event {\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      streamStart\n      streamEnd\n      maximumBufferSize\n      endOfStreamBehaviour\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         playVODAsset: {
             "operationName":"playVODAsset",
@@ -36,7 +36,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
         playRecording: {
             "operationName":"playRecording",
             "variables":{ input: undefined },
-            "query":"mutation playRecording($input: PlayRecordingInput!) {\n  playRecording(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n      recording {\n        start\n        end\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation playRecording($input: PlayRecordingInput!) {\n  playRecording(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n    adPlaybackRestrictions\n      recording {\n        start\n        end\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         setRecordingBookmark: {
             "operationName":"setRecordingBookmark",
@@ -46,12 +46,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
         restartEvent: {
             "operationName":"restartEvent",
             "variables":{ input: undefined },
-            "query":"mutation restartEvent($input: RestartEventInput!) {\n  restartEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n      event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation restartEvent($input: RestartEventInput!) {\n  restartEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n    adPlaybackRestrictions\n      event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         catchupEvent: {
             "operationName":"catchupEvent",
             "variables":{ input: undefined },
-            "query":"mutation catchupEvent($input: CatchupEventInput!) {\n  catchupEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n      event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation catchupEvent($input: CatchupEventInput!) {\n  catchupEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n    adPlaybackRestrictions\n      event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         setEventBookmark: {
             "operationName":"setEventBookmark",
@@ -263,6 +263,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             // Acquire the url and ... happy streaming!
             media._playbackInfo = this._acquirePlaybackInfo(query, media)
             .then(function(playbackInfo) {
+                com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adplaybackRestrictions)
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned
                                                         // session id as replaceSessionId (WINPUB-1604)
@@ -316,12 +317,13 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
         _manifestHandler(manifest) {
             let media = playerManager.getMediaInformation() || this._currentMedia;
-
+            // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
+            let  { adBlocks } =  media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
+            media && manifest && com.zappware.chromecast.adshandler.addAdsBlocks(adBlocks)
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV      ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.NPVR      ){
-
                 try {
                     if (manifest.indexOf('type="dynamic"') > 0) {
 
@@ -391,7 +393,6 @@ com.zappware.chromecast.Nexx4Player = (function () {
 //                // Ignore any error: it should not hold back the reload.
 //                DEBUG && log("Unexpected exception " + e + " in _manifestHandler()!");
 //            }
-
             return manifest;
         }
 
@@ -559,6 +560,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             media._playbackInfo = this._acquirePlaybackInfo(query, media)
             .then(function(playbackInfo) {
                 if (playbackInfo && playbackInfo.url) {
+                    com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adplaybackRestrictions)
                     media.contentUrl = playbackInfo.url;
                     media._playingStartedAt = com.zappware.chromecast.util.getCurrentTime();
                     media._playbackInfo = playbackInfo;
@@ -671,7 +673,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                         media._positionInfo.minPosition = Math.max(...minPositions);
                         media._positionInfo.curPosition = Math.max(Math.min(this._getCurrentPosition(media) || Number.MAX_SAFE_INTEGER, media._positionInfo.maxPosition), media._positionInfo.minPosition);
 
-                        if (this._state === com.zappware.chromecast.PlayerState.PAUSED && 
+                        if (this._state === com.zappware.chromecast.PlayerState.PAUSED &&
                             media._positionInfo.curPosition <= media._positionInfo.minPosition) {
                                 DEBUG && log('Auto-resuming at start of TSB')
                                 playerManager.play();
@@ -1104,4 +1106,5 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
         _graphql(request) { }
     };
+
 })();

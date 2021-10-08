@@ -366,7 +366,7 @@ com.zappware.chromecast.Player = (function () {
                     break;
             }
 
-            if (!this.canSeek(mediaInfo)) {
+            if (!this.canSeek(mediaInfo, position)) {
                 DEBUG && log("setPosition(" + position + ") ignored: setPosition not supported.");
                 return;
             }
@@ -378,6 +378,7 @@ com.zappware.chromecast.Player = (function () {
             if (this.getMaxPosition() > this.getMinPosition()) {
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
+            position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(position)
 
             // Fix the requested position in the _positionInfo to avoid positions jumping back and forth
             if (mediaInfo._positionInfo) {
@@ -426,7 +427,7 @@ com.zappware.chromecast.Player = (function () {
         }
 
         // canSeek //////////////////////////////////////////////////////////////////////////////////
-        canSeek(mediaInfo) {
+        canSeek(mediaInfo, position) {
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
@@ -434,7 +435,7 @@ com.zappware.chromecast.Player = (function () {
                 return this.isTimeshiftEnabled(mediaInfo);
             }
 
-            return true;
+            return com.zappware.chromecast.adshandler.canSeek(position)
         }
 
         // canJump //////////////////////////////////////////////////////////////////////////////////
@@ -545,6 +546,7 @@ com.zappware.chromecast.Player = (function () {
                 }
                 media._positionInfo.maxPosition = (seekableRange) ? seekableRange.end : playerManager.getDurationSec();
             }
+            com.zappware.chromecast.adshandler.checkAdEnterExit()
         }
 
         // getPosition ////////////////////////////////////////////////////////////////////////////////
