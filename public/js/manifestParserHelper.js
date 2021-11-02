@@ -44,7 +44,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
           if (per.EventStream && per.EventStream[0].schemeIdUri.indexOf("scte")) {
             let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
             let adsInfo = getAdsBlockInfo(per, per.EventStream[0], typeManifest, mdp);
-            adBlocks.push(adsInfo);
+            adsInfo && adBlocks.push(adsInfo);
           } else {
             console.log("");
           }
@@ -61,31 +61,52 @@ com.zappware.chromecast.manifestParserHelper = (function () {
 
   function getAdsBlockInfo(period, eventStream, typeManifest, mdp) {
     if (!period) return;
-    let startTime = period.start;
+    // check for PresentationTime
+    let isPresentationTimeZero = checkForPresentationTime(eventStream)
+    if (isPresentationTimeZero) {
+      let startTime = period.start;
+      // for dynamic streams
+      let utcTimeUrl = typeManifest === "dynamic" && ((mdp && mdp.UTCTiming[0].value) || "https://time.akamai.com/?iso");
+      let adsStartDynamicStream = typeManifest === "dynamic" && calculateStartTimeForDynamicStream(period, typeManifest, utcTimeUrl);
 
-    // for dynamic streams
-    let utcTimeUrl = typeManifest === "dynamic" && ((mdp && mdp.UTCTiming[0].value) || "https://time.akamai.com/?iso");
-    let adsStartDynamicStream = typeManifest === "dynamic" && calculateStartTimeForDynamicStream(period, typeManifest, utcTimeUrl);
+      let adStartTime = typeManifest === "dynamic" ? adsStartDynamicStream : startTime.substring(2, startTime.length - 1);
+      let duration = period.duration || 0;
+      if (!duration) return
+      let minutesSearch = duration.indexOf("M");
+      let secondsSearch = duration.indexOf("S");
+      let durationMinutes = (minutesSearch > -1) && duration.substring(2, minutesSearch);
 
-    let adStartTime = typeManifest === "dynamic" ? adsStartDynamicStream : startTime.substring(2, startTime.length - 1);
-    let duration = period.duration;
-    let minutesSearch = duration.indexOf("M");
-    let secondsSearch = duration.indexOf("S");
-    let durationMinutes = duration.substring(2, minutesSearch);
-    let durationSeconds = duration.substring(minutesSearch + 1, secondsSearch);
-    let durationMinutesToSeconds = convertMinutesToSeconds(durationMinutes);
-    let totalDuration = parseFloat(durationMinutesToSeconds) + parseFloat(durationSeconds);
-    let adEndTime = totalDuration + parseFloat(adStartTime);
-    let adId = eventStream.Event[0].id;
-    let adType = "TYPE_SCTE35";
+      // duration possibilities ==> 'PT3M4S' 'PT3M', 'PT4S'
+      let durationSeconds = (minutesSearch > -1 && secondsSearch > -1) ? duration.substring(minutesSearch + 1, secondsSearch) :
+        (minutesSearch > -1 && secondsSearch === -1) ? 0 :
+        (minutesSearch <= -1 && secondsSearch > -1) ? duration.substring(2, secondsSearch) : 0;
 
-    return {
-      adId,
-      adStartTime,
-      adEndTime,
-      totalDuration,
-      adType,
-    };
+      let durationMinutesToSeconds = durationMinutes && convertMinutesToSeconds(durationMinutes);
+      let totalDuration = durationMinutesToSeconds ? parseFloat(durationMinutesToSeconds) + parseFloat(durationSeconds) : parseFloat(durationSeconds);
+      let adEndTime = totalDuration + parseFloat(adStartTime);
+      let adId = eventStream.Event[0].id;
+      let adType = "TYPE_SCTE35";
+
+      return {
+        adId,
+        adStartTime: parseInt(adStartTime),
+        adEndTime: parseInt(adEndTime),
+        totalDuration,
+        adType,
+      };
+
+    } else {
+     let adsInfo = calculateWhenPresentationTimeIsNotZero(eventStream, typeManifest, mdp)
+     return adsInfo.map((ad) => {
+       return {
+         adId: ad.adId,
+         adStartTime: parseInt(ad.start),
+         adEndTime: parseInt(ad.end),
+         totalDuration: ad.duration,
+         adType: ad.adType,
+       }
+     })
+    }
   }
 
   function convertMinutesToSeconds(minutes) {
@@ -126,6 +147,59 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     let adsStartTime = startTime - diff;
     return adsStartTime;
   }
+
+  /************************************************************************************
+   * Logic to Calculate ad's start and end time when Event's presentationTime is not zero
+   *************************************************************************************/
+  function checkForPresentationTime(eventStream) {
+    // check for presentation time
+    let isPresentationTimeZero
+    eventStream.Event.map((e) => {
+      if (parseInt(e.presentationTime) === 0) {
+        isPresentationTimeZero = true
+        return true
+      } else {
+        isPresentationTimeZero = false
+        return false
+      }
+    })
+    return isPresentationTimeZero
+  }
+
+  function calculateWhenPresentationTimeIsNotZero(eventStream, typeManifest, mdp) {
+    //To convert these to seconds, the presentationTime and the duration must be divided by the timescale.
+    let timeScale = eventStream.timescale
+    return eventStream.Event.map((event) => {
+
+      // for dynamic streams
+      let utcTimeUrl = typeManifest === "dynamic" && ((mdp && mdp.UTCTiming[0].value) || "https://time.akamai.com/?iso");
+      let adsStartDynamicStream = typeManifest === "dynamic" && dynamicLogicForNonZeroPTime(typeManifest, utcTimeUrl, event,timeScale);
+
+      let start = typeManifest === "dynamic" ? adsStartDynamicStream : (event.presentationTime / timeScale)
+      let duration = (event.duration / timeScale)
+      let end = parseFloat(start) + parseFloat(duration)
+      let adId = event.id
+      let adType = "TYPE_SCTE35";
+      return {
+        start,
+        duration,
+        end,
+        adId,
+        adType
+      };
+    });
+  }
+
+  function dynamicLogicForNonZeroPTime(typeManifest, url, event, timeScale) {
+    if (typeManifest !== "dynamic") return;
+    let currentTime = com.zappware.chromecast.util.getCurrentTime();
+    let utcTime = fetchManifestUtcTime(url);
+    let utcTimeToSeconds = convertDateToSeconds(utcTime);
+    let diff = currentTime - utcTimeToSeconds;
+    let start = (event.presentationTime / timeScale);
+    let adsStartTime = start - diff;
+    return adsStartTime;
+  }
   /************************************** */
   // END AD SKIPPING
   /***************************************************** */
@@ -139,5 +213,8 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     convertDateToSeconds,
     toDateTime,
     calculateStartTimeForDynamicStream,
+    checkForPresentationTime,
+    calculateWhenPresentationTimeIsNotZero,
+    dynamicLogicForNonZeroPTime
   };
 })();

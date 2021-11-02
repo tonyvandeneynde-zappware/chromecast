@@ -11,6 +11,73 @@ com.zappware.chromecast.Nexx4Player = (function () {
         playChannel: {
             "operationName":"playChannel",
             "variables":{ input: undefined },
+            "query":"mutation playChannel($input: PlayChannelInput!) {\n  playChannel(input: $input) {\n    playbackInfo {\n      sessionId\n      url\n      channel {\n        id\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+        },
+        pauseLiveChannel: {
+            "operationName":"pauseLiveChannel",
+            "variables":{ input: undefined },
+            "query":"mutation pauseLiveChannel($input: PauseLiveChannelInput!) {\n  pauseLiveChannel(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      playbackRestrictions {\n        message\n        __typename\n      }\n      event {\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      streamStart\n      streamEnd\n      maximumBufferSize\n      endOfStreamBehaviour\n      __typename\n    }\n    __typename\n  }\n}\n"
+        },
+        playVODAsset: {
+            "operationName":"playVODAsset",
+            "variables":{ input: undefined },
+            "query":"mutation playVODAsset($input: PlayVODAssetInput!) {\n  playVODAsset(input: $input) {\n    playbackInfo {\n      deliveryKind\n      url\n      endOfEpisodeOffset\n      sessionId\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      vodAsset {\n        id\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+        },
+        setVODBookmark: {
+            "operationName":"setVODBookmark",
+            "variables":{ input: undefined, profileId: undefined },
+            "query":"mutation setVODBookmark($input: SetVODBookmarkInput!, $profileId: ID!) {\n  setVODBookmark(input: $input) {\n    vodAsset {\n      ...cacheInfoFragment\n      personalInfo(profileId: $profileId) {\n        ...personalVODInfoFragment\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment personalVODInfoFragment on PersonalVODInfo {\n  ...cacheInfoFragment\n  bookmark {\n    ...bookmarkFragment\n    __typename\n  }\n  __typename\n}\n\nfragment cacheInfoFragment on Cacheable {\n  __typename\n  id\n  expiry\n}\n\nfragment bookmarkFragment on Bookmark {\n  ...cacheInfoFragment\n  position\n  audio\n  subtitle\n  __typename\n}\n"
+        },
+        playTrailer: {
+            "operationName":"playTrailer",
+            "variables":{ input: undefined },
+            "query":"mutation playTrailer($input: PlayTrailerInput!) {\n  playTrailer(input: $input) {\n    playbackInfo {\n      deliveryKind\n      url\n      sessionId\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+        },
+        playRecording: {
+            "operationName":"playRecording",
+            "variables":{ input: undefined },
+            "query":"mutation playRecording($input: PlayRecordingInput!) {\n  playRecording(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n      recording {\n        start\n        end\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+        },
+        setRecordingBookmark: {
+            "operationName":"setRecordingBookmark",
+            "variables":{ input: undefined, profileId: undefined },
+            "query":"mutation setRecordingBookmark($input: SetRecordingBookmarkInput!, $profileId: ID!) {\n  setRecordingBookmark(input: $input) {\n    recording {\n      start\n      ...cacheInfoFragment\n      personalInfo(profileId: $profileId) {\n        ...personalRecordingInfoFragment\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment personalRecordingInfoFragment on PersonalRecordingInfo {\n  bookmark {\n    ...cacheInfoFragment\n    position\n    __typename\n  }\n  __typename\n}\n\nfragment cacheInfoFragment on Cacheable {\n  __typename\n  id\n  expiry\n}\n"
+        },
+        restartEvent: {
+            "operationName":"restartEvent",
+            "variables":{ input: undefined },
+            "query":"mutation restartEvent($input: RestartEventInput!) {\n  restartEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n      event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+        },
+        catchupEvent: {
+            "operationName":"catchupEvent",
+            "variables":{ input: undefined },
+            "query":"mutation catchupEvent($input: CatchupEventInput!) {\n  catchupEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n      event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+        },
+        setEventBookmark: {
+            "operationName":"setEventBookmark",
+            "variables":{ input: undefined, profileId: undefined },
+            "query":"mutation setEventBookmark($input: SetEventBookmarkInput!, $profileId: ID!) {\n  setEventBookmark(input: $input) {\n    event {\n      ...cacheInfoFragment\n      personalInfo(profileId: $profileId) {\n        ...personalEventInfoFragment\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment personalEventInfoFragment on PersonalEventInfo {\n  ...cacheInfoFragment\n  recordings(kindFilter: NETWORK) {\n    ... on NetworkRecording {\n      id\n      start\n      end\n      status\n      availableUntil\n      personalRecordingInfo: personalInfo(profileId: $profileId) {\n        ...personalRecordingInfoFragment\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  bookmark {\n    ...bookmarkFragment\n    __typename\n  }\n  __typename\n}\n\nfragment cacheInfoFragment on Cacheable {\n  __typename\n  id\n  expiry\n}\n\nfragment bookmarkFragment on Bookmark {\n  ...cacheInfoFragment\n  position\n  audio\n  subtitle\n  __typename\n}\n\nfragment personalRecordingInfoFragment on PersonalRecordingInfo {\n  bookmark {\n    ...cacheInfoFragment\n    position\n    __typename\n  }\n  __typename\n}\n"
+        },
+        keepAlive: {
+            "operationName":"keepAlive",
+            "variables":{},
+            "query":"mutation keepAlive {\n  keepSessionAlive {\n    sessionTimeout\n    __typename\n  }\n}\n"
+        },
+        stopPlayback: {
+            "operationName":"stopPlayback",
+            "variables":{ input: undefined },
+            "query":"mutation stopPlayback($input: StopPlaybackInput!) {\n  stopPlayback(input: $input) {\n    success\n    __typename\n  }\n}\n"
+        },
+        getCurrentEvent: {
+            "operationName": "getCurrentEvent",
+            "variables": { },
+            "query": "query getCurrentEvent($channelId: ID!, $time: Date!) {\n  channel(id: $channelId) {\n    eventsAt(time: $time, previous: 0, following: 0) {\n      id\n      expiry\n      items {\n        ...nowPlayingEventFragment\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\n\nfragment nowPlayingEventFragment on Event {\n  ...eventInfoBasicFragment\n  __typename\n}\n\nfragment eventInfoBasicFragment on Event {\n  id\n  title\n  start\n  end\n  __typename\n}\n"
+        }
+    };
+    var tempQueries = {
+        playChannel: {
+            "operationName":"playChannel",
+            "variables":{ input: undefined },
             "query":"mutation playChannel($input: PlayChannelInput!) {\n  playChannel(input: $input) {\n    playbackInfo {\n      sessionId\n      url\n    adPlaybackRestrictions\n      channel {\n        id\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         pauseLiveChannel: {
@@ -258,12 +325,13 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
             this.playbackConfig.___workaround = {};
             this.playbackConfig.___workaround.manifestHandler = this.playbackConfig.manifestHandler;
+            com.zappware.chromecast.adshandler.reset()
             this.playbackConfig.manifestHandler = this._manifestHandler.bind(this);
 
             // Acquire the url and ... happy streaming!
             media._playbackInfo = this._acquirePlaybackInfo(query, media)
             .then(function(playbackInfo) {
-                com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adplaybackRestrictions)
+                playbackInfo && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions)
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned
                                                         // session id as replaceSessionId (WINPUB-1604)
@@ -318,8 +386,14 @@ com.zappware.chromecast.Nexx4Player = (function () {
         _manifestHandler(manifest) {
             let media = playerManager.getMediaInformation() || this._currentMedia;
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
-            let  { adBlocks } =  media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
-            media && manifest && com.zappware.chromecast.adshandler.addAdsBlocks(adBlocks)
+            try {
+                let isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
+                let isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+                 let  { adBlocks } =  isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
+                 isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.addAdsBlocks(adBlocks)
+            } catch (error) {
+                  console.log(error)
+            }
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV      ||
@@ -560,7 +634,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             media._playbackInfo = this._acquirePlaybackInfo(query, media)
             .then(function(playbackInfo) {
                 if (playbackInfo && playbackInfo.url) {
-                    com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adplaybackRestrictions)
+                    com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions)
                     media.contentUrl = playbackInfo.url;
                     media._playingStartedAt = com.zappware.chromecast.util.getCurrentTime();
                     media._playbackInfo = playbackInfo;
@@ -756,9 +830,10 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 case 'playVODAsset': // NOSONAR: Ignore purposely fall-through warning.
                 case 'playTrailer':
                     if (!query.query) {
-                        query.query = queries[query.operationName].query;
+                        let isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+                        query.query = isAdSkippingEnabled ? tempQueries[query.operationName].query : queries[query.operationName].query;
 
-                        var variables = queries[query.operationName].variables;
+                        var variables = isAdSkippingEnabled ? tempQueries[query.operationName].variables : queries[query.operationName].variables;
                         for (var v in variables) {
                             if (variables.hasOwnProperty(v) && !query.variables.hasOwnProperty(v)) {
                                 query.variables[v] = variables[v];

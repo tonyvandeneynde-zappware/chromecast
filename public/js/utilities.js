@@ -245,8 +245,8 @@ com.zappware.chromecast.util = (function () {
 
     function httpHead(url, timeout) {
         return new Promise(function (resolve, reject) {
-            var xmlHttp = new XMLHttpRequest();
 
+            var xmlHttp = new XMLHttpRequest();
             xmlHttp.timeout = timeout;
             xmlHttp.onreadystatechange = function() {
                 if (xmlHttp.readyState === 4) {
