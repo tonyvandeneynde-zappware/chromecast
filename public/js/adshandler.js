@@ -59,14 +59,6 @@
     console.log('adshandler - media:', media)
     mediaInfo = playerManager.getMediaInformation()
     console.log('adshandler - mediaInfo:', mediaInfo)
-    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV) {
-        const customData = JSON.parse(mediaInfo.metadata.customData)
-        console.log('customData:', customData)
-        const currentTime = com.zappware.chromecast.util.getCurrentTime()
-    }
     // const currentTime = getCurrentTimeSec()
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
@@ -165,6 +157,15 @@
   const addAdsBlock = (adId, adStartTime, adEndTime, adType) => {
     if (!isAdSkippingEnabled) return
     if(!adId) return
+    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV ||
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV) {
+        const customData = JSON.parse(mediaInfo.metadata.customData)
+        console.log('customData:', customData)
+        adStartTime -= customData.start
+        adEndTime -= customData.start
+    }
     const nextId = (adsBlocks.length === 0 ? 0 : _.last(adsBlocks).id + 1)
     const newAdsBlock = {
       id: nextId,
