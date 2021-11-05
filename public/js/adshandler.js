@@ -177,7 +177,7 @@
       return
     }
 
-    if (playerManager.getCurrentTimeSec() && playerManager.getCurrentTimeSec() > endTime) {
+    if (playerManager.getCurrentTimeSec() && playerManager.getCurrentTimeSec() > adEndTime) {
       return
     }
 
