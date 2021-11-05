@@ -219,6 +219,7 @@
   }
 
   const reset = () => {
+    console.log('adshandler - RESET ads:')
     if (!isAdSkippingEnabled) return
     adsBlocks = [];
     activeAd = null;
