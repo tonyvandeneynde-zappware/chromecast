@@ -197,6 +197,8 @@
   const findFirstAdsBlock = (time) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Finding ads before', time)
+    console.log('adsBlocks:', adsBlocks)
+
     return _.find(adsBlocks, (adsBlock) => (time > adsBlock.adStartTime))
   }
 
