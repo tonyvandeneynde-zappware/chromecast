@@ -174,7 +174,10 @@
     }
 
     if (adStartTime < 0) {
-      console.log('adsHandler - Ignored new ad block since the duration is 0.', newAdsBlock)
+      return
+    }
+
+    if (playerManager.getCurrentTimeSec() && playerManager.getCurrentTimeSec() > endTime) {
       return
     }
 
