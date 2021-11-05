@@ -99,7 +99,7 @@
       // new adblock entered
       handleAdsBlockEnterEvent(newActiveAd)
     }
-    if (activeAd && activeAd.endTime < currentTime && !newActiveAd) {
+    if (activeAd && activeAd.adEndTime < currentTime && !newActiveAd) {
       handleAdsBlockExitEvent(activeAd)
     }
     return
