@@ -32,20 +32,20 @@
   _.map(adPlayBackRestrictions, res => {
     if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
       // This is temp fix to align all platforms
-       adPolicy = {
-        allow_skip: true, // allow jumping over an ad block entirely
-        allow_forward: false, // allow going forward during an ad block
-        allow_backward: true, // allow going backward during an ad block
-        allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
-      }
-
-      // This is what is should be eventually
-      // adPolicy = {
-      //   allow_skip: false, // allow jumping over an ad block entirely
+      //  adPolicy = {
+      //   allow_skip: true, // allow jumping over an ad block entirely
       //   allow_forward: false, // allow going forward during an ad block
       //   allow_backward: true, // allow going backward during an ad block
-      //   allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
+      //   allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
       // }
+
+      // This is what is should be eventually
+      adPolicy = {
+        allow_skip: false, // allow jumping over an ad block entirely
+        allow_forward: false, // allow going forward during an ad block
+        allow_backward: true, // allow going backward during an ad block
+        allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
+      }
     } else {
       adPolicy = undefined
     }
@@ -132,9 +132,9 @@
 
   const removeAdsBlock = (adsBlockToRemove) => {
     if (!isAdSkippingEnabled) return
-    console.log('adsHandler - Removing ads block with startTime', adsBlockToRemove.startTime)
+    console.log('adsHandler - Removing ads block with startTime', adsBlockToRemove.adStartTime)
     _.remove(adsBlocks, (adsBlock) => {
-      return adsBlock.adId === adsBlockToRemove.adId
+      return (adsBlock.adStartTime === adsBlockToRemove.adStartTime && adsBlock.adEndTime === adsBlockToRemove.adEndTime)
     })
     activeAd = null
   }
