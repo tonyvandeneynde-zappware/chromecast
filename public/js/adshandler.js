@@ -61,7 +61,8 @@
     console.log('adshandler - mediaInfo:', mediaInfo)
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
       mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER) {
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV) {
         const customData = JSON.parse(mediaInfo.metadata.customData)
         console.log('customData:', customData)
         const currentTime = com.zappware.chromecast.util.getCurrentTime()
