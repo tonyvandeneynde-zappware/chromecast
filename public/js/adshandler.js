@@ -55,11 +55,7 @@
   //
   // Check if the playback position needs to be forced to the start of an ads block.
   //
-  const validateRequestedPlaybackPosition = (time, media) => {
-    console.log('adshandler - media:', media)
-    mediaInfo = playerManager.getMediaInformation()
-    console.log('adshandler - mediaInfo:', mediaInfo)
-    // const currentTime = getCurrentTimeSec()
+  const validateRequestedPlaybackPosition = (time) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
     let updatedTime = time
@@ -157,6 +153,8 @@
   const addAdsBlock = (adId, adStartTime, adEndTime, adType) => {
     if (!isAdSkippingEnabled) return
     if(!adId) return
+    mediaInfo = playerManager.getMediaInformation()
+    console.log('adshandler - mediaInfo:', mediaInfo)
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
       mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV ||
       mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
