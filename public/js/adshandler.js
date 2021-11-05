@@ -175,7 +175,7 @@
       return
     }
     adsBlocks.push(newAdsBlock)
-    console.log('adsHandler - Added ad block to the list', newAdsBlock)
+    console.log('testtest adsHandler - Added ad block to the list', newAdsBlock)
   }
 
   const addAdsBlocks = (newAdBlocks) => {
