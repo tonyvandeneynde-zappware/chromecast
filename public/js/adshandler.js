@@ -56,6 +56,7 @@
   // Check if the playback position needs to be forced to the start of an ads block.
   //
   const validateRequestedPlaybackPosition = (time, media) => {
+    console.log('adshandler - media:', media)
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
     let updatedTime = time
