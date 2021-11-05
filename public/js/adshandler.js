@@ -55,7 +55,7 @@
   //
   // Check if the playback position needs to be forced to the start of an ads block.
   //
-  const validateRequestedPlaybackPosition = (time) => {
+  const validateRequestedPlaybackPosition = (time, media) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
     let updatedTime = time
@@ -89,7 +89,6 @@
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
-    console.log('checkAdEnterExit:', currentTime)
     let newActiveAd = null
     adsBlocks.forEach(ad => {
       if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
