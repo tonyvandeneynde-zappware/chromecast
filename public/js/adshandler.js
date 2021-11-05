@@ -57,6 +57,13 @@
   //
   const validateRequestedPlaybackPosition = (time, media) => {
     console.log('adshandler - media:', media)
+    mediaInfo = playerManager.getMediaInformation()
+    console.log('adshandler - mediaInfo:', mediaInfo)
+    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+      currentTime = com.zappware.chromecast.util.getCurrentTime()
+    }
+    // const currentTime = getCurrentTimeSec()
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
     let updatedTime = time
