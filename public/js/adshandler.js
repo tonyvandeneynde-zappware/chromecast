@@ -89,6 +89,7 @@
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
+    console.log('checkAdEnterExit:', currentTime)
     let newActiveAd = null
     adsBlocks.forEach(ad => {
       if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
@@ -171,6 +172,11 @@
       adStartTime: adStartTime,
       adEndTime: adEndTime,
       adType: adType
+    }
+
+    if (adStartTime < 0) {
+      console.log('adsHandler - Ignored new ad block since the duration is 0.', newAdsBlock)
+      return
     }
 
     // ignore ad blocks with duration 0.
