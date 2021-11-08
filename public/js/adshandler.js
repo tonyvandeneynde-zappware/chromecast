@@ -87,7 +87,7 @@
   }
 
   const checkAdEnterExit = () => {
-    console.log('checkAdEnterExit:', checkAdEnterExit)
+    console.log('checkAdEnterExit:')
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
     console.log('currentTime:', currentTime)
@@ -191,7 +191,7 @@
       return
     }
 
-    if (playerManager.getCurrentTimeSec() && playerManager.getCurrentTimeSec() > adEndTime) {
+    if (getCurrentTimeSec() > adEndTime) {
       return
     }
 
@@ -243,16 +243,7 @@
   const logAdsBlocks = () => { console.log('adsHandler - Ads Blocks', adsBlocks) }
 
   const getCurrentTimeSec = () => {
-    let currentTime
-    mediaInfo = playerManager.getMediaInformation()
-    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER) {
-      currentTime = com.zappware.chromecast.util.getCurrentTime()
-    } else {
-      currentTime = playerManager.getCurrentTimeSec()
-    }
-    return currentTime
+    return playerManager.getCurrentTimeSec()
   }
 
   const reset = () => {
