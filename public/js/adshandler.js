@@ -165,6 +165,7 @@
   }
 
   const addAdsBlock = (adId, adStartTime, adEndTime, adType) => {
+    console.log('addAdsBlock:', addAdsBlock)
     if (!isAdSkippingEnabled) return
     if(!adId) return
     mediaInfo = playerManager.getMediaInformation()
