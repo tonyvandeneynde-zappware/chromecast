@@ -90,21 +90,23 @@
     console.log('adsHandler - checkAdEnterExit:')
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
+    console.log('adaHandler - currentTime:', currentTime)
     removePastAdsBlocks()
 
+    console.log('adsHandler - activeAd:', activeAd)
+    console.log('adsHandler - activeAd.adEndTime < currentTime:', activeAd && activeAd.adEndTime < currentTime)
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd)
     }
-    
-    let newActiveAd = null
-    adsBlocks.forEach(ad => {
-      if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
-        newActiveAd = ad
-      }
-    })
 
-    if (!activeAd && newActiveAd || (activeAd && newActiveAd && activeAd.id !== newActiveAd.id)) {
+    if (!activeAd) {
       // new adblock entered
+      let newActiveAd = null
+      adsBlocks.forEach(ad => {
+        if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
+          newActiveAd = ad
+        }
+      })
       handleAdsBlockEnterEvent(newActiveAd)
     }
   }
@@ -112,7 +114,7 @@
   const canSeek = (position) => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
-    console.log('adsHandler - currentTime:')
+    console.log('adsHandler - currentTime:', currentTime)
     console.log('adsHandler - activeAd:', activeAd)
     if (activeAd && position > currentTime ) {
       showAdSkippingMessage()
