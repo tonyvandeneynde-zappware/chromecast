@@ -72,7 +72,7 @@
       } else { // skipping allowed
         // check if the requested time is in an ads block and from which direction it is entered
         const jumpedBackward = getCurrentTimeSec() > time
-        if (activeAd) {
+        if (!activeAd) {
           if (jumpedBackward && adPolicy.allow_backward_into_ad) {
             console.log('... jumped backward into an ads block, this is allowed.')
             return time
