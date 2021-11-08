@@ -87,6 +87,7 @@
   }
 
   const checkAdEnterExit = () => {
+    console.log('adsHandler - checkAdEnterExit:')
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
     removePastAdsBlocks()
@@ -111,6 +112,8 @@
   const canSeek = (position) => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
+    console.log('adsHandler - currentTime:')
+    console.log('adsHandler - activeAd:', activeAd)
     if (activeAd && position > currentTime ) {
       showAdSkippingMessage()
       return false
@@ -162,8 +165,6 @@
     if (!isAdSkippingEnabled) return
     if(!adId) return
     mediaInfo = playerManager.getMediaInformation()
-    console.log('adshandler - mediaInfo:', mediaInfo)
-    console.log('adshandler - mediaInfo._playbackMode:', mediaInfo._playbackMode)
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER) {
         const customData = JSON.parse(mediaInfo.metadata.customData)
         adStartTime -= customData.start
@@ -200,7 +201,7 @@
       return
     }
     adsBlocks.push(newAdsBlock)
-    console.log('testtest adsHandler - Added ad block to the list', newAdsBlock)
+    console.log('adsHandler - Added ad block to the list', newAdsBlock)
   }
 
   const addAdsBlocks = (newAdBlocks) => {
