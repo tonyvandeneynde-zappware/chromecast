@@ -92,9 +92,6 @@
     const currentTime = getCurrentTimeSec()
     console.log('currentTime:', currentTime)
     removePastAdsBlocks()
-    adsBlocks.filter((adsBlock) => {
-      adsBlock.adEndTime > currentTime
-    })
     
     let newActiveAd = null
     adsBlocks.forEach(ad => {
