@@ -231,7 +231,9 @@
     let currentTime
     mediaInfo = playerManager.getMediaInformation()
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV ||
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV) {
       currentTime = com.zappware.chromecast.util.getCurrentTime()
     } else {
       currentTime = playerManager.getCurrentTimeSec()
