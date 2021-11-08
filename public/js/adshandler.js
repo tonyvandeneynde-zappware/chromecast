@@ -87,10 +87,8 @@
   }
 
   const checkAdEnterExit = () => {
-    console.log('checkAdEnterExit:')
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
-    console.log('currentTime:', currentTime)
     removePastAdsBlocks()
     
     let newActiveAd = null
@@ -100,9 +98,6 @@
       }
     });
     if (!activeAd && newActiveAd || (activeAd && newActiveAd && activeAd.id !== newActiveAd.id)) {
-      console.log('currentTime:', currentTime)
-      console.log('newActiveAd:', newActiveAd)
-      console.log('activeAd:', activeAd)
       // new adblock entered
       handleAdsBlockEnterEvent(newActiveAd)
     }
