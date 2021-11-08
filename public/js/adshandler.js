@@ -198,6 +198,7 @@
   }
 
   const addAdsBlocks = (newAdBlocks) => {
+    console.log('addAdsBlocks:', newAdBlocks)
     if (!isAdSkippingEnabled) return
     if (!newAdBlocks) return
     _.map(newAdBlocks, (ad) => {
