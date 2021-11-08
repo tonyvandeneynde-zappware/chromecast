@@ -90,21 +90,22 @@
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
     removePastAdsBlocks()
+
+    if (activeAd && activeAd.adEndTime < currentTime) {
+      handleAdsBlockExitEvent(activeAd)
+    }
     
     let newActiveAd = null
     adsBlocks.forEach(ad => {
       if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
         newActiveAd = ad
       }
-    });
+    })
+
     if (!activeAd && newActiveAd || (activeAd && newActiveAd && activeAd.id !== newActiveAd.id)) {
       // new adblock entered
       handleAdsBlockEnterEvent(newActiveAd)
     }
-    if (activeAd && activeAd.adEndTime < currentTime && !newActiveAd) {
-      handleAdsBlockExitEvent(activeAd)
-    }
-    return
   }
 
   const canSeek = (position) => {
