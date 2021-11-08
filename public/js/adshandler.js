@@ -62,7 +62,7 @@
 
     if (adPolicy) {
       // skipping not allowed
-      if (!adPolicy.allow_skip) {
+      if (!adPolicy.allow_skip && !activeAd) {
         // ad blocks
         const firstAdsBlock = findFirstAdsBlock(time)
         if (firstAdsBlock) {
