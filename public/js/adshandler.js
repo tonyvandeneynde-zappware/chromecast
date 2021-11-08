@@ -93,7 +93,7 @@
     adsBlocks.filter((adsBlock) => {
       adsBlock.adEndTime > currentTime
     })
-
+    
     let newActiveAd = null
     adsBlocks.forEach(ad => {
       if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
@@ -101,6 +101,9 @@
       }
     });
     if (!activeAd && newActiveAd || (activeAd && newActiveAd && activeAd.id !== newActiveAd.id)) {
+      console.log('currentTime:', currentTime)
+      console.log('newActiveAd:', newActiveAd)
+      console.log('activeAd:', activeAd)
       // new adblock entered
       handleAdsBlockEnterEvent(newActiveAd)
     }
