@@ -157,18 +157,19 @@
   }
 
   const addAdsBlock = (adId, adStartTime, adEndTime, adType) => {
-    console.log('addAdsBlock:', addAdsBlock)
+    console.log('addAdsBlock:')
     if (!isAdSkippingEnabled) return
     if(!adId) return
     mediaInfo = playerManager.getMediaInformation()
     console.log('adshandler - mediaInfo:', mediaInfo)
+    console.log('adshandler - mediaInfo._playbackMode:', mediaInfo._playbackMode)
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER) {
         const customData = JSON.parse(mediaInfo.metadata.customData)
-        console.log('customData:', customData)
         adStartTime -= customData.start
         adEndTime -= customData.start
     }
     const nextId = (adsBlocks.length === 0 ? 0 : _.last(adsBlocks).id + 1)
+    console.log('newAdsBlock:', adStartTime, adEndTime)
     const newAdsBlock = {
       id: nextId,
       adId: adId,
