@@ -89,6 +89,11 @@
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
+    removePastAdsBlocks()
+    adsBlocks.filter((adsBlock) => {
+      adsBlock.adEndTime > currentTime
+    })
+
     let newActiveAd = null
     adsBlocks.forEach(ad => {
       if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
@@ -127,7 +132,11 @@
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
     activeAd = null
-    removeAdsBlock(adsBlock)
+  }
+
+  removePastAdsBlocks = () => {
+    const currentTime = getCurrentTimeSec()
+    adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adEndTime < currentTime)
   }
 
   const removeAdsBlock = (adsBlockToRemove) => {
