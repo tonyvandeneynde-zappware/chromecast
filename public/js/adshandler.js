@@ -141,7 +141,7 @@
 
   removePastAdsBlocks = () => {
     const currentTime = getCurrentTimeSec()
-    adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adEndTime < currentTime)
+    adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adEndTime > currentTime)
   }
 
   const removeAdsBlock = (adsBlockToRemove) => {
