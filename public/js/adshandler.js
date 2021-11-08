@@ -87,8 +87,10 @@
   }
 
   const checkAdEnterExit = () => {
+    console.log('checkAdEnterExit:', checkAdEnterExit)
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
+    console.log('currentTime:', currentTime)
     removePastAdsBlocks()
     adsBlocks.filter((adsBlock) => {
       adsBlock.adEndTime > currentTime
@@ -245,8 +247,7 @@
     mediaInfo = playerManager.getMediaInformation()
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
       mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV) {
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER) {
       currentTime = com.zappware.chromecast.util.getCurrentTime()
     } else {
       currentTime = playerManager.getCurrentTimeSec()
