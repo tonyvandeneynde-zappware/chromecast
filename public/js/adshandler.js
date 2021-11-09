@@ -60,7 +60,7 @@
   const validateRequestedPlaybackPosition = (time, media) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
-    console.log('adsHandler', currentTime)
+    console.log('adsHandler', getCurrentTimeSec())
     console.log('adsHandler - active ad', activeAd)
     console.log('adsHandler - adsBlocks', adsBlocks)
     let updatedTime = time
@@ -252,6 +252,7 @@
     adsBlocks = [];
     activeAd = null;
     adPolicy = null;
+    removedAds = {}
   }
 
   /* return the public functions */
