@@ -171,8 +171,7 @@
     if (!isAdSkippingEnabled) return
     if(!adId) return
     mediaInfo = playerManager.getMediaInformation()
-    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
-      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV) {
+    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER) {
         const customData = JSON.parse(mediaInfo.metadata.customData)
         adStartTime -= customData.start
         adEndTime -= customData.start
