@@ -172,12 +172,12 @@
     if(!adId) return
     mediaInfo = playerManager.getMediaInformation()
     const customData = JSON.parse(mediaInfo.metadata.customData)
-    const streamEnd = new Date(mediaInfo._playbackInfo.streamEnd).getTime()
+    const streamEnd = new Date(mediaInfo._playbackInfo.streamEnd).getTime()/1000
     const startOverTVBeforeTime = customData.customData.startOverTVBeforeTime
     console.log('adshandler - streamEnd:', streamEnd)
     console.log('adshandler - com.zappware.chromecast.util.getCurrentTime():', com.zappware.chromecast.util.getCurrentTime())
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
-        (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUT && streamEnd <= com.zappware.chromecast.util.getCurrentTime())) {
+        (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV && streamEnd > com.zappware.chromecast.util.getCurrentTime())) {
         adStartTime -= customData.start
         adEndTime -= customData.start
     }
