@@ -14,6 +14,8 @@
 
   let isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
 
+  let removedAds = {}
+
   //
   // AD RESTRICTIONS
   //
@@ -58,6 +60,9 @@
   const validateRequestedPlaybackPosition = (time, media) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
+    console.log('adsHandler', currentTime)
+    console.log('adsHandler - active ad', activeAd)
+    console.log('adsHandler - adsBlocks', adsBlocks)
     let updatedTime = time
 
     if (adPolicy) {
@@ -90,7 +95,7 @@
     console.log('adsHandler - checkAdEnterExit:')
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
-    console.log('adaHandler - currentTime:', currentTime)
+    console.log('adsHandler - currentTime:', currentTime)
     removePastAdsBlocks()
 
     console.log('adsHandler - activeAd:', activeAd)
@@ -163,17 +168,16 @@
   }
 
   const addAdsBlock = (adId, adStartTime, adEndTime, adType) => {
-    console.log('addAdsBlock:')
     if (!isAdSkippingEnabled) return
     if(!adId) return
     mediaInfo = playerManager.getMediaInformation()
-    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER) {
+    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
+      mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV) {
         const customData = JSON.parse(mediaInfo.metadata.customData)
         adStartTime -= customData.start
         adEndTime -= customData.start
     }
     const nextId = (adsBlocks.length === 0 ? 0 : _.last(adsBlocks).id + 1)
-    console.log('newAdsBlock:', adStartTime, adEndTime)
     const newAdsBlock = {
       id: nextId,
       adId: adId,
