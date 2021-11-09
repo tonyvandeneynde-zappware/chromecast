@@ -112,7 +112,7 @@
           newActiveAd = ad
         }
       })
-      handleAdsBlockEnterEvent(newActiveAd)
+      if (newActiveAd) handleAdsBlockEnterEvent(newActiveAd)
     }
   }
 
