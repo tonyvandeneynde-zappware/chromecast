@@ -103,7 +103,7 @@
     console.log('adsHandler - currentTime:', currentTime)
     removePastAdsBlocks()
 
-    console.log('adsHandler - activeAd:', activeAd.id)
+    console.log('adsHandler - activeAd:', activeAd)
     console.log('adsHandler - removedAds:', removedAds)
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd)
