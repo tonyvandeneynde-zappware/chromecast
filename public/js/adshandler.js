@@ -16,6 +16,8 @@
 
   let removedAds = {}
 
+  let initialPosition = null
+
   //
   // AD RESTRICTIONS
   //
@@ -63,6 +65,9 @@
     console.log('adsHandler', getCurrentTimeSec())
     console.log('adsHandler - active ad', activeAd)
     console.log('adsHandler - adsBlocks', adsBlocks)
+    if (initialPosition === null) {
+      setInitialPosition(time)
+    }
     let updatedTime = time
 
     if (adPolicy) {
@@ -173,7 +178,6 @@
     mediaInfo = playerManager.getMediaInformation()
     const customData = JSON.parse(mediaInfo.metadata.customData)
     const streamEnd = new Date(mediaInfo._playbackInfo.streamEnd).getTime()/1000
-    const startOverTVBeforeTime = customData.customData.startOverTVBeforeTime
     console.log('adshandler - streamEnd:', streamEnd)
     console.log('adshandler - com.zappware.chromecast.util.getCurrentTime():', com.zappware.chromecast.util.getCurrentTime())
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
@@ -190,7 +194,7 @@
       adType: adType
     }
 
-    if (adStartTime < 0 || adEndTime < startOverTVBeforeTime) {
+    if (adStartTime < 0 || (initialPosition && adEndTime < initialPosition)) {
       return
     }
 
@@ -229,6 +233,11 @@
       addAdsBlock(ad.adId, ad.adStartTime, ad.adEndTime, ad.adType)
     })
   }
+
+  const setInitialPosition = (time) => {
+    initialPosition = time
+    adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adEndTime > initialPosition)
+  }
   //
   // AD BLOCK HELPERS
   //
@@ -257,6 +266,7 @@
     activeAd = null;
     adPolicy = null;
     removedAds = {}
+    initialPosition = null
   }
 
   /* return the public functions */
