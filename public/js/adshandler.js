@@ -103,10 +103,13 @@
     console.log('adsHandler - currentTime:', currentTime)
     removePastAdsBlocks()
 
-    console.log('adsHandler - activeAd:', activeAd)
-    console.log('adsHandler - activeAd.adEndTime < currentTime:', activeAd && activeAd.adEndTime < currentTime)
+    console.log('adsHandler - activeAd:', activeAd.id)
+    console.log('adsHandler - removedAds:', removedAds)
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd)
+    }
+    if (activeAd && activeAd.startTime > currentTime) {
+      activeAd = null
     }
 
     if (!activeAd) {
@@ -144,21 +147,13 @@
   const handleAdsBlockExitEvent = (adsBlock) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
+    removedAds[adsBlock.id] = true
     activeAd = null
   }
 
   removePastAdsBlocks = () => {
     const currentTime = getCurrentTimeSec()
     adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adEndTime > currentTime)
-  }
-
-  const removeAdsBlock = (adsBlockToRemove) => {
-    if (!isAdSkippingEnabled) return
-    console.log('adsHandler - Removing ads block with startTime', adsBlockToRemove.adStartTime)
-    _.remove(adsBlocks, (adsBlock) => {
-      return (adsBlock.adStartTime === adsBlockToRemove.adStartTime && adsBlock.adEndTime === adsBlockToRemove.adEndTime)
-    })
-    activeAd = null
   }
 
   const showAdSkippingMessage = () => {
@@ -175,6 +170,7 @@
   const addAdsBlock = (adId, adStartTime, adEndTime, adType) => {
     if (!isAdSkippingEnabled) return
     if(!adId) return
+    if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
     const customData = JSON.parse(mediaInfo.metadata.customData)
     const streamEnd = new Date(mediaInfo._playbackInfo.streamEnd).getTime()/1000
