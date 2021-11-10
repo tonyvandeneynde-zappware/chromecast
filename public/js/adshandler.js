@@ -108,7 +108,7 @@
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd)
     }
-    if (activeAd && activeAd.startTime > currentTime) {
+    if (activeAd && activeAd.adStartTime > currentTime) {
       activeAd = null
     }
 
