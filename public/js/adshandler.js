@@ -147,7 +147,7 @@
   const handleAdsBlockExitEvent = (adsBlock) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
-    removedAds[adsBlock.id] = true
+    removedAds[adsBlock.adId] = true
     activeAd = null
   }
 
