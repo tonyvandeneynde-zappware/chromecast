@@ -390,7 +390,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 let isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
                 let isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
                  let  { adBlocks } =  isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
-                 isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.addAdsBlocks(adBlocks)
+                 isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
             } catch (error) {
                   console.log(error)
             }

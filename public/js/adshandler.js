@@ -36,20 +36,20 @@
   _.map(adPlayBackRestrictions, res => {
     if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
       // This is temp fix to align all platforms
-      //  adPolicy = {
-      //   allow_skip: true, // allow jumping over an ad block entirely
-      //   allow_forward: false, // allow going forward during an ad block
-      //   allow_backward: true, // allow going backward during an ad block
-      //   allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
-      // }
-
-      // This is what is should be eventually
-      adPolicy = {
-        allow_skip: false, // allow jumping over an ad block entirely
+       adPolicy = {
+        allow_skip: true, // allow jumping over an ad block entirely
         allow_forward: false, // allow going forward during an ad block
         allow_backward: true, // allow going backward during an ad block
-        allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
+        allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
       }
+
+      // This is what is should be eventually
+      // adPolicy = {
+      //   allow_skip: false, // allow jumping over an ad block entirely
+      //   allow_forward: false, // allow going forward during an ad block
+      //   allow_backward: true, // allow going backward during an ad block
+      //   allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
+      // }
     } else {
       adPolicy = undefined
     }
@@ -62,9 +62,6 @@
   const validateRequestedPlaybackPosition = (time, media) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
-    console.log('adsHandler', getCurrentTimeSec())
-    console.log('adsHandler - active ad', activeAd)
-    console.log('adsHandler - adsBlocks', adsBlocks)
     if (initialPosition === null) {
       setInitialPosition(time)
     }
@@ -97,14 +94,10 @@
   }
 
   const checkAdEnterExit = () => {
-    console.log('adsHandler - checkAdEnterExit:')
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
-    console.log('adsHandler - currentTime:', currentTime)
-    removePastAdsBlocks()
 
-    console.log('adsHandler - activeAd:', activeAd)
-    console.log('adsHandler - removedAds:', removedAds)
+    removePastAdsBlocks()
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd)
     }
@@ -127,8 +120,6 @@
   const canSeek = (position) => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
-    console.log('adsHandler - currentTime:', currentTime)
-    console.log('adsHandler - activeAd:', activeAd)
     if (activeAd && position > currentTime ) {
       showAdSkippingMessage()
       return false
@@ -151,7 +142,7 @@
     activeAd = null
   }
 
-  removePastAdsBlocks = () => {
+  const removePastAdsBlocks = () => {
     const currentTime = getCurrentTimeSec()
     adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adEndTime > currentTime)
   }
@@ -174,8 +165,6 @@
     mediaInfo = playerManager.getMediaInformation()
     const customData = JSON.parse(mediaInfo.metadata.customData)
     const streamEnd = new Date(mediaInfo._playbackInfo.streamEnd).getTime()/1000
-    console.log('adshandler - streamEnd:', streamEnd)
-    console.log('adshandler - com.zappware.chromecast.util.getCurrentTime():', com.zappware.chromecast.util.getCurrentTime())
     if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
         (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV && streamEnd > com.zappware.chromecast.util.getCurrentTime())) {
         adStartTime -= customData.start
@@ -214,9 +203,8 @@
     console.log('adsHandler - Added ad block to the list', newAdsBlock)
   }
 
-  const addAdsBlocks = (newAdBlocks) => {
+  const setAdsBlocks = (newAdBlocks) => {
     adsBlocks = []
-    console.log('addAdsBlocks:', newAdBlocks)
     if (!isAdSkippingEnabled) return
     if (!newAdBlocks) return
     _.map(newAdBlocks, (ad) => {
@@ -240,8 +228,6 @@
   const findFirstAdsBlock = (time) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Finding ads before', time)
-    console.log('adsBlocks:', adsBlocks)
-
     return _.find(adsBlocks, (adsBlock) => (time > adsBlock.adStartTime))
   }
 
@@ -271,8 +257,7 @@
     canSeek: canSeek,
     checkAdEnterExit: checkAdEnterExit,
     setAdPolicy: setAdPolicy,
-    addAdsBlock: addAdsBlock,
-    addAdsBlocks: addAdsBlocks,
+    setAdsBlocks: setAdsBlocks,
     reset: reset
   }
 
