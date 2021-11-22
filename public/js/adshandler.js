@@ -167,7 +167,7 @@
     if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
     const customData = JSON.parse(mediaInfo.metadata.customData)
-    if (adStartTime > 650379601) {
+    if (adStartTime > (new Date('1990').getTime())) {
         adStartTime -= customData.start
         adEndTime -= customData.start
     }
