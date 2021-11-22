@@ -167,9 +167,7 @@
     if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
     const customData = JSON.parse(mediaInfo.metadata.customData)
-    const streamEnd = new Date(mediaInfo._playbackInfo.streamEnd).getTime()/1000
-    if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
-        (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV && streamEnd > com.zappware.chromecast.util.getCurrentTime())) {
+    if (adStartTime > 650379601) {
         adStartTime -= customData.start
         adEndTime -= customData.start
     }
