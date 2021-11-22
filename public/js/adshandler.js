@@ -207,6 +207,7 @@
   }
 
   const setAdsBlocks = (newAdBlocks) => {
+    console.log('adsHandler - newAdBlocks:', newAdBlocks)
     adsBlocks = []
     if (!isAdSkippingEnabled) return
     if (!newAdBlocks) return
