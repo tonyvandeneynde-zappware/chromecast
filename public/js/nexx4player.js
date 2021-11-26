@@ -643,6 +643,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     that._inauguratePlaybackInfo(media._playbackInfo);
 
                     // Reload should trigger a new loadRequest
+                    console.log('A1ATPUB-1042:0 reloadAndSeek')
                     return that._reloadAndSeek(position, resumeState)
                     .then(function(_media) {
                         if (_media) {
@@ -891,6 +892,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             DEBUG && log("setPosition(" + position + "); state = " + this._state);
 
             if (this._state === com.zappware.chromecast.PlayerState.LOADING) {
+                console.log('A1ATPUB-1042:1 ignore seekrequest if still loading')
                 // Ignore seek request if still loading
                 return null;
             }
@@ -984,10 +986,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 }
 
                 DEBUG && log("Media stalled: calling seek " + _seekTo);
+                console.log('A1ATPUB-1042:2 onMediaStalled seek')
                 playerManager.seek(_seekTo);
 
                 var that = this;
                 this._stalledPromise = this._waitForEvent('SEEKED').then(function() {
+                    console.log('A1ATPUB-1042:3 onMediaStalled seek')
                     if (mediaInfo === that._currentMedia &&
                         (that._state === com.zappware.chromecast.PlayerState.PLAYING ||
                         that._state === com.zappware.chromecast.PlayerState.PAUSED)) {

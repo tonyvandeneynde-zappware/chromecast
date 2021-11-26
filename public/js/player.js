@@ -348,6 +348,7 @@ com.zappware.chromecast.Player = (function () {
 
         // setPosition ////////////////////////////////////////////////////////////////////////////////
         setPosition(position, resumeState) {
+            console.log('A1ATPUB-1042:6 setPosition', position)
             var mediaInfo = playerManager.getMediaInformation();
             switch(this._state) {
                 case com.zappware.chromecast.PlayerState.LOADING:
@@ -397,7 +398,7 @@ com.zappware.chromecast.Player = (function () {
                     return this._reloadAndSeek(position, resumeState);
                 }
             }
-
+            console.log('A1ATPUB-1042:4 setposition', position)
             return this._seek(position, resumeState);
         }
 
@@ -431,7 +432,7 @@ com.zappware.chromecast.Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                return this.isTimeshiftEnabled(mediaInfo);
+                return this.isTimeshiftEnabled(mediaInfo) && com.zappware.chromecast.adshandler.canSeek(position);
             }
 
             return com.zappware.chromecast.adshandler.canSeek(position)
@@ -884,6 +885,7 @@ com.zappware.chromecast.Player = (function () {
             var promise = Promise.resolve();
             if (position !== playerManager.getCurrentTimeSec()) {
                 DEBUG && log("calling seek " + position);
+                console.log('A1ATPUB-1042:5 seek', position)
                 playerManager.seek(position);
                 promise = this._waitForEvent('SEEKED');
             }
@@ -979,6 +981,7 @@ com.zappware.chromecast.Player = (function () {
                                 }
                                 else {
                                     // We're still seeking
+                                    console.log('A1ATPUB-1042:6 stil seeking', position)
                                     that._seek(position, resumeState);
                                 }
                             }
