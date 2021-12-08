@@ -36,7 +36,6 @@ com.zappware.chromecast.Player = (function () {
 
         // load ////////////////////////////////////////////////////////////////////////////////////////
         load(loadRequestData) {
-            console.log('A1ATPUB-1042:146')
             DEBUG && log("load(); loadRequestData = " + JSON.stringify(loadRequestData) + "; playerState: " + playerManager.getPlayerState());
 
             DEBUG && assert(loadRequestData.customData, "Missing property 'customData' on loadRequestData.");
@@ -44,7 +43,6 @@ com.zappware.chromecast.Player = (function () {
             DEBUG && assert(loadRequestData.media.contentId, "Missing property 'contentId' on loadRequestData.");
 
             if (!this._config) {
-                console.log('A1ATPUB-1042:147')
                 DEBUG && log("load(); loadRequestData = " + JSON.stringify(loadRequestData) + " ignored: not initialized!");
                 return null;
             }
@@ -65,7 +63,6 @@ com.zappware.chromecast.Player = (function () {
             var that = this;
             this._currentMedia = loadRequestData.media;
             if (this._loading) {
-                console.log('A1ATPUB-1042:148')
                 DEBUG && log("another load request is in progress, this one is delayed.");
                 this._loading.then(function() {
                     if (that._currentMedia === loadRequestData.media) {
@@ -81,7 +78,6 @@ com.zappware.chromecast.Player = (function () {
             // Hold off new load requests for a short while
             this._loading = new Promise(function(resolve) {
                 setTimeout(function() {
-                    console.log('A1ATPUB-1042:149')
                     that._loading = undefined;
                     resolve();
                 }, 3000);
@@ -89,13 +85,10 @@ com.zappware.chromecast.Player = (function () {
 
             // Piggy back the mediaSessionToken on the media's customData
             if (loadRequestData.customData.mediaSessionToken) {
-                console.log('A1ATPUB-1042:150')
                 if (loadRequestData.media.customData) {
-                    console.log('A1ATPUB-1042:151')
                     loadRequestData.media.customData = com.zappware.chromecast.util.getAsObject(loadRequestData.media.customData);
                 }
                 else {
-                    console.log('A1ATPUB-1042:152')
                     loadRequestData.media.customData = {};
                 }
                 loadRequestData.media.customData.mediaSessionToken = loadRequestData.customData.mediaSessionToken;
@@ -107,12 +100,10 @@ com.zappware.chromecast.Player = (function () {
             loadRequestData.media._playbackMode = this._getPlaybackMode(loadRequestData);
             if (loadRequestData.media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 loadRequestData.media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                console.log('A1ATPUB-1042:153')
+
                 // If we have a currentTime set, we want to start in PLTV.
                 if (loadRequestData.currentTime) {
-                    console.log('A1ATPUB-1042:154')
                     if (!loadRequestData.customData.currentPosition && loadRequestData.currentTime > 0) {
-                        console.log('A1ATPUB-1042:155')
                         loadRequestData.customData.currentPosition = loadRequestData.currentTime;
                     }
                 }
@@ -129,9 +120,7 @@ com.zappware.chromecast.Player = (function () {
                 };
             }
             else {
-                console.log('A1ATPUB-1042:156')
                 if (loadRequestData.customData.currentPosition !== undefined) {
-                    console.log('A1ATPUB-1042:157')
                     loadRequestData.currentTime = loadRequestData.customData.currentPosition;
                 }
                 loadRequestData.currentTime = loadRequestData.currentTime || 0;
@@ -150,9 +139,8 @@ com.zappware.chromecast.Player = (function () {
 
             // Reload function (no fuzz)
             this._reload = function(properties) {
-                console.log('A1ATPUB-1042:158')
+
                 if (loadRequestData) {
-                    console.log('A1ATPUB-1042:159')
                     com.zappware.chromecast.receiver.onBuffering(true); // Show the loading indicator
 
                     // Add a flag to indicate the loadRequest has already been handled.
@@ -163,12 +151,10 @@ com.zappware.chromecast.Player = (function () {
                         loadRequestData.activeTrackIds = [];
                         var audioTrack = playerManager.getAudioTracksManager().getActiveTrack();
                         if (audioTrack) {
-                            console.log('A1ATPUB-1042:160')
                             loadRequestData.activeTrackIds.push(audioTrack.trackId);
                         }
                         var textTracks = playerManager.getTextTracksManager().getActiveTracks();
                         if (textTracks && textTracks.length) {
-                            console.log('A1ATPUB-1042:161')
                             for (var i = 0; i < textTracks.length; i++) {
                                 loadRequestData.activeTrackIds.push(textTracks[i].trackId);
                             }
@@ -180,7 +166,6 @@ com.zappware.chromecast.Player = (function () {
                     }
 
                     if (properties) {
-                        console.log('A1ATPUB-1042:162')
                         for (var p in properties) {
                             if (properties.hasOwnProperty(p)) {
                                 loadRequestData[p] = properties[p];
@@ -201,9 +186,7 @@ com.zappware.chromecast.Player = (function () {
 
         // play ///////////////////////////////////////////////////////////////////////////////////////
         play() {
-            console.log('A1ATPUB-1042:163')
             if (this.canPause()) {
-                console.log('A1ATPUB-1042:164')
                 switch(this._state) {
                     case com.zappware.chromecast.PlayerState.SEEKING:
                     case com.zappware.chromecast.PlayerState.PAUSED:
@@ -222,14 +205,11 @@ com.zappware.chromecast.Player = (function () {
 
         // pause ///////////////////////////////////////////////////////////////////////////////////////
         pause() {
-            console.log('A1ATPUB-1042:165')
             if (this.canPause()) {
-                console.log('A1ATPUB-1042:166')
                 switch(this._state) {
                     case com.zappware.chromecast.PlayerState.SEEKING:
                     case com.zappware.chromecast.PlayerState.PAUSED:
                     case com.zappware.chromecast.PlayerState.PLAYING:
-                        console.log('A1ATPUB-1042:167')
                         this._state = com.zappware.chromecast.PlayerState.PAUSED;
                         break;
                     default:
@@ -244,13 +224,11 @@ com.zappware.chromecast.Player = (function () {
 
         // seek ///////////////////////////////////////////////////////////////////////////////////////
         seek(data) {
-            console.log('A1ATPUB-1042:168')
             // Allow only when playing / paused / seeking
             if (this._state === com.zappware.chromecast.PlayerState.PLAYING ||
                 this._state === com.zappware.chromecast.PlayerState.PAUSED  ||
                 this._state === com.zappware.chromecast.PlayerState.SEEKING ||
                 this._reloadAndSeekInProgressForPosition                    ){
-                console.log('A1ATPUB-1042:169')
     //            data.currentTime = mediaInfo.playerManager.getCurrentTimeSec();
     //            data.relativeTime = 0;
                 return data;
@@ -261,7 +239,6 @@ com.zappware.chromecast.Player = (function () {
 
         // jump ///////////////////////////////////////////////////////////////////////////////////////
         jump(jump) {
-            console.log('A1ATPUB-1042:170')
             DEBUG && log("jump(" + jump + ")");
 
             // Allow only when playing / paused / seeking
@@ -269,7 +246,7 @@ com.zappware.chromecast.Player = (function () {
                 this._state === com.zappware.chromecast.PlayerState.PAUSED  ||
                 this._state === com.zappware.chromecast.PlayerState.SEEKING ||
                 this._reloadAndSeekInProgressForPosition                    ){
-                    console.log('A1ATPUB-1042:171')
+
                 if (this.canJump(jump)) {
 
                     // TODO!!!
@@ -281,7 +258,6 @@ com.zappware.chromecast.Player = (function () {
 
         // shutdown ///////////////////////////////////////////////////////////////////////////////////
         shutdown() {
-            console.log('A1ATPUB-1042:172')
             DEBUG && log("shutdown()");
 
             // Clear video src to avoid a glimps of video is shown when shutting down while locked
@@ -295,9 +271,7 @@ com.zappware.chromecast.Player = (function () {
 
         // stop ///////////////////////////////////////////////////////////////////////////////////////
         stop() {
-            console.log('A1ATPUB-1042:173')
             if (this._state === com.zappware.chromecast.PlayerState.STOPPED) {
-                console.log('A1ATPUB-1042:174')
                 return; // It should be OK to allow the request to be handled by the player
             }
             DEBUG && log("stop()");
@@ -310,7 +284,6 @@ com.zappware.chromecast.Player = (function () {
 
         // error //////////////////////////////////////////////////////////////////////////////////////
         _error(e, more) {
-            console.log('A1ATPUB-1042:175')
             if (this._state === com.zappware.chromecast.PlayerState.ERROR) {
                 return;
             }
@@ -344,26 +317,20 @@ com.zappware.chromecast.Player = (function () {
 
         // onMediaFinished ///////////////////////////////////////////////////////////////////////////////////
         onMediaFinished(event) {
-            console.log('A1ATPUB-1042:176')
             if (this._state === com.zappware.chromecast.PlayerState.PLAYING ||
                 this._state === com.zappware.chromecast.PlayerState.PAUSED) {
-                    console.log('A1ATPUB-1042:177')
                 DEBUG && log(`onMediaFinished("${event.endedReason}")`);
 
                 if (event.endedReason === "ERROR") {
-                    console.log('A1ATPUB-1042:178')
                     this._error(com.zappware.chromecast.Error.PLAYBACK);
                 }
                 else if (event.endedReason === "END_OF_STREAM") {
-                    console.log('A1ATPUB-1042:179')
                     var mediaInfo = playerManager.getMediaInformation() || this._currentMedia;
                     if (this._stopPLTV && mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
                         // Switch to LIVETV on EOS in PLTV
-                        console.log('A1ATPUB-1042:180')
                         this._stopPLTV();
                     }
                     else {
-                        console.log('A1ATPUB-1042:181')
                         this.stop();
                     }
                 }
@@ -372,30 +339,24 @@ com.zappware.chromecast.Player = (function () {
 
         // onMediaStalled ///////////////////////////////////////////////////////////////////////////////////
         onMediaStalled() {
-            console.log('A1ATPUB-1042:181')
         }
 
         // getState ///////////////////////////////////////////////////////////////////////////////////
         getState() {
-            console.log('A1ATPUB-1042:182')
             return this._state;
         }
 
         // setPosition ////////////////////////////////////////////////////////////////////////////////
         setPosition(position, resumeState) {
-            console.log('A1ATPUB-1042:6 setPosition', position)
             var mediaInfo = playerManager.getMediaInformation();
             switch(this._state) {
                 case com.zappware.chromecast.PlayerState.LOADING:
                 case com.zappware.chromecast.PlayerState.LOADED:
                 case com.zappware.chromecast.PlayerState.ERROR:
                 case com.zappware.chromecast.PlayerState.STOPPED:
-                    console.log('A1ATPUB-1042:183')
                     return;
                 case com.zappware.chromecast.PlayerState.SEEKING:
-                    console.log('A1ATPUB-1042:184')
                     if (this._reloadAndSeekInProgressForPosition) {
-                        console.log('A1ATPUB-1042:185')
                         // Another _reloadAndSeekRequest is pending -> it is sufficient to update
                         this._reloadAndSeekInProgressForPosition = position;
                         return this._reloadAndSeekPromise;
@@ -406,7 +367,6 @@ com.zappware.chromecast.Player = (function () {
             }
 
             if (!this.canSeek(mediaInfo, position)) {
-                console.log('A1ATPUB-1042:186')
                 DEBUG && log("setPosition(" + position + ") ignored: setPosition not supported.");
                 return;
             }
@@ -416,22 +376,19 @@ com.zappware.chromecast.Player = (function () {
 
             // position should be within expected range (if valid)
             if (this.getMaxPosition() > this.getMinPosition()) {
-                console.log('A1ATPUB-1042:187')
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
             position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(position)
             // Fix the requested position in the _positionInfo to avoid positions jumping back and forth
             if (mediaInfo._positionInfo) {
-                console.log('A1ATPUB-1042:188')
                 mediaInfo._positionInfo.curPosition = position;
             }
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                    console.log('A1ATPUB-1042:189')
+
                 var seekableRange = playerManager.getLiveSeekableRange();
                 if (position >= seekableRange.end + mediaInfo.startAbsoluteTime) {
-                    console.log('A1ATPUB-1042:190')
                     // Handle position out of seekable range: reload and seek. If position is close to 'now'
                     // we set it to a large value, which implies we jump to live.
                     if (Math.abs(position - this.getMaxPosition()) < 5) {
@@ -440,17 +397,15 @@ com.zappware.chromecast.Player = (function () {
                     return this._reloadAndSeek(position, resumeState);
                 }
             }
-            console.log('A1ATPUB-1042:4 setposition', position)
+
             return this._seek(position, resumeState);
         }
 
         // isTimeshiftEnabled /////////////////////////////////////////////////////////////////////////
         isTimeshiftEnabled(mediaInfo, seekableRange) {
-            console.log('A1ATPUB-1042:191')
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
 
             if (mediaInfo && !mediaInfo._timeshiftEnabled) {
-                console.log('A1ATPUB-1042:192')
                 seekableRange = seekableRange || playerManager.getLiveSeekableRange();
                 mediaInfo._timeshiftEnabled = (seekableRange && seekableRange.end > seekableRange.start);
             }
@@ -460,12 +415,10 @@ com.zappware.chromecast.Player = (function () {
 
         // canPause /////////////////////////////////////////////////////////////////////////////////
         canPause(mediaInfo) {
-            console.log('A1ATPUB-1042:193')
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                    console.log('A1ATPUB-1042:194')
                 return this.isTimeshiftEnabled(mediaInfo);
             }
 
@@ -474,13 +427,11 @@ com.zappware.chromecast.Player = (function () {
 
         // canSeek //////////////////////////////////////////////////////////////////////////////////
         canSeek(mediaInfo, position) {
-            console.log('A1ATPUB-1042:195')
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                    console.log('A1ATPUB-1042:196')
-                return this.isTimeshiftEnabled(mediaInfo) && com.zappware.chromecast.adshandler.canSeek(position);
+                return this.isTimeshiftEnabled(mediaInfo);
             }
 
             return com.zappware.chromecast.adshandler.canSeek(position)
@@ -488,11 +439,9 @@ com.zappware.chromecast.Player = (function () {
 
         // canJump //////////////////////////////////////////////////////////////////////////////////
         canJump(jump, mediaInfo) {
-            console.log('A1ATPUB-1042:197')
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
 
             if (mediaInfo.queueData) {
-                console.log('A1ATPUB-1042:198')
                 var qMgr = playerManager.getQueueManager();
                 var items = qMgr.getItems();
                 var newIndex = qMgr.getCurrentItemIndex() + jump;
@@ -504,12 +453,10 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _getPositionInfo(mediaInfo) {
-            console.log('A1ATPUB-1042:199')
             mediaInfo = mediaInfo || playerManager.getMediaInformation() || this._currentMedia;
 
             // If we can't return a position, or the player is in error state, return empty position info
             if (!mediaInfo || !mediaInfo._positionInfo || this._state === com.zappware.chromecast.PlayerState.ERROR) {
-                console.log('A1ATPUB-1042:200')
                 return {};
             }
 
@@ -522,12 +469,11 @@ com.zappware.chromecast.Player = (function () {
                 this._state === com.zappware.chromecast.PlayerState.LOADING ||
                 this._state === com.zappware.chromecast.PlayerState.LOADED  ||
                 this._state === com.zappware.chromecast.PlayerState.SEEKING ){
-                    console.log('A1ATPUB-1042:201')
+
                 // In case we have a timer running, restart it. Motivation: It has been observed that the timer failed
                 // to be cleared in reload scenarios, so this is a kind of safety net to avoid the position never to be
                 // updated again.
                 if (mediaInfo._positionInfo.timer) {
-                    console.log('A1ATPUB-1042:202')
                     clearTimeout(mediaInfo._positionInfo.timer);
                     mediaInfo._positionInfo.timer = setTimeout(() => delete mediaInfo._positionInfo.timer, 0);
                 }
@@ -545,14 +491,12 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _getCurrentPosition(media) {
-            console.log('A1ATPUB-1042:203')
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                    console.log('A1ATPUB-1042:204')
+
                 // Relative to current time
                 var curPosition = Math.min(this._reloadAndSeekInProgressForPosition, com.zappware.chromecast.util.getCurrentTime());
                 if (curPosition) {
-                    console.log('A1ATPUB-1042:205')
                     return curPosition;
                 }
 
@@ -561,13 +505,10 @@ com.zappware.chromecast.Player = (function () {
 
                 // In LIVETV or PLTV, ignore any position not within range
                 if (media && ((seekableRange && curTimeSec > seekableRange.start) || this._state === com.zappware.chromecast.PlayerState.PAUSED)) {
-                    console.log('A1ATPUB-1042:206')
                     if (media.startAbsoluteTime) {
-                        console.log('A1ATPUB-1042:207')
                         return media.startAbsoluteTime + curTimeSec;
                     }
                     else if (media._playingStartedAt && this._state !== com.zappware.chromecast.PlayerState.LOADING) {
-                        console.log('A1ATPUB-1042:208')
                         return media._playingStartedAt + curTimeSec;
                     }
                 }
@@ -581,21 +522,18 @@ com.zappware.chromecast.Player = (function () {
         _updatePositionInfo(media) {
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                    console.log('A1ATPUB-1042:209')
+
                 let curPosition = this._getCurrentPosition(media);
                 if (this.isTimeshiftEnabled() && media._playingStartedAt) {
-                    console.log('A1ATPUB-1042:210')
                     media._positionInfo.maxPosition = com.zappware.chromecast.util.getCurrentTime();
                     media._positionInfo.minPosition = Math.max(media._playingStartedAt, media._positionInfo.maxPosition - this._maxPlaybackOffset);
                     media._positionInfo.curPosition = Math.max(Math.min(curPosition || Number.MAX_SAFE_INTEGER, media._positionInfo.maxPosition), media._positionInfo.minPosition);
                 }
                 else {
-                    console.log('A1ATPUB-1042:211')
                     media._positionInfo.curPosition = media._positionInfo.minPosition = media._positionInfo.maxPosition = curPosition;
                 }
             }
             else {
-                console.log('A1ATPUB-1042:212')
                 // Absolute
                 media._positionInfo.curPosition = playerManager.getCurrentTimeSec();
                 media._positionInfo.minPosition = 0;
@@ -603,7 +541,6 @@ com.zappware.chromecast.Player = (function () {
                 var seekableRange;
                 if (media._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
                     media._playbackMode === com.zappware.chromecast.PlaybackMode.NPVR) {
-                        console.log('A1ATPUB-1042:213')
                     seekableRange = playerManager.getLiveSeekableRange();
                 }
                 media._positionInfo.maxPosition = (seekableRange) ? seekableRange.end : playerManager.getDurationSec();
@@ -613,19 +550,16 @@ com.zappware.chromecast.Player = (function () {
 
         // getPosition ////////////////////////////////////////////////////////////////////////////////
         getPosition(mediaInfo) {
-            console.log('A1ATPUB-1042:214')
             return this._getPositionInfo(mediaInfo).curPosition;
         }
 
         // getMinPosition /////////////////////////////////////////////////////////////////////////////
         getMinPosition(mediaInfo) {
-            console.log('A1ATPUB-1042:215')
             return this._getPositionInfo(mediaInfo).minPosition;
         }
 
         // getMaxPosition /////////////////////////////////////////////////////////////////////////////
         getMaxPosition(mediaInfo) {
-            console.log('A1ATPUB-1042:216')
             return this._getPositionInfo(mediaInfo).maxPosition;
         }
 
@@ -645,7 +579,6 @@ com.zappware.chromecast.Player = (function () {
 
         // getCustomData //////////////////////////////////////////////////////////////////////////////
         getCustomData(messageType) {
-            console.log('A1ATPUB-1042:217')
             var mediaInfo = playerManager.getMediaInformation();
 
             var customData = {
@@ -660,23 +593,18 @@ com.zappware.chromecast.Player = (function () {
 
         // getPlaybackConfig //////////////////////////////////////////////////////////////////////////
         getPlaybackConfig() {
-            console.log('A1ATPUB-1042:218')
             return this.playbackConfig;
         }
 
         getMediaStartAbsoluteTime(media, force) {
-            console.log('A1ATPUB-1042:219')
             media = media || playerManager.getMediaInformation() || this._currentMedia;
             if (!media.startAbsoluteTime || force) {
-                console.log('A1ATPUB-1042:220')
                 var liveSeekableRange = playerManager.getLiveSeekableRange();
                 if (liveSeekableRange && liveSeekableRange.end > liveSeekableRange.start) {
-                    console.log('A1ATPUB-1042:221')
                     // We rely on the startAbsoluteTime to be present in case timeshift is supported, but
                     // it is not there -> set it ourselves.
                     media.startAbsoluteTime = com.zappware.chromecast.util.getCurrentTime() - liveSeekableRange.end;
                     if (media._offsetToLive) {
-                        console.log('A1ATPUB-1042:222')
                         DEBUG && log("media._offsetToLive was set: adding another " + media._offsetToLive + 's');
                         media.startAbsoluteTime += media._offsetToLive;
                     }
@@ -688,7 +616,6 @@ com.zappware.chromecast.Player = (function () {
 
         // Non-public methods ////////////////////////////////////////////////////////////////////////
         _load(loadRequestData) {
-            console.log('A1ATPUB-1042:223')
             var that = this;
             var media = loadRequestData.media;
 
@@ -703,7 +630,6 @@ com.zappware.chromecast.Player = (function () {
                 that._loadSession(loadRequestData.media, loadRequestData.customData).then(function(error) {
                     DEBUG && log("player._loadSession() done -> proceeding: " + (media === that._currentMedia));
                     if (media === that._currentMedia) {
-                        console.log('A1ATPUB-1042:224')
                         if (error) {
                             DEBUG && log("Load failure: Error " + error + " during load request.");
 
@@ -732,7 +658,6 @@ com.zappware.chromecast.Player = (function () {
             }, qos.maxLoadDuration);
 
             var _onPlaying = function() {
-                console.log('A1ATPUB-1042:225')
                 if (that._state !== com.zappware.chromecast.PlayerState.PLAYING) {
                     DEBUG && log(`${that._state} -> PLAYING`);
                     that._state = com.zappware.chromecast.PlayerState.PLAYING;
@@ -763,16 +688,13 @@ com.zappware.chromecast.Player = (function () {
             };
 
             var _handlePlayerManagerEvent = function(event) {
-                console.log('A1ATPUB-1042:226')
                 if (event.type === "REQUEST_LOAD" || media !== that._currentMedia || that._reloadAndSeekInProgressForPosition) {
                     //  Bail out if a new load request arrived.
-                    console.log('A1ATPUB-1042:227')
                     playerManager.removeEventListener(cast.framework.events.category.CORE, _handlePlayerManagerEvent);
                     return;
                 }
 
                 if (!playerManager.getMediaInformation()) {
-                    console.log('A1ATPUB-1042:228')
                     DEBUG && log("No media? This is fatal.");
                     playerManager.removeEventListener(cast.framework.events.category.CORE, _handlePlayerManagerEvent);
                     _onError();
@@ -789,7 +711,6 @@ com.zappware.chromecast.Player = (function () {
                         }
                         break;
                     case "PLAYER_LOAD_COMPLETE":
-                        console.log('A1ATPUB-1042:229')
                         that._state = com.zappware.chromecast.PlayerState.LOADED;
                         media._playingStartedAt = com.zappware.chromecast.util.getCurrentTime();
                         that.getMediaStartAbsoluteTime(media, true);
@@ -799,15 +720,11 @@ com.zappware.chromecast.Player = (function () {
                         }
                         break;
                     case 'SEEKING':
-                        console.log('A1ATPUB-1042:230')
                         if (that._state === com.zappware.chromecast.PlayerState.LOADED) {
-                            console.log('A1ATPUB-1042:231')
                             if (loadRequestData.customData.currentPosition >= 0) {
-                                console.log('A1ATPUB-1042:232')
                                 that._state = com.zappware.chromecast.PlayerState.SEEKING;
                                 let settingPosition = that.setPosition(loadRequestData.customData.currentPosition);
                                 if (settingPosition instanceof Promise) {
-                                    console.log('A1ATPUB-1042:233')
                                     settingPosition.then(function() {
                                         _onPlaying();
                                     });
@@ -822,7 +739,6 @@ com.zappware.chromecast.Player = (function () {
                         }
                         break;
                     case 'PLAYING':
-                        console.log('A1ATPUB-1042:234')
                         _onPlaying();
                         break;
                     default:
@@ -836,7 +752,6 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _waitForEvent(_event, timeout) {
-            console.log('A1ATPUB-1042:235')
             var that = this;
             return this._waitForEvents([_event, , "ERROR"], timeout, function(event) {
                 return ((event && event.type !== 'ERROR') || !that._isHarmless(event));
@@ -844,7 +759,6 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _waitForEvents(events, timeout, functor) {
-            console.log('A1ATPUB-1042:236')
             return new Promise(function(resolve) {
                 var _timeout = timeout && setTimeout(_resolve, timeout);
                 var _handlePlayerManagerEvent = function(event) {
@@ -869,7 +783,6 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _selectPreferredTracks(config) {
-            console.log('A1ATPUB-1042:237')
             try {
                 if (config.audioLanguagePreference && config.audioLanguagePreference.length) {
                     DEBUG && log("Selecting audio track:");
@@ -897,7 +810,6 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _selectPreferredTrack(mgr, preferences) {
-            console.log('A1ATPUB-1042:238')
             var tracks;
             var activeLanguage;
             try {
@@ -917,7 +829,6 @@ com.zappware.chromecast.Player = (function () {
             }
 
             if (tracks && tracks.length && preferences && preferences.length) {
-                console.log('A1ATPUB-1042:239')
                 DEBUG && log("available tracks: " + JSON.stringify(tracks) + ")");
                 var languages = [];
                 for (var i = 0; i < tracks.length; i++) {
@@ -945,23 +856,20 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _seek(position, resumeState) {
-            console.log('A1ATPUB-1042:240')
             var mediaInfo = playerManager.getMediaInformation();
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                    console.log('A1ATPUB-1042:241')
+
                 // position is absolute -> convert it to the buffer time
                 position = position - mediaInfo.startAbsoluteTime;
 
                 var seekableRange = playerManager.getLiveSeekableRange();
                 if (seekableRange && seekableRange.end > seekableRange.start) {
-                    console.log('A1ATPUB-1042:242')
                     position = Math.min(Math.max(position, seekableRange.start), seekableRange.end);
                 }
 
                 if (position < mediaInfo._offsetToLive) {
-                    console.log('A1ATPUB-1042:243')
                     position = mediaInfo._offsetToLive;
                 }
             }
@@ -969,50 +877,40 @@ com.zappware.chromecast.Player = (function () {
             // Pausing before seek seems to reduce time to seek
             if (mediaInfo._playbackMode !== com.zappware.chromecast.PlaybackMode.LIVETV &&
                 this.getState() === com.zappware.chromecast.PlayerState.PLAYING)  {
-                    console.log('A1ATPUB-1042:244')
                 DEBUG && log("calling pause before seek " + position);
                 playerManager.pause();
             }
 
             var promise = Promise.resolve();
             if (position !== playerManager.getCurrentTimeSec()) {
-                console.log('A1ATPUB-1042:245')
                 DEBUG && log("calling seek " + position);
-                console.log('A1ATPUB-1042:5 seek', position)
                 playerManager.seek(position);
                 promise = this._waitForEvent('SEEKED');
             }
 
             // If no or bad resumeState, assume it is PLAYING
             if (resumeState !== com.zappware.chromecast.PlayerState.PAUSED) {
-                console.log('A1ATPUB-1042:246')
                 resumeState = com.zappware.chromecast.PlayerState.PLAYING;
             }
 
             var that = this;
             var media = this._currentMedia;
             return promise.then(function(event) {
-                console.log('A1ATPUB-1042:247')
                 if (media !== that._currentMedia) {
-                    console.log('A1ATPUB-1042:248')
                     return;
                 }
 
                 if (playerManager.getPlayerState() !== 'PLAYING' && resumeState === com.zappware.chromecast.PlayerState.PLAYING) {
-                    console.log('A1ATPUB-1042:249')
                     playerManager.play();
                     return that._waitForEvent('PLAYING');
                 }
 
                 if (playerManager.getPlayerState() !== 'PAUSED' && resumeState === com.zappware.chromecast.PlayerState.PAUSED) {
-                    console.log('A1ATPUB-1042:250')
                     playerManager.pause();
                     return that._waitForEvent('PAUSE');
                 }
             }).then(function(event) {
-                console.log('A1ATPUB-1042:251')
                 if (media === that._currentMedia) {
-                    console.log('A1ATPUB-1042:252')
                     that._state = resumeState;
                     com.zappware.chromecast.receiver.onSeeked();
                 }
@@ -1020,7 +918,6 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _reloadAndSeek(position, resumeState) {
-            console.log('A1ATPUB-1042:253')
             DEBUG && log("_reloadAndSeek(" + position + ")");
             var that = this;
 
@@ -1028,21 +925,18 @@ com.zappware.chromecast.Player = (function () {
             this._reloadAndSeekObject = {}; // object to detect new call to _reloadAndSeek
 
             if (this._reloadAndSeekPromise) {
-                console.log('A1ATPUB-1042:254')
                 return this._reloadAndSeekPromise.then(function(){
                     return that._reloadAndSeek(position, resumeState);
                 });
             }
 
             this._reloadAndSeekPromise = new Promise(function(resolve) {
-                console.log('A1ATPUB-1042:255')
                 var media = that._currentMedia;
                 var object = that._reloadAndSeekObject;
                 var player_load_complete = false;
 
                 function _reloadAndSeekDone(result) {
                     if (that._reloadAndSeekObject === object) {
-                        console.log('A1ATPUB-1042:256')
                         that._reloadAndSeekInProgressForPosition = undefined;
                     }
                     that._reloadAndSeekPromise = undefined;
@@ -1056,15 +950,12 @@ com.zappware.chromecast.Player = (function () {
 
                 // A listener for playerManagerEvents will handle things for us.
                 function _handlePlayerManagerEvent(event) {
-                    console.log('A1ATPUB-1042:257')
                     if (event && event.type === 'PLAYER_LOAD_COMPLETE') {
-                        console.log('A1ATPUB-1042:258')
                         player_load_complete = true;
                     }
 
                     // We have been interrupted by another (re)load request: bail out!
                     if (that._currentMedia !== media || (player_load_complete && that._reloadAndSeekObject !== object)) {
-                        console.log('A1ATPUB-1042:259')
                         DEBUG && log(`_reloadAndSeek(${position}) was interrupted by another (re)load request -> bailing out`);
                         _reloadAndSeekDone();
                         return;
@@ -1072,9 +963,7 @@ com.zappware.chromecast.Player = (function () {
 
                     switch(event && event.type) {
                         case 'PLAYER_LOAD_COMPLETE':
-                            console.log('A1ATPUB-1042:260')
                             if (media !== playerManager.getMediaInformation()) {
-                                console.log('A1ATPUB-1042:261')
                                 DEBUG && log("Media change when reloading");
 
                                 // Update the media references
@@ -1085,22 +974,17 @@ com.zappware.chromecast.Player = (function () {
                             that.getMediaStartAbsoluteTime(media, true);
 
                             if (that.getState() === com.zappware.chromecast.PlayerState.SEEKING) {
-                                console.log('A1ATPUB-1042:262')
                                 if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV) {
-                                    console.log('A1ATPUB-1042:263')
                                     playerManager.play();
                                 }
                                 else {
-                                    console.log('A1ATPUB-1042:264')
                                     // We're still seeking
-                                    console.log('A1ATPUB-1042:6 stil seeking', position)
                                     that._seek(position, resumeState);
                                 }
                             }
                             break;
                         case 'PLAYING':
                         case 'SEEKED':
-                            console.log('A1ATPUB-1042:265')
                             DEBUG && log("_reloadAndSeek(" + position + ") -> done !!! ");
                             _reloadAndSeekDone(media);
                             break;
@@ -1142,7 +1026,6 @@ com.zappware.chromecast.Player = (function () {
         }
 
         _stopSessions(sessions) {
-            console.log('A1ATPUB-1042:266')
             sessions = sessions || this._media;
             var promises = [];
 

@@ -119,7 +119,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     // intercept the (incoming) SEEK message to be able to do our own seek handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.SEEK, function (data) {
         DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "Message intercepted: " + JSON.stringify(data));
-        console.log('A1ATPUB-1042:7')
+
         // If we did the request ourselves, allow it to pass
         if (com.zappware.chromecast.cast._localRequests && com.zappware.chromecast.cast._localRequests.indexOf(data.requestId) >= 0) {
             DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "local request -> allow to pass");
@@ -145,7 +145,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 // return data and not null not to confuse the sender app. Hence this trick to make sure the seek position is not
                 // actually applied by the playerManager.
                 data.mediaSessionId = undefined;
-
+                return null
             }
         }
 
@@ -154,9 +154,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) QUEUE_UPDATE message
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.QUEUE_UPDATE, function (data) {
-        console.log('A1ATPUB-1042:8')
         if (data.jump) {
-            console.log('A1ATPUB-1042:9')
             return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.jump(data.jump), data);
         }
         return null;
@@ -164,12 +162,10 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (outgoing) MEDIA_STATUS message to be able to add customData
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.MEDIA_STATUS, function (mediaStatusData) {
-        console.log('A1ATPUB-1042:10')
         mediaStatusData.customData = com.zappware.chromecast.receiver.getCustomData(cast.framework.messages.MessageType.MEDIA_STATUS);
 
         // NEXX4-18655: name the audio and subtitle tracks
         if (mediaStatusData.media && mediaStatusData.media.tracks) {
-            console.log('A1ATPUB-1042:11')
             for (var i = 0; i < mediaStatusData.media.tracks.length; i++) {
                 var track = mediaStatusData.media.tracks[i];
                 if (!track.name) {
@@ -184,7 +180,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     });
 
     playerManager.addEventListener(cast.framework.events.category.CORE, function(event) {
-        console.log('A1ATPUB-1042:12')
         DEBUG && (event.type !== 'MEDIA_STATUS') && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "onPlayerManagerEvent(" + JSON.stringify(event) + ")");
         var state = com.zappware.chromecast.player.getState();
         switch (event.type) {
@@ -193,7 +188,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 // network failure. To confirm that the player is stalled, the position is checked for progress: if no progress for 3 seconds
                 // the player is assumed to be stalled.
                 if (com.zappware.chromecast.player.getState() === com.zappware.chromecast.PlayerState.PLAYING) {
-                    console.log('A1ATPUB-1042:12')
                     let currentMediaTime = playerManager.getCurrentTimeSec();
                     let mediaInfo = playerManager.getMediaInformation();
                     setTimeout(() => {
@@ -203,7 +197,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                              currentMediaTime === playerManager.getCurrentTimeSec());
 
                         if (stalled) {
-                            console.log('A1ATPUB-1042:13')
                             com.zappware.chromecast.player.onMediaStalled();
                         }
                     }, 3000);
@@ -243,7 +236,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
         }
 
         if (event.senderId === 'local') {
-            console.log('A1ATPUB-1042:14')
             if (!com.zappware.chromecast.cast._localRequests) {
                 com.zappware.chromecast.cast._localRequests = [];
             }
@@ -260,7 +252,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     });
 
     function _onEventThatRequiresStop(event) {
-        console.log('A1ATPUB-1042:15')
         if (!event) {
             return;
         }
@@ -280,7 +271,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
         com.zappware.chromecast.util.log("Starting ZCR VERSION: " + VERSION );
     });
     context.addEventListener(cast.framework.system.EventType.SYSTEM_VOLUME_CHANGED, function() {
-        console.log('A1ATPUB-1042:16')
         // Restore mute status
         if (com.zappware.chromecast.player.getMuted()) {
             com.zappware.chromecast.player.setMuted(true);
@@ -288,7 +278,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     });
 
     function _onSenderDisconnect(event) {
-        console.log('A1ATPUB-1042:17')
         DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "SENDER_DISCONNECTED, senders: " + context.getSenders().length);
 
         // When "requested_by_sender", we should finish, even if there are other senders connected (ref. NEXX4-17326)
@@ -308,7 +297,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     //       CAF API.
     //
     context.addEventListener(cast.framework.system.EventType.SENDER_CONNECTED, function(event) {
-        console.log('A1ATPUB-1042:18')
         DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "SENDER_CONNECTED, senders: " + context.getSenders().length);
 
         context.removeEventListener(cast.framework.system.EventType.SENDER_DISCONNECTED, _onSenderDisconnect);
@@ -319,7 +307,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     ////////////// CUSTOM MESSAGES ////////////////////////////////////////////////////////////////////
     context.addCustomMessageListener(CUSTOM_CHANNEL, function (customEvent) {
-        console.log('A1ATPUB-1042:19')
         try {
             var data = (typeof customEvent.data === "string") ? JSON.parse(customEvent.data) : com.zappware.chromecast.util.cloneObject(customEvent.data);
 
@@ -331,7 +318,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     });
 
     function _onCustomEvent(data, sender) {
-        console.log('A1ATPUB-1042:20')
         try {
             DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "_onCustomEvent(" + JSON.stringify(data)+ ")");
 
@@ -340,34 +326,28 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
             var promise, params;
 
             if (actionType !== 'get' && actionType !== 'set') {
-                console.log('A1ATPUB-1042:21')
                 // Unsupported custom message:
                 com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "unhandled custom message: " + JSON.stringify(data));
                 return;
             }
 
             if (com.zappware.chromecast.receiver['get' + action]) {
-                console.log('A1ATPUB-1042:22')
                 params = com.zappware.chromecast.receiver['get' + action](data.params);
             }
 
             if (actionType === 'set') {
-                console.log('A1ATPUB-1042:23')
                 promise = com.zappware.chromecast.receiver[data.action](data.params);
             }
 
             (promise || Promise.resolve())
             .then(function() {
                 if (actionType === 'set') {
-                    console.log('A1ATPUB-1042:24')
                     if (com.zappware.chromecast.receiver['get' + action]) {
-                        console.log('A1ATPUB-1042:25')
                         var newParams = com.zappware.chromecast.receiver['get' + action](data.params);
 
                         // In case there is no update to the parameters, only send a response to the sender
                         // that initiated the request. If parameters changed -> broadcast to all senders.
                         if (JSON.stringify(newParams) !== JSON.stringify(params)) {
-                            console.log('A1ATPUB-1042:26')
                             sender = undefined;
                             params = newParams;
                         }
@@ -379,21 +359,18 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                     params: params
                 };
                 if (data.requestId) {
-                    console.log('A1ATPUB-1042:27')
                     response.requestId = data.requestId;
                 }
-                console.log('A1ATPUB-1042:28')
+
                 com.zappware.chromecast.cast.sendCustomMessage(response, sender);
             });
         }
         catch (e) {
-            console.log('A1ATPUB-1042:29')
             console.error(e);
         }
     }
 
     if (context.getDeviceCapabilities()) {
-        console.log('A1ATPUB-1042:30')
         // start the context
         var options = {};
         options.maxInactivity = 60;
@@ -412,20 +389,16 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 };
 
 com.zappware.chromecast.cast.sendCustomMessage = function(message, sender) {
-    console.log('A1ATPUB-1042:31')
     DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "sendCustomMessage(" + JSON.stringify(message)+ ")");
 
     if (context.getSenders().length > 0) {
-        console.log('A1ATPUB-1042:32')
         // If sender is undefined -> broadcast to all senders
         context.sendCustomMessage(CUSTOM_CHANNEL, sender, message);
     }
 };
 
 com.zappware.chromecast.cast.sendCustomLogMessage = function(message) {
-    console.log('A1ATPUB-1042:33')
     if (context.getSenders().length > 0) {
-        console.log('A1ATPUB-1042:34')
         // broadcast log to all senders
         context.sendCustomMessage(CUSTOM_LOG_CHANNEL, undefined, message);
     }
