@@ -89,7 +89,8 @@
 
     if (adPolicy) {
       // skipping not allowed
-      if (!adPolicy.allow_skip && !activeAd) {
+      const jumpedBackward = getCurrentTimeSec() > time
+      if (!jumpedBackward && !adPolicy.allow_skip && !activeAd) {
         // ad blocks
         const firstAdsBlock = findFirstAdsBlock(time, playerManager.getCurrentTimeSec())
         if (firstAdsBlock) {
@@ -98,7 +99,6 @@
         }
       } else { // skipping allowed
         // check if the requested time is in an ads block and from which direction it is entered
-        const jumpedBackward = getCurrentTimeSec() > time
         let playbackMode = getPlaybackMode()
         if (jumpedBackward && playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
           return time
@@ -124,6 +124,7 @@
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec();
+    console.log('adshandler checkAdEnterExit: currentTime', currentTime)
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd);
     }
@@ -146,6 +147,7 @@
   }
 
   const canSeek = (position) => {
+    console.log('adshandler canSeek:', position)
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
     if (signallingType === 'UNKNOWN') { // Block on channel-level
