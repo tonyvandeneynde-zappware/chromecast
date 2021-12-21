@@ -486,7 +486,7 @@ com.zappware.chromecast.Player = (function () {
 
             // Update the position info and return it
             this._updatePositionInfo(mediaInfo);
-
+            com.zappware.chromecast.adshandler.setTimingForViewedWindow(com.zappware.chromecast.util.getCurrentTime())
             return mediaInfo._positionInfo;
         }
 
@@ -515,7 +515,6 @@ com.zappware.chromecast.Player = (function () {
 
                 return com.zappware.chromecast.util.getCurrentTime();
             }
-
             return playerManager.getCurrentTimeSec();;
         }
 

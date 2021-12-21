@@ -208,6 +208,21 @@ img#splash {
     background-color: black;
     padding: 0 10px; }
 
+.BlockInfo {
+  position: absolute;
+  top: 67px;
+  left: 148px;
+  height: 67px;
+  text-align: left;
+  white-space: nowrap;
+  text-align: left; }
+  .BlockInfo p {
+    font-family: FontSans;
+    font-size: 35px;
+    color: white;
+    background-color: black;
+    padding: 0 10px; }
+
 .BitRate {
   position: absolute;
   top: 33px;
@@ -283,11 +298,11 @@ body:not(.Splash) #background {
         height: convert(48px);
         width: convert(389px);
         text-align: left;
-        white-space: nowrap;            
+        white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis;            
+        text-overflow: ellipsis;
         text-align: left;
-        
+
         p {
             font-family: FontSans;
             font-size: convert(27px);

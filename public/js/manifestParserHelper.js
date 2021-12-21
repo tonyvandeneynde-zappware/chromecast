@@ -7,6 +7,7 @@
 //      AD SKIPPING LOGIC
 /*************************************** */
 com.zappware.chromecast.manifestParserHelper = (function () {
+
   function parseManifest(manifest) {
     // type = static, dynamic
     if (!manifest) return;
@@ -61,15 +62,38 @@ com.zappware.chromecast.manifestParserHelper = (function () {
 
   function getAdsBlockInfo(period, eventStream, typeManifest, mdp) {
     if (!period) return;
-    // check for PresentationTime
-    let isPresentationTimeZero = checkForPresentationTime(eventStream)
-    if (isPresentationTimeZero) {
+    const adSignallingType = com.zappware.chromecast.adshandler.getAdSignallingType()
+    if (adSignallingType === com.zappware.chromecast.AdSignallingTypes.SCTE35_ZW_1) {
+      return getAdBlockInfoOnPTZero(period, eventStream, typeManifest, mdp)
+    } else if (adSignallingType === com.zappware.chromecast.AdSignallingTypes.DEFAULT) {
+      const isPresentationTimeZero = checkForPresentationTime(eventStream)
+      if (isPresentationTimeZero) {
+        return getAdBlockInfoOnPTZero(period, eventStream, typeManifest, mdp)
+      } else {
+       const adsInfo = calculateWhenPresentationTimeIsNotZero(eventStream, typeManifest, mdp)
+       return adsInfo.map((ad) => {
+         return {
+           adId: ad.adId,
+           adStartTime: parseInt(ad.start),
+           adEndTime: parseInt(ad.end),
+           totalDuration: ad.duration,
+           adType: ad.adType,
+         }
+       })
+      }
+    } else {
+      return {}
+    }
+  }
+
+  function getAdBlockInfoOnPTZero (period, eventStream, typeManifest, mdp) {
       let startTime = period.start;
       // for dynamic streams
       let utcTimeUrl = typeManifest === "dynamic" && ((mdp && mdp.UTCTiming[0].value) || "https://time.akamai.com/?iso");
       let adsStartDynamicStream = typeManifest === "dynamic" && calculateStartTimeForDynamicStream(period, typeManifest, utcTimeUrl);
 
       let adStartTime = typeManifest === "dynamic" ? adsStartDynamicStream : startTime.substring(2, startTime.length - 1);
+      let eventDuration = (eventStream.Event[0] && eventStream.Event[0].duration) || period.duration
       let duration = period.duration || 0;
       if (!duration) return
       let minutesSearch = duration.indexOf("M");
@@ -83,7 +107,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
 
       let durationMinutesToSeconds = durationMinutes && convertMinutesToSeconds(durationMinutes);
       let totalDuration = durationMinutesToSeconds ? parseFloat(durationMinutesToSeconds) + parseFloat(durationSeconds) : parseFloat(durationSeconds);
-      let adEndTime = totalDuration + parseFloat(adStartTime);
+      let adEndTime = (eventDuration === undefined) ? adStartTime : totalDuration + parseFloat(adStartTime);
       let adId = eventStream.Event[0].id;
       let adType = "TYPE_SCTE35";
 
@@ -95,18 +119,9 @@ com.zappware.chromecast.manifestParserHelper = (function () {
         adType,
       };
 
-    } else {
-     let adsInfo = calculateWhenPresentationTimeIsNotZero(eventStream, typeManifest, mdp)
-     return adsInfo.map((ad) => {
-       return {
-         adId: ad.adId,
-         adStartTime: parseInt(ad.start),
-         adEndTime: parseInt(ad.end),
-         totalDuration: ad.duration,
-         adType: ad.adType,
-       }
-     })
-    }
+
+
+
   }
 
   function convertMinutesToSeconds(minutes) {
@@ -200,6 +215,10 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     let adsStartTime = start - diff;
     return adsStartTime;
   }
+
+
+
+
   /************************************** */
   // END AD SKIPPING
   /***************************************************** */

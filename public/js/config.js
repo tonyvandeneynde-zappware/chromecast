@@ -40,6 +40,7 @@ TAG_CONFIG.bookmarkInterval = 300; // in seconds
 TAG_CONFIG.offsetToLive = 6; // in seconds
 TAG_CONFIG.maxPLTVBufferSize = 3600; // in seconds
 TAG_CONFIG.adSkippingEnabled = true; // Toggle for ads skipping feature
+TAG_CONFIG.adSignallingTypeEnabled = false; // Toggle for ads signalling type
 
 // Uncomment the line below for deployments with broadbeak (A1 Croatia):
 // TAG_CONFIG.broadpeakHeartbeatInterval = 20; // in seconds
