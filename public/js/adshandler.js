@@ -89,7 +89,7 @@
 
     if (adPolicy) {
       // skipping not allowed
-      const jumpedBackward = getCurrentTimeSec() > time
+      const jumpedBackward = getCurrentTimeSec() >= time
       console.log('adshandeler time:', time)
       console.log('adshandler getCurrentTimeSec():', getCurrentTimeSec())
       console.log('adshandler jumpedBackward:', jumpedBackward)
