@@ -93,12 +93,14 @@
       console.log('adshandeler time:', time)
       console.log('adshandler getCurrentTimeSec():', getCurrentTimeSec())
       console.log('adshandler jumpedBackward:', jumpedBackward)
-      if (!jumpedBackward && !adPolicy.allow_skip && !activeAd) {
+      if (!adPolicy.allow_skip && !activeAd) {
         // ad blocks
-        const firstAdsBlock = findFirstAdsBlock(time, playerManager.getCurrentTimeSec())
-        if (firstAdsBlock) {
-          console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
-          updatedTime = firstAdsBlock.adStartTime
+        if (!jumpedBackward) {
+          const firstAdsBlock = findFirstAdsBlock(time, playerManager.getCurrentTimeSec())
+          if (firstAdsBlock) {
+            console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
+            updatedTime = firstAdsBlock.adStartTime
+          }
         }
       } else { // skipping allowed
         // check if the requested time is in an ads block and from which direction it is entered
