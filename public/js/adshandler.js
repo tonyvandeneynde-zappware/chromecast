@@ -54,7 +54,7 @@
           allow_skip: false, // allow jumping over an ad block entirely
           allow_forward: false, // allow going forward during an ad block
           allow_backward: true, // allow going backward during an ad block
-          allow_backward_into_ad: false // allow jumping backward into an ad block, without being redirected to the start of the ad block
+          allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
         }
       } else {
         adPolicy = undefined
@@ -90,9 +90,6 @@
     if (adPolicy) {
       // skipping not allowed
       const jumpedBackward = getCurrentTimeSec() >= time
-      console.log('adshandeler time:', time)
-      console.log('adshandler getCurrentTimeSec():', getCurrentTimeSec())
-      console.log('adshandler jumpedBackward:', jumpedBackward)
       if (!adPolicy.allow_skip && !activeAd) {
         // ad blocks
         if (!jumpedBackward) {
@@ -129,7 +126,6 @@
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec();
-    console.log('adshandler checkAdEnterExit: currentTime', currentTime)
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd);
     }
@@ -152,7 +148,6 @@
   }
 
   const canSeek = (position) => {
-    console.log('adshandler canSeek:', position)
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
     if (signallingType === 'UNKNOWN') { // Block on channel-level
