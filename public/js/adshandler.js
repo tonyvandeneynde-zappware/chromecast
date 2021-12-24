@@ -73,7 +73,6 @@
     else {
       signallingType = com.zappware.chromecast.AdSignallingTypes.UNKNOWN
     }
-    signallingType = com.zappware.chromecast.AdSignallingTypes.DEFAULT
 
 }
 
@@ -204,6 +203,8 @@
   }
 
   const addAdsBlock = (adId, adStartTime, adEndTime, adType) => {
+    console.log('adshandler addAdsBlock:', adId, adStartTime, adEndTime, adType)
+    console.log('adshandler removedAds:', removedAds)
     if (!isAdSkippingEnabled) return
     if(!adId) return
     if(removedAds[adId]) return  // already viewed ads block
@@ -266,7 +267,6 @@
 
   const setInitialPosition = (time) => {
     initialPosition = time
-    adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adEndTime > initialPosition)
   }
   //
   // AD BLOCK HELPERS

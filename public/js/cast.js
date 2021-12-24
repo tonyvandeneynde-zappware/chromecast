@@ -118,7 +118,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) SEEK message to be able to do our own seek handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.SEEK, function (data) {
-        console.log('iospos data:', data)
         DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "Message intercepted: " + JSON.stringify(data));
 
         // If we did the request ourselves, allow it to pass
@@ -146,15 +145,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 // return data and not null not to confuse the sender app. Hence this trick to make sure the seek position is not
                 // actually applied by the playerManager.
                 data.mediaSessionId = undefined;
-                if (com.zappware.chromecast.adshandler.canSeek(_position)){
-                    _position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position)
-                } else {
-                    _position = playerManager.getCurrentTimeSec()
-                }
-                console.log('iospos position:', _position)
-                data.currentTime = _position
-                console.log('iospos data:', data)
-                // return data
+                return null
             }
         }
 
