@@ -174,7 +174,14 @@
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
     removedAds[adsBlock.adId] = true
+    removeAdsBlockById(adsBlock)
     activeAd = null
+  }
+
+  const removeAdsBlockById = (adsBlockToRemove) => {
+    console.log('adshandler adsBlocks before:', adsBlocks)
+    adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adId != adsBlockToRemove.adId)
+    console.log('adshandler adsBlocks after:', adsBlocks)
   }
 
   const removePastAdsBlocks = () => {
