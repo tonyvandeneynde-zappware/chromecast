@@ -118,6 +118,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) SEEK message to be able to do our own seek handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.SEEK, function (data) {
+        console.log('iospos data:', data)
         DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "Message intercepted: " + JSON.stringify(data));
 
         // If we did the request ourselves, allow it to pass

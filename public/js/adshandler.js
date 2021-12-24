@@ -73,6 +73,7 @@
     else {
       signallingType = com.zappware.chromecast.AdSignallingTypes.UNKNOWN
     }
+    signallingType = com.zappware.chromecast.AdSignallingTypes.DEFAULT
 
 }
 
