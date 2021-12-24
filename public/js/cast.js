@@ -152,7 +152,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                     _position = playerManager.getCurrentTimeSec()
                 }
                 console.log('iospos position:', _position)
-                data.currentTime = undefined // _position
+                data.currentTime = _position
                 console.log('iospos data:', data)
                 // return data
             }
