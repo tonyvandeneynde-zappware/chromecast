@@ -149,7 +149,8 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 const position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(position)
                 console.log('iospos position:', position)
                 console.log('iospos data:', data)
-                return null
+                data.currentTime = position
+                // return data
             }
         }
 
