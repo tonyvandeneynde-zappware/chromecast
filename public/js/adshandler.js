@@ -95,7 +95,8 @@
       if (!adPolicy.allow_skip && !activeAd) {
         // ad blocks
         if (!jumpedBackward) {
-          const firstAdsBlock = findFirstAdsBlock(time, playerManager.getCurrentTimeSec())
+          console.log('adshandler playerManager.getCurrentTimeSec():', getCurrentTimeSec())
+          const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
             updatedTime = firstAdsBlock.adStartTime
@@ -121,6 +122,7 @@
         }
       }
     }
+    console.log('adshandler updatedTime:', updatedTime)
     return updatedTime
 
   }
@@ -190,12 +192,14 @@
   }
 
   const  removeAdsBlocksInWindow = () => {
+    console.log('adshandler removeAdsBlocksInWindow before:', adsBlocks)
     if (!isAdSkippingEnabled) return
     if (adPolicy && adPolicy.allow_skip) return
     console.log('adsHandler - Removing all ads blocks in live viewed window')
     _.remove(adsBlocks, (adsBlock) => {
       return _.findIndex(adSkippingWindows, (window) => adsBlock.adStartTime >= window.startTime && adsBlock.adEndTime <= window.endTime) !== -1
     })
+    console.log('adshandler removeAdsBlocksInWindow after:', adsBlocks)
   }
 
   const showAdSkippingMessage = () => {
