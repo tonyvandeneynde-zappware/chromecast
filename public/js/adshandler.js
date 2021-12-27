@@ -139,11 +139,9 @@
     }
 
     if (!activeAd) {
-      // new adblock entered
+      // new adblock entered?
       let newActiveAd = null
       adsBlocks.forEach(ad => {
-        //All ads from the start of the live session until
-        // the start of the nPLTV session can be skipped.
         if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
           newActiveAd = ad
         }
@@ -153,12 +151,14 @@
   }
 
   const canSeek = (position) => {
+    console.log('adshandler canSeek:', position)
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
     if (signallingType === 'UNKNOWN') { // Block on channel-level
       const shouldBlockTrickPlay =  blockTrickPlay(position, currentTime)
       return shouldBlockTrickPlay ? false : true
     } else {
+      console.log('adshandler activeAd:', activeAd)
       if (activeAd && position > currentTime ) {
         showAdSkippingMessage()
         return false
@@ -219,9 +219,7 @@
     if(!adId) return
     if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
-    console.log('adshandler mediaInfo:', mediaInfo)
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData)
-    console.log('adshandler customData:', customData)
     if (customData && adStartTime > (new Date('2000').getTime())) {
         adStartTime -= customData.start
         adEndTime -= customData.start
