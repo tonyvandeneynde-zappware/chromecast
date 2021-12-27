@@ -131,7 +131,8 @@
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec();
-    console.log('adshandler checkAdEnterExit:', currentTime)
+    console.log('adshandler ee checkAdEnterExit:', currentTime)
+    console.log('adshandler ee playerManager.getCurrentTimeSec():', playerManager.getCurrentTimeSec())
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd);
     }
@@ -147,7 +148,7 @@
           newActiveAd = ad
         }
       })
-      console.log('adshandler newActiveAd:', newActiveAd)
+      console.log('adshandler ee newActiveAd:', newActiveAd)
       if (newActiveAd) handleAdsBlockEnterEvent(newActiveAd)
     }
   }
