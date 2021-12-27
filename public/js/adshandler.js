@@ -133,6 +133,7 @@
     const currentTime = getCurrentTimeSec();
     console.log('adshandler ee checkAdEnterExit:', currentTime)
     console.log('adshandler ee playerManager.getCurrentTimeSec():', playerManager.getCurrentTimeSec())
+    console.log('adshandler ee playerManager.getMediaInformation():', playerManager.getMediaInformation())
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd);
     }
