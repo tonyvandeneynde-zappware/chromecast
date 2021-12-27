@@ -221,7 +221,7 @@
     console.log('adshandler mediaInfo:', mediaInfo)
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData)
     console.log('adshandler customData:', customData)
-    if (adStartTime > (new Date('2000').getTime())) {
+    if (customData && adStartTime > (new Date('2000').getTime())) {
         adStartTime -= customData.start
         adEndTime -= customData.start
     }
