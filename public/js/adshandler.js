@@ -234,11 +234,7 @@
       adType: adType
     }
 
-    if (adStartTime < 0 || (initialPosition && adEndTime < initialPosition)) {
-      return
-    }
-
-    if (getCurrentTimeSec() > adEndTime) {
+    if (adStartTime < 0) {
       return
     }
 
