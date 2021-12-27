@@ -298,7 +298,8 @@
   const getCurrentTimeSec = () => {
     const media = playerManager.getMediaInformation()
     console.log('adshandler getCurrentTimeSec media:', media)
-    return playerManager.getCurrentTimeSec()
+    // return playerManager.getCurrentTimeSec()
+    return playerManager.getMediaInformation()._positionInfo.curPosition
   }
 
   const reset = () => {
