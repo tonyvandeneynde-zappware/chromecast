@@ -218,6 +218,7 @@
     if(!adId) return
     if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
+    console.log('adshandler mediaInfo:', mediaInfo)
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData)
     console.log('adshandler customData:', customData)
     if (adStartTime > (new Date('2000').getTime())) {
