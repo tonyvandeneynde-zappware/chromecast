@@ -296,6 +296,8 @@
   const logAdsBlocks = () => { console.log('adsHandler - Ads Blocks', adsBlocks) }
 
   const getCurrentTimeSec = () => {
+    const media = playerManager.getMediaInformation()
+    console.log('adshandler getCurrentTimeSec media:', media)
     return playerManager.getCurrentTimeSec()
   }
 
