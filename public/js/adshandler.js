@@ -293,11 +293,14 @@
   const logAdsBlocks = () => { console.log('adsHandler - Ads Blocks', adsBlocks) }
 
   const getCurrentTimeSec = () => {
-    const media = playerManager.getMediaInformation()
-    // console.log('adshandler getCurrentTimeSec media:', media)
-    // return playerManager.getCurrentTimeSec()
-    return playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
-    // return playerManager.getMediaInformation()._positionInfo.curPosition
+    const playbackMode = getPlaybackMode()
+    let currentTime
+    if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+      currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
+    } else {
+      currentTime = playerManager.getCurrentTimeSec()
+    }
+    return currentTime
   }
 
   const reset = () => {
