@@ -431,7 +431,7 @@ com.zappware.chromecast.Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                return this.isTimeshiftEnabled(mediaInfo);
+                return this.isTimeshiftEnabled(mediaInfo) && com.zappware.chromecast.adshandler.canSeek(position)
             }
 
             return com.zappware.chromecast.adshandler.canSeek(position)
