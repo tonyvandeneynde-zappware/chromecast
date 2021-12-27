@@ -82,6 +82,8 @@
   const validateRequestedPlaybackPosition = (time, media) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
+    console.log('adshandler adsBlocks:', adsBlocks)
+    console.log('adshandler adSkippingWindows:', adSkippingWindows)
     if (initialPosition === null) {
       setInitialPosition(time)
     }
