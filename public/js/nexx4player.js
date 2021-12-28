@@ -457,22 +457,13 @@ com.zappware.chromecast.Nexx4Player = (function () {
         _manifestHandler(manifest) {
             let media = playerManager.getMediaInformation() || this._currentMedia;
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
-            if (!this.numberOfManifestsParsed) {
-                this.numberOfManifestsParsed = 1
-                try {
-                    const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
-                    const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
-                    const  { adBlocks } =  isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
-                    isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
-                } catch (error) {
-                    console.log(error)
-                }
-            } else {
-                if (this.numberOfManifestsParsed === 10) {
-                    this.numberOfManifestsParsed = 0
-                } else {
-                    this.numberOfManifestsParsed++
-                }
+            try {
+                const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
+                const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+                 const  { adBlocks } =  isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
+                 isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
+            } catch (error) {
+                  console.log(error)
             }
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
