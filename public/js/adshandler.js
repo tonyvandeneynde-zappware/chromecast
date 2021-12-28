@@ -114,7 +114,6 @@
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec();
-    // console.log('adshandler ee checkAdEnterExit:', currentTime)
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd);
     }
@@ -130,7 +129,6 @@
           newActiveAd = ad
         }
       })
-      // console.log('adshandler ee newActiveAd:', newActiveAd)
       if (newActiveAd) handleAdsBlockEnterEvent(newActiveAd)
     }
   }
@@ -178,14 +176,12 @@
   }
 
   const  removeAdsBlocksInWindow = () => {
-    console.log('adshandler removeAdsBlocksInWindow before:', adsBlocks)
     if (!isAdSkippingEnabled) return
     if (adPolicy && adPolicy.allow_skip) return
     console.log('adsHandler - Removing all ads blocks in live viewed window')
     _.remove(adsBlocks, (adsBlock) => {
       return _.findIndex(adSkippingWindows, (window) => adsBlock.adStartTime >= window.startTime && adsBlock.adEndTime <= window.endTime) !== -1
     })
-    console.log('adshandler removeAdsBlocksInWindow after:', adsBlocks)
   }
 
   const showAdSkippingMessage = () => {
@@ -239,7 +235,6 @@
   }
 
   const setAdsBlocks = (newAdBlocks) => {
-    console.log('adshandler newAdBlocks:', newAdBlocks)
     adsBlocks = []
     if (!isAdSkippingEnabled) return
     if (!newAdBlocks) return
