@@ -135,7 +135,7 @@
   }
 
   const canSeek = (position) => {
-    return
+    return true
     console.log('adshandler canSeek:', position)
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
