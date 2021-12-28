@@ -112,6 +112,7 @@
   }
 
   const checkAdEnterExit = () => {
+    return
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec();
     if (activeAd && activeAd.adEndTime < currentTime) {
@@ -134,6 +135,7 @@
   }
 
   const canSeek = (position) => {
+    return
     console.log('adshandler canSeek:', position)
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
