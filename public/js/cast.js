@@ -150,7 +150,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 } else {
                     _position = playerManager.getCurrentTimeSec()
                 }
-                data.currentTime = _position
+                // data.currentTime = _position
             }
         }
 
