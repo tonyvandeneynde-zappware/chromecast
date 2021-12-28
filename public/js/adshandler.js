@@ -93,10 +93,11 @@
     if (adPolicy) {
       // skipping not allowed
       const jumpedBackward = getCurrentTimeSec() >= time
+      console.log('adshandler jumpedBackward:', jumpedBackward)
       if (!activeAd) {
         // ad blocks
         if (!jumpedBackward) {
-          console.log('adshandler playerManager.getCurrentTimeSec():', getCurrentTimeSec())
+          console.log('adshandler getCurrentTimeSec():', getCurrentTimeSec())
           const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
