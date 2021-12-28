@@ -402,7 +402,14 @@ com.zappware.chromecast.Nexx4Player = (function () {
             .then(function(playbackInfo) {
                 const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
                 const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
-                isAdSkippingEnabled && playbackInfo && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null)
+                if (!this.numberOfManifestsParsed) {
+                    isAdSkippingEnabled && playbackInfo && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null)
+                    this.numberOfManifestsParsed = 1
+                } else {
+                    if (this.numberOfManifestsParsed === 10) {
+                        this.numberOfManifestsParsed = 0
+                    }
+                }
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned
                                                         // session id as replaceSessionId (WINPUB-1604)
