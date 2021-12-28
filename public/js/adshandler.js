@@ -93,7 +93,7 @@
     if (adPolicy) {
       // skipping not allowed
       const jumpedBackward = getCurrentTimeSec() >= time
-      if (!adPolicy.allow_skip && !activeAd) {
+      if (!activeAd) {
         // ad blocks
         if (!jumpedBackward) {
           console.log('adshandler playerManager.getCurrentTimeSec():', getCurrentTimeSec())
@@ -101,24 +101,6 @@
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
             updatedTime = firstAdsBlock.adStartTime
-          }
-        }
-      } else { // skipping allowed
-        // check if the requested time is in an ads block and from which direction it is entered
-        let playbackMode = getPlaybackMode()
-        if (jumpedBackward && playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-          return time
-        }
-        if (!activeAd) {
-          if (jumpedBackward && adPolicy.allow_backward_into_ad) {
-            console.log('... jumped backward into an ads block, this is allowed.')
-            return time
-          } else {
-            console.log('... jumped into an ads block, playing ads block from start.')
-            activeAd = getAdsBlockForTime(time)
-            if (activeAd) {
-              updatedTime = activeAd.adStartTime
-            }
           }
         }
       }
