@@ -91,36 +91,20 @@
       // skipping not allowed
       const jumpedBackward = getCurrentTimeSec() >= time
       if (!adPolicy.allow_skip && !activeAd) {
-        // ad blocks
-        if (!jumpedBackward) {
-          const firstAdsBlock = findFirstAdsBlock(time, playerManager.getCurrentTimeSec())
-          if (firstAdsBlock) {
-            console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
-            updatedTime = firstAdsBlock.adStartTime
-          }
-        }
-      } else { // skipping allowed
-        // check if the requested time is in an ads block and from which direction it is entered
-        let playbackMode = getPlaybackMode()
-        if (jumpedBackward && playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-          return time
-        }
         if (!activeAd) {
-          if (jumpedBackward && adPolicy.allow_backward_into_ad) {
-            console.log('... jumped backward into an ads block, this is allowed.')
-            return time
-          } else {
-            console.log('... jumped into an ads block, playing ads block from start.')
-            activeAd = getAdsBlockForTime(time)
-            if (activeAd) {
-              updatedTime = activeAd.adStartTime
+          // ad blocks
+          if (!jumpedBackward) {
+            const firstAdsBlock = findFirstAdsBlock(time, playerManager.getCurrentTimeSec())
+            const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
+            if (firstAdsBlock) {
+              console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
+              updatedTime = firstAdsBlock.adStartTime
             }
           }
         }
       }
     }
     return updatedTime
-
   }
 
   const checkAdEnterExit = () => {
@@ -134,11 +118,9 @@
     }
 
     if (!activeAd) {
-      // new adblock entered
+      // new adblock entered?
       let newActiveAd = null
       adsBlocks.forEach(ad => {
-        //All ads from the start of the live session until
-        // the start of the nPLTV session can be skipped.
         if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
           newActiveAd = ad
         }
@@ -213,7 +195,7 @@
     if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData)
-    if (adStartTime > (new Date('2000').getTime())) {
+    if (customData && adStartTime > (new Date('2000').getTime())) {
         adStartTime -= customData.start
         adEndTime -= customData.start
     }
@@ -226,11 +208,7 @@
       adType: adType
     }
 
-    if (adStartTime < 0 || (initialPosition && adEndTime < initialPosition)) {
-      return
-    }
-
-    if (getCurrentTimeSec() > adEndTime) {
+    if (adStartTime < 0) {
       return
     }
 
@@ -287,7 +265,14 @@
   const logAdsBlocks = () => { console.log('adsHandler - Ads Blocks', adsBlocks) }
 
   const getCurrentTimeSec = () => {
-    return playerManager.getCurrentTimeSec()
+    const playbackMode = getPlaybackMode()
+    let currentTime
+    if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+      currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
+    } else {
+      currentTime = playerManager.getCurrentTimeSec()
+    }
+    return currentTime
   }
 
   const reset = () => {
