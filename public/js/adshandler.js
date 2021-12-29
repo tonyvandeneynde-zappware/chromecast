@@ -81,7 +81,7 @@
           const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
-            updatedTime = firstAdsBlock.adStartTime+0.1
+            updatedTime = firstAdsBlock.adStartTime + 0.2
           }
         }
       }
