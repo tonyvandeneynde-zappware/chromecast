@@ -72,8 +72,8 @@
 
     if (adPolicy) {
       // skipping not allowed
-      return time - 600
       const jumpedBackward = getCurrentTimeSec() >= time
+      return time - 600
       if (!adPolicy.allow_skip && !activeAd) {
         if (!activeAd) {
           // ad blocks
