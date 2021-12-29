@@ -80,7 +80,7 @@
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
             // return time - 600
-            updatedTime = firstAdsBlock.adStartTime-2
+            updatedTime = firstAdsBlock.adStartTime-10
           }
         }
       }
