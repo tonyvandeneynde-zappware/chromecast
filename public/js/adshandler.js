@@ -18,8 +18,6 @@
 
   let removedAds = {}
 
-  let initialPosition = null
-
   let adSkippingWindows = []
 
   let playbackMode = ''
@@ -41,20 +39,8 @@
     if (!isAdSkippingEnabled) return
     _.map(adPlayBackRestrictions, res => {
       if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
-        // This is temp fix to align all platforms
-        //  adPolicy = {
-        //   allow_skip: true, // allow jumping over an ad block entirely
-        //   allow_forward: false, // allow going forward during an ad block
-        //   allow_backward: true, // allow going backward during an ad block
-        //   allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
-        // }
-
-        // This is what is should be eventually
         adPolicy = {
-          allow_skip: false, // allow jumping over an ad block entirely
-          allow_forward: false, // allow going forward during an ad block
-          allow_backward: true, // allow going backward during an ad block
-          allow_backward_into_ad: true // allow jumping backward into an ad block, without being redirected to the start of the ad block
+          allow_skip: false
         }
       } else {
         adPolicy = undefined
@@ -82,14 +68,11 @@
   const validateRequestedPlaybackPosition = (time) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
-    return time - 600
-    if (initialPosition === null) {
-      setInitialPosition(time)
-    }
     let updatedTime = time
 
     if (adPolicy) {
       // skipping not allowed
+      return time - 600
       const jumpedBackward = getCurrentTimeSec() >= time
       if (!adPolicy.allow_skip && !activeAd) {
         if (!activeAd) {
@@ -247,9 +230,6 @@
 
   }
 
-  const setInitialPosition = (time) => {
-    initialPosition = time
-  }
   //
   // AD BLOCK HELPERS
   //
@@ -283,7 +263,6 @@
     activeAd = null;
     adPolicy = null;
     removedAds = {}
-    initialPosition = null
     let playerState = com.zappware.chromecast.player.getState();
     if (playerState === com.zappware.chromecast.PlayerState.STOPPED) {
       adSkippingWindows = []
