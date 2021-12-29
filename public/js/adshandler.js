@@ -76,8 +76,8 @@
         const jumpedBackward = getCurrentTimeSec() >= time
         // ad blocks
         if (!jumpedBackward) {
-          return time - 600
           const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
+          return time - 600
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
             updatedTime = firstAdsBlock.adStartTime
