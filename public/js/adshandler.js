@@ -94,7 +94,6 @@
         if (!activeAd) {
           // ad blocks
           if (!jumpedBackward) {
-            const firstAdsBlock = findFirstAdsBlock(time, playerManager.getCurrentTimeSec())
             const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
             if (firstAdsBlock) {
               console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
