@@ -378,9 +378,7 @@ com.zappware.chromecast.Player = (function () {
             if (this.getMaxPosition() > this.getMinPosition()) {
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
-            console.log('adshandler position before:', position)
-            position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(position)
-            console.log('adshandler position after:', position)
+            // position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(position)
             // Fix the requested position in the _positionInfo to avoid positions jumping back and forth
             if (mediaInfo._positionInfo) {
                 mediaInfo._positionInfo.curPosition = position;
@@ -433,7 +431,7 @@ com.zappware.chromecast.Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                return this.isTimeshiftEnabled(mediaInfo) && com.zappware.chromecast.adshandler.canSeek(position)
+                return this.isTimeshiftEnabled(mediaInfo);
             }
 
             return com.zappware.chromecast.adshandler.canSeek(position)
@@ -488,7 +486,7 @@ com.zappware.chromecast.Player = (function () {
 
             // Update the position info and return it
             this._updatePositionInfo(mediaInfo);
-            // com.zappware.chromecast.adshandler.setTimingForViewedWindow(com.zappware.chromecast.util.getCurrentTime())
+            com.zappware.chromecast.adshandler.setTimingForViewedWindow(com.zappware.chromecast.util.getCurrentTime())
             return mediaInfo._positionInfo;
         }
 

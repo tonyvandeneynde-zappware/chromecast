@@ -73,7 +73,6 @@
     else {
       signallingType = com.zappware.chromecast.AdSignallingTypes.UNKNOWN
     }
-    signallingType = com.zappware.chromecast.AdSignallingTypes.DEFAULT
 
 }
 
@@ -83,8 +82,6 @@
   const validateRequestedPlaybackPosition = (time, media) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
-    console.log('adshandler adsBlocks:', adsBlocks)
-    console.log('adshandler adSkippingWindows:', adSkippingWindows)
     if (initialPosition === null) {
       setInitialPosition(time)
     }
@@ -93,26 +90,40 @@
     if (adPolicy) {
       // skipping not allowed
       const jumpedBackward = getCurrentTimeSec() >= time
-      console.log('adshandler jumpedBackward:', jumpedBackward)
-      if (!activeAd) {
+      if (!adPolicy.allow_skip && !activeAd) {
         // ad blocks
         if (!jumpedBackward) {
-          console.log('adshandler getCurrentTimeSec():', getCurrentTimeSec())
-          const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
+          const firstAdsBlock = findFirstAdsBlock(time, playerManager.getCurrentTimeSec())
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
             updatedTime = firstAdsBlock.adStartTime
           }
         }
+      } else { // skipping allowed
+        // check if the requested time is in an ads block and from which direction it is entered
+        let playbackMode = getPlaybackMode()
+        if (jumpedBackward && playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+          return time
+        }
+        if (!activeAd) {
+          if (jumpedBackward && adPolicy.allow_backward_into_ad) {
+            console.log('... jumped backward into an ads block, this is allowed.')
+            return time
+          } else {
+            console.log('... jumped into an ads block, playing ads block from start.')
+            activeAd = getAdsBlockForTime(time)
+            if (activeAd) {
+              updatedTime = activeAd.adStartTime
+            }
+          }
+        }
       }
     }
-    console.log('adshandler updatedTime:', updatedTime)
     return updatedTime
 
   }
 
   const checkAdEnterExit = () => {
-    return
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec();
     if (activeAd && activeAd.adEndTime < currentTime) {
@@ -123,9 +134,11 @@
     }
 
     if (!activeAd) {
-      // new adblock entered?
+      // new adblock entered
       let newActiveAd = null
       adsBlocks.forEach(ad => {
+        //All ads from the start of the live session until
+        // the start of the nPLTV session can be skipped.
         if (currentTime >= ad.adStartTime && currentTime <= ad.adEndTime) {
           newActiveAd = ad
         }
@@ -135,15 +148,12 @@
   }
 
   const canSeek = (position) => {
-    return true
-    console.log('adshandler canSeek:', position)
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
     if (signallingType === 'UNKNOWN') { // Block on channel-level
       const shouldBlockTrickPlay =  blockTrickPlay(position, currentTime)
       return shouldBlockTrickPlay ? false : true
     } else {
-      console.log('adshandler activeAd:', activeAd)
       if (activeAd && position > currentTime ) {
         showAdSkippingMessage()
         return false
@@ -203,7 +213,7 @@
     if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData)
-    if (customData && adStartTime > (new Date('2000').getTime())) {
+    if (adStartTime > (new Date('2000').getTime())) {
         adStartTime -= customData.start
         adEndTime -= customData.start
     }
@@ -216,7 +226,11 @@
       adType: adType
     }
 
-    if (adStartTime < 0) {
+    if (adStartTime < 0 || (initialPosition && adEndTime < initialPosition)) {
+      return
+    }
+
+    if (getCurrentTimeSec() > adEndTime) {
       return
     }
 
@@ -273,14 +287,7 @@
   const logAdsBlocks = () => { console.log('adsHandler - Ads Blocks', adsBlocks) }
 
   const getCurrentTimeSec = () => {
-    const playbackMode = getPlaybackMode()
-    let currentTime
-    if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-      currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
-    } else {
-      currentTime = playerManager.getCurrentTimeSec()
-    }
-    return currentTime
+    return playerManager.getCurrentTimeSec()
   }
 
   const reset = () => {
