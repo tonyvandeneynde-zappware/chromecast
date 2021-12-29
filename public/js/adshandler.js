@@ -72,17 +72,15 @@
 
     if (adPolicy) {
       // skipping not allowed
-      const jumpedBackward = getCurrentTimeSec() >= time
-      return time - 600
-      if (!adPolicy.allow_skip && !activeAd) {
-        if (!activeAd) {
-          // ad blocks
-          if (!jumpedBackward) {
-            const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
-            if (firstAdsBlock) {
-              console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
-              updatedTime = firstAdsBlock.adStartTime
-            }
+      if (!activeAd) {
+        const jumpedBackward = getCurrentTimeSec() >= time
+        // ad blocks
+        if (!jumpedBackward) {
+          return time - 600
+          const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
+          if (firstAdsBlock) {
+            console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
+            updatedTime = firstAdsBlock.adStartTime
           }
         }
       }
