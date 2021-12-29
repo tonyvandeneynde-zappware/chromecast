@@ -129,6 +129,7 @@
   }
 
   const canSeek = (position) => {
+    console.log('adshandler canSeek:', position)
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
     if (signallingType === 'UNKNOWN') { // Block on channel-level
