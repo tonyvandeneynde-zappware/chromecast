@@ -79,9 +79,7 @@
           const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
-            updatedTime = firstAdsBlock.adStartTime
-          } else {
-            return
+            updatedTime = firstAdsBlock.adStartTime - 0.2
           }
         }
       }
@@ -249,9 +247,9 @@
     if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
       currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
     } else {
-      // currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
+      currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
 
-      currentTime = playerManager.getCurrentTimeSec()
+      // currentTime = playerManager.getCurrentTimeSec()
     }
     return currentTime
   }
