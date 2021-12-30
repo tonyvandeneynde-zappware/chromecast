@@ -59,8 +59,6 @@
     else {
       signallingType = com.zappware.chromecast.AdSignallingTypes.UNKNOWN
     }
-    signallingType = com.zappware.chromecast.AdSignallingTypes.DEFAULT
-
 
 }
 
@@ -86,7 +84,6 @@
         }
       }
     }
-    console.log('adshandler updatedTime:', updatedTime)
     return updatedTime
   }
 
@@ -113,7 +110,6 @@
   }
 
   const canSeek = (position) => {
-    console.log('adshandler canSeek:', position)
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
     if (signallingType === 'UNKNOWN') { // Block on channel-level
@@ -251,7 +247,9 @@
     if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
       currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
     } else {
-      currentTime = playerManager.getCurrentTimeSec()
+      currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
+
+      // currentTime = playerManager.getCurrentTimeSec()
     }
     return currentTime
   }
