@@ -247,9 +247,7 @@
     if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
       currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
     } else {
-      currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
-
-      // currentTime = playerManager.getCurrentTimeSec()
+      currentTime = playerManager.getCurrentTimeSec()
     }
     return currentTime
   }
