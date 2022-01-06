@@ -146,7 +146,9 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 // return data and not null not to confuse the sender app. Hence this trick to make sure the seek position is not
                 // actually applied by the playerManager.
                 data.mediaSessionId = undefined;
-                if (com.zappware.chromecast.adshandler.canSeek(_position)){
+                const canSeek = com.zappware.chromecast.adshandler.canSeek(_position)
+                console.log('adshandler canSeek:', canSeek)
+                if (canSeek){
                     _position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position)
                 } else {
                     _position = playerManager.getCurrentTimeSec()
