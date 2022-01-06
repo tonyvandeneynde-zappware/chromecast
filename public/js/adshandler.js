@@ -22,6 +22,8 @@
 
   let playbackMode = ''
 
+  let initialPosition = null
+
   //
   // AD RESTRICTIONS
   //
@@ -67,7 +69,11 @@
   //
   const validateRequestedPlaybackPosition = (time) => {
     if (!isAdSkippingEnabled) return
+    if (initialPosition === null) {
+      setInitialPosition(time)
+    }
     console.log('adsHandler - Validating requested playback position', time, '...')
+    console.log('adshandler media', playerManager.getMediaInformation())
     let updatedTime = time
 
     if (adPolicy) {
