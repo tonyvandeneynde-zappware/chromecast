@@ -69,13 +69,13 @@
   //
   const validateRequestedPlaybackPosition = (time) => {
     if (!isAdSkippingEnabled) return
+    console.log('adsHandler - Validating requested playback position', time, '...')
+    console.log('adshandler media', playerManager.getMediaInformation())
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
     console.log('adshandler customData:', customData)
     if (customData && customData.startOverTVBeforeTime) {
       if (time === customData.startOverTVBeforeTime) return time
     }
-    console.log('adsHandler - Validating requested playback position', time, '...')
-    console.log('adshandler media', playerManager.getMediaInformation())
     let updatedTime = time
 
     if (adPolicy) {
@@ -93,10 +93,6 @@
       }
     }
     return updatedTime
-  }
-
-  const setInitialPosition = (time) => {
-    initialPosition = time
   }
 
   const checkAdEnterExit = () => {
