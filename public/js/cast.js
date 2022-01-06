@@ -146,7 +146,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 // actually applied by the playerManager.
                 data.mediaSessionId = undefined;
 
-                // Workaround for strange iOS implementation NEXX4-30295
+                // TEMPORARY workaround for strange iOS implementation NEXX4-30295
                 // In PLTV a seek from iOS sometimes has a time with reference to the start of the buffer and sometimes it is an epoch time. Depends on weather the buttons or dragging the progress bar was used to trigger the seek.
                 const startAbsoluteTime = playerManager.getMediaInformation().startAbsoluteTime
                 const canSeek = com.zappware.chromecast.adshandler.canSeek(_position)
@@ -157,7 +157,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                     newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position)
                     if (newPosition === _position) {
                         // Also check if an ad can be detected when the seek time with reference to the buffer start but the ads are in epoch time
-                        //newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position + startAbsoluteTime) - startAbsoluteTime
+                        newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position + startAbsoluteTime) - startAbsoluteTime
                     }
                 } else {
                     newPosition = playerManager.getCurrentTimeSec()
