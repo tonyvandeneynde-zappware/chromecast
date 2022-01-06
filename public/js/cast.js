@@ -146,6 +146,8 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 // return data and not null not to confuse the sender app. Hence this trick to make sure the seek position is not
                 // actually applied by the playerManager.
                 data.mediaSessionId = undefined;
+                const mediaInfo = playerManager.getMediaInformation()
+                console.log('adshandler mediaInfo:', mediaInfo)
                 const canSeek = com.zappware.chromecast.adshandler.canSeek(_position)
                 console.log('adshandler canSeek:', canSeek)
                 if (canSeek){
