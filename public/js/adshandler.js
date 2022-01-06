@@ -112,7 +112,6 @@
   const canSeek = (position) => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
-    console.log('adshandler canSeek: pos ', position, ', cur time ', currentTime, 'sig type', signallingType, 'active ad: ', activeAd)
     if (signallingType === 'UNKNOWN') { // Block on channel-level
       const shouldBlockTrickPlay =  blockTrickPlay(position, currentTime)
       return shouldBlockTrickPlay ? false : true
@@ -176,7 +175,6 @@
     if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData)
-    console.log('adshandler addAdsBlock:', customData, adStartTime)
     if (customData && adStartTime > (new Date('2000').getTime())) {
         adStartTime -= customData.start
         adEndTime -= customData.start
