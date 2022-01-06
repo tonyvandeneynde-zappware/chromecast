@@ -93,6 +93,10 @@
     return updatedTime
   }
 
+  const setInitialPosition = (time) => {
+    initialPosition = time
+  }
+
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec();
