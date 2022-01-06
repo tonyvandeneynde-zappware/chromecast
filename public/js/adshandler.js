@@ -74,7 +74,7 @@
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
     console.log('adshandler customData:', customData)
     if (customData && customData.startOverTVBeforeTime) {
-      if (time === customData.startOverTVBeforeTime) return time
+      // if (time === customData.startOverTVBeforeTime) return time
     }
     let updatedTime = time
 
@@ -82,6 +82,7 @@
       // skipping not allowed
       if (!activeAd) {
         const jumpedBackward = getCurrentTimeSec() >= time
+        console.log('adshandler jumpedBackward:', jumpedBackward)
         // ad blocks
         if (!jumpedBackward) {
           const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
