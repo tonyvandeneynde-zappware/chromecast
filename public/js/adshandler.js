@@ -82,7 +82,7 @@
       // skipping not allowed
       if (!activeAd) {
         const jumpedBackward = getCurrentTimeSec() >= time
-        console.log('adshandler getCurrentTimeSec:', getCurrentTimeSec)
+        console.log('adshandler getCurrentTimeSec:', getCurrentTimeSec())
         console.log('adshandler jumpedBackward:', jumpedBackward)
         // ad blocks
         if (!jumpedBackward) {
