@@ -62,7 +62,7 @@ const DEFAULT_CONFIG = {
       maxLoadDuration: 20000,
       autoPauseDuration: 1,
       autoResumeNumberOfSegments: 1,
-      initialBandwidth: 200000
+      initialBandwidth: 600000
     },
     blackout: [],
     customData: {}

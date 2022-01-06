@@ -79,7 +79,7 @@
           const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
-            updatedTime = firstAdsBlock.adStartTime + 0.2
+            updatedTime = firstAdsBlock.adStartTime + 0.2 // +0.2 because when jumping to adStartTime exactly the player hangs for some currently unknown reason
           }
         }
       }
@@ -308,6 +308,7 @@
   }
 
   const  setTimingForViewedWindow = (currentTime) => {
+    if (!isAdSkippingEnabled) return
     const windowForAdskipping = _.last(adSkippingWindows)
     let playbackMode = getPlaybackMode()
     if (playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV) {
