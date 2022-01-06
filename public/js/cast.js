@@ -118,6 +118,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) SEEK message to be able to do our own seek handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.SEEK, function (data) {
+        console.log('adshandler interceptor SEEK:', data)
         DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "Message intercepted: " + JSON.stringify(data));
 
         // If we did the request ourselves, allow it to pass
@@ -153,7 +154,8 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 data.currentTime = _position
             }
         }
-
+        console.log('adshandler localRequests:', com.zappware.chromecast.cast._localRequests)
+        console.log('adshandler data:', data)
         return data;
     });
 
