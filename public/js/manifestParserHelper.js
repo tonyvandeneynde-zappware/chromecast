@@ -67,10 +67,15 @@ com.zappware.chromecast.manifestParserHelper = (function () {
       return getAdBlockInfoOnPTZero(period, eventStream, typeManifest, mdp)
     } else if (adSignallingType === com.zappware.chromecast.AdSignallingTypes.DEFAULT) {
       const isPresentationTimeZero = checkForPresentationTime(eventStream)
+
+      const periodStart = period.start // temp fix ==> Presentation time should be fixed in manifest
+      let periodStartSeconds = periodStart && periodStart.substring(2, periodStart.length - 1);
+      let periodStartTime =  periodStart && !_.isEqual(periodStartSeconds, '0') && periodStartSeconds
+
       if (isPresentationTimeZero) {
         return getAdBlockInfoOnPTZero(period, eventStream, typeManifest, mdp)
       } else {
-       const adsInfo = calculateWhenPresentationTimeIsNotZero(eventStream, typeManifest, mdp)
+       const adsInfo = calculateWhenPresentationTimeIsNotZero(eventStream, typeManifest, mdp, periodStartTime)
        return adsInfo.map((ad) => {
          return {
            adId: ad.adId,
@@ -95,18 +100,21 @@ com.zappware.chromecast.manifestParserHelper = (function () {
       let adStartTime = typeManifest === "dynamic" ? adsStartDynamicStream : startTime.substring(2, startTime.length - 1);
       let eventDuration = (eventStream.Event[0] && eventStream.Event[0].duration) || period.duration
       let duration = period.duration || 0;
-      if (!duration) return
-      let minutesSearch = duration.indexOf("M");
-      let secondsSearch = duration.indexOf("S");
-      let durationMinutes = (minutesSearch > -1) && duration.substring(2, minutesSearch);
+      let durationOfEvent = (eventStream.Event[0] && eventStream.Event[0].duration)
+      let timeScale = eventStream && eventStream.timescale
+
+      let minutesSearch = duration && duration.indexOf("M");
+      let secondsSearch = duration && duration.indexOf("S");
+      let durationMinutes = duration && (minutesSearch > -1) && duration.substring(2, minutesSearch);
 
       // duration possibilities ==> 'PT3M4S' 'PT3M', 'PT4S'
-      let durationSeconds = (minutesSearch > -1 && secondsSearch > -1) ? duration.substring(minutesSearch + 1, secondsSearch) :
+      let durationSeconds = duration && (minutesSearch > -1 && secondsSearch > -1) ? duration.substring(minutesSearch + 1, secondsSearch) :
         (minutesSearch > -1 && secondsSearch === -1) ? 0 :
         (minutesSearch <= -1 && secondsSearch > -1) ? duration.substring(2, secondsSearch) : 0;
 
       let durationMinutesToSeconds = durationMinutes && convertMinutesToSeconds(durationMinutes);
-      let totalDuration = durationMinutesToSeconds ? parseFloat(durationMinutesToSeconds) + parseFloat(durationSeconds) : parseFloat(durationSeconds);
+      let totalDuration = durationOfEvent ? (durationOfEvent/(timeScale || 180000)) : durationMinutesToSeconds ? parseFloat(durationMinutesToSeconds) + parseFloat(durationSeconds) : parseFloat(durationSeconds);
+
       let adEndTime = (eventDuration === undefined) ? adStartTime : totalDuration + parseFloat(adStartTime);
       let adId = eventStream.Event[0].id;
       let adType = "TYPE_SCTE35";
@@ -181,7 +189,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     return isPresentationTimeZero
   }
 
-  function calculateWhenPresentationTimeIsNotZero(eventStream, typeManifest, mdp) {
+  function calculateWhenPresentationTimeIsNotZero(eventStream, typeManifest, mdp, periodStartTime) {
     //To convert these to seconds, the presentationTime and the duration must be divided by the timescale.
     let timeScale = eventStream.timescale
     return eventStream.Event.map((event) => {
@@ -190,7 +198,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
       let utcTimeUrl = typeManifest === "dynamic" && ((mdp && mdp.UTCTiming[0].value) || "https://time.akamai.com/?iso");
       let adsStartDynamicStream = typeManifest === "dynamic" && dynamicLogicForNonZeroPTime(typeManifest, utcTimeUrl, event,timeScale);
 
-      let start = typeManifest === "dynamic" ? adsStartDynamicStream : (event.presentationTime / timeScale)
+      let start = typeManifest === "dynamic" ? adsStartDynamicStream : periodStartTime || (event.presentationTime / timeScale)
       let duration = (event.duration / timeScale)
       let end = parseFloat(start) + parseFloat(duration)
       let adId = event.id

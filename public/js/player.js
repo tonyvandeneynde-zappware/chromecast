@@ -80,7 +80,7 @@ com.zappware.chromecast.Player = (function () {
                 setTimeout(function() {
                     that._loading = undefined;
                     resolve();
-                }, 3000);
+                }, 10000);
             });
 
             // Piggy back the mediaSessionToken on the media's customData
