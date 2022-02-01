@@ -174,6 +174,7 @@ com.zappware.chromecast.Player = (function () {
                     }
 
                     loadRequestData.media.startAbsoluteTime = undefined;
+                    console.log('bugg loadRequestData:', loadRequestData)
                     playerManager.load(loadRequestData);
                 }
             };
