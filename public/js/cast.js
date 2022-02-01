@@ -103,9 +103,11 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     }
 
     // intercept the (incoming) LOAD request to be able to read in a contentId and get data
-    /*playerManager.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, function (loadRequestData) {
-        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.load(loadRequestData), loadRequestData);
-    });*/
+    playerManager.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, function (loadRequestData) {
+        console.log('bugg 21 load message data:', data)
+        return data
+        // return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.load(loadRequestData), loadRequestData);
+    });
 
     // intercept the (incoming) STOP message to be able to do our own stop handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.STOP, function (data) {
@@ -118,9 +120,11 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     });
 
     // intercept the (incoming) PLAY message to be able to do our own play handling
-    /*playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PLAY, function (data) {
-        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.play(), data);
-    });*/
+    playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PLAY, function (data) {
+        console.log('bugg 20 play message data:', data)
+        return data
+        //return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.play(), data);
+    });
 
     // intercept the (incoming) SEEK message to be able to do our own seek handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.SEEK, function (data) {
