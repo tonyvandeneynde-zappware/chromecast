@@ -118,9 +118,9 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     });
 
     // intercept the (incoming) PLAY message to be able to do our own play handling
-    playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PLAY, function (data) {
+    /*playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PLAY, function (data) {
         return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.play(), data);
-    });
+    });*/
 
     // intercept the (incoming) SEEK message to be able to do our own seek handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.SEEK, function (data) {
