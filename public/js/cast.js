@@ -92,7 +92,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 if (r === null) {
                     data = null;
                 }
-                console.log('bugg 19 return newData:', newData)
+                console.log('bugg 19 return data:', data)
                 return JSON.parse(JSON.stringify(data));
             })
             .catch(function(e){
