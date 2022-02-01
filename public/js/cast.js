@@ -93,6 +93,83 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                     data = null;
                 }
                 console.log('bugg 19 return data:', data)
+                data = JSON.parse({
+                    "autoplay": true,
+                    "currentTime": 300,
+                    "customData": {
+                      "config": {
+                        "playback": {}
+                      },
+                      "currentPosition": 300,
+                      "mediaSessionToken": "b8655124-0841-4576-bd3d-e6bd6d3a1b44"
+                    },
+                    "media": {
+                      "_customData": {
+                        "householdId": "2998",
+                        "pathEvo": "https://sdsevowebott.romeo.a1.net:8843/ext_dev_facade/auth",
+                        "pathLic": "https://widevine.romeo.a1.net:8063?deviceId=$DEVICE_ID$",
+                        "pathMW": "https://sdsevowebott.romeo.a1.net:8443/sdsmiddleware/A1/graphql/4.0",
+                        "playbackConfig": {},
+                        "profileId": "2986",
+                        "sessionParams": {
+                          "cloned_token": "cVdSd1FtYUtSZXlFZzBSbmxVdERVQXwzMDkzfDEwMC45NS4yNDYuOTR8Mjk5OF9lYzdjYTZjZGI0MjEzZjYzMGFiYTFiMDNhMzRkNjU4MXwxNjQzNzI0Mjg3fDE2NDM3MjYwODd8MHx0b255fDE=|MEYCIQCt6AtU6sM4LCXMHyq1BQkYUZawcLFgwkbTisIs/yAeXwIhAIRh0QaRVywF34Llijryv9hK3yP2qnPQQnD/Woa9cslG",
+                          "device_id": "2998_ec7ca6cdb4213f630aba1b03a34d6581",
+                          "token": "QWtwcnNzZm1TRG1FX1JvZGFEX2VSUXwzMDkzfDEwMC45NS4yNDYuOTR8Mjk5OF9lYzdjYTZjZGI0MjEzZjYzMGFiYTFiMDNhMzRkNjU4MXwxNjQzNzI0MDYxfDE2NDM3MjU4NjF8MHx0b255fDE=|MEQCIFaLYVgwA8XRnMsk308Zu3WBbq91n0EPP3TtunoLrCnQAiB2kLx2gY5Zmvp3QLzu6qkwoZo1gQm4GMxIPUT3hNHsjw==",
+                          "user_id": "2998"
+                        }
+                      },
+                      "_playbackInfo": {
+                        "__typename": "TimeshiftPlaybackInfo",
+                        "_bookmarkTimer": 3487,
+                        "event": {
+                          "__typename": "Event",
+                          "channel": {
+                            "__typename": "Channel",
+                            "id": "2428"
+                          },
+                          "id": "3310890"
+                        },
+                        "heartbeat": {
+                          "__typename": "HttpHeartbeat",
+                          "_timer": 3486,
+                          "includeAuthHeaders": true,
+                          "interval": 240,
+                          "url": "https://sdsevowebott.romeo.a1.net:8843/ext_dev_facade/assetMgmt/MediaSessionHB?devId=2998_ec7ca6cdb4213f630aba1b03a34d6581&uId=3093&pId=2986&adId=3&sId=e9ngZeyqTWeqvhz8slpvLw"
+                        },
+                        "sessionId": "e9ngZeyqTWeqvhz8slpvLw",
+                        "streamEnd": "2022-02-01T14:55:00Z",
+                        "streamStart": "2022-02-01T13:55:00Z",
+                        "url": "https://stream3.romeo.a1.net:443/session/ea71d57c-8367-11ec-89ff-005056ab2c05$h1.0$default/zemjxh/__cl/cg:SO/__c/711_RTL_HD_ABR/__op/dash-default/__dci/711_RTL_HD_ABR/__f/SD.mpd?token=41cfcc792284d05b1b849299d8a13f23_1643810687_1643810687&startTime=20220201T135458Z&stopTime=20220201T145535Z"
+                      },
+                      "_playbackMode": "STARTOVER",
+                      "_positionInfo": {
+                        "curPosition": 300,
+                        "minPosition": 0
+                      },
+                      "contentId": "[{\"operationName\":\"restartEvent\",\"variables\":{\"input\":{\"eventId\":\"3310890\"}}}]",
+                      "contentType": "application/dash+xml",
+                      "contentUrl": "https://stream3.romeo.a1.net:443/session/ea71d57c-8367-11ec-89ff-005056ab2c05$h1.0$default/zemjxh/__cl/cg:SO/__c/711_RTL_HD_ABR/__op/dash-default/__dci/711_RTL_HD_ABR/__f/SD.mpd?token=41cfcc792284d05b1b849299d8a13f23_1643810687_1643810687&startTime=20220201T135458Z&stopTime=20220201T145535Z",
+                      "customData": {
+                        "mediaSessionToken": "b8655124-0841-4576-bd3d-e6bd6d3a1b44"
+                      },
+                      "duration": null,
+                      "metadata": {
+                        "customData": "{\"contentType\":\"STARTOVER\",\"channelId\":\"2428\",\"channelLogo\":\"https:\\//sdsevocdn.romeo.a1.net/cdn_pub//svcs/180x66_channel_s_m_x1/89147161-c5f1-48eb-90d3-e1fa5445b729.png\",\"channelTitle\":\"RTL Austria HD TEST SCTE35\",\"clear\":true,\"mediaSessionToken\":\"b8655124-0841-4576-bd3d-e6bd6d3a1b44\",\"title\":\"Echt jetzt?! - mit Ilka Bessin\",\"image\":\"https://sdsevocdn.romeo.a1.net/cdn_pub//epg/1920x1080_event_s_bg_x1/1920x1080_g174_h10_aa_1.jpg\",\"customData\":{\"eventId\":\"3310890\",\"startOverTVBeforeTime\":300},\"start\":1643723700,\"end\":1643727300,\"bufferStart\":1643723700,\"items\":[{\"title\":\"Punkt 12 - Das RTL-Mittagsjournal\",\"start\":1643713200,\"end\":1643724000,\"ageRating\":0,\"blocked\":false,\"image\":\"https://sdsevocdn.romeo.a1.net/cdn_pub//epg/1920x1080_event_s_bg_x1/1920x1080_g100_h10_ab_1.jpg\",\"customData\":{\"eventId\":\"3310890\",\"startOverTVBeforeTime\":300}},{\"title\":\"Echt jetzt?! - mit Ilka Bessin\",\"start\":1643724000,\"end\":1643726700,\"ageRating\":12,\"blocked\":false,\"image\":\"https://sdsevocdn.romeo.a1.net/cdn_pub//epg/1920x1080_event_s_bg_x1/1920x1080_g174_h10_aa_1.jpg\",\"customData\":{\"eventId\":\"3310890\",\"startOverTVBeforeTime\":300}},{\"title\":\"Die Retourenprofis\",\"start\":1643726700,\"end\":1643730300,\"ageRating\":0,\"blocked\":false,\"image\":\"https://sdsevocdn.romeo.a1.net/cdn_pub//epg/1920x1080_event_s_bg_x1/1920x1080_p20913407_i_h10_ab_1.jpg\",\"customData\":{\"eventId\":\"3310890\",\"startOverTVBeforeTime\":300}}]}",
+                        "images": [
+                          {
+                            "url": "https://sdsevocdn.romeo.a1.net/cdn_pub//epg/1920x1080_event_s_bg_x1/1920x1080_g174_h10_aa_1.jpg"
+                          }
+                        ],
+                        "metadataType": 0,
+                        "subtitle": "",
+                        "title": "Echt jetzt?! - mit Ilka Bessin"
+                      },
+                      "streamType": "BUFFERED"
+                    },
+                    "playbackRate": 1,
+                    "requestId": 221,
+                    "type": "LOAD"
+                  })
                 return data;
             })
             .catch(function(e){
