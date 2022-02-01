@@ -85,6 +85,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
         if (response instanceof Promise) {
             return response.then(function(r) {
                 console.log('bugg 15 response:', r, data)
+                console.log('bugg 33 data', JSON.stringify(data))
                 newData = { media: { contentUrl: data.media.contentUrl } }
                 console.log('bugg 18 data after:', data)
                 if (r === null) {
@@ -105,8 +106,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     // intercept the (incoming) LOAD request to be able to read in a contentId and get data
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, function (loadRequestData) {
         console.log('bugg 21 load message loadRequestData:', loadRequestData)
-        return loadRequestData
-        // return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.load(loadRequestData), loadRequestData);
+        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.load(loadRequestData), loadRequestData);
     });
 
     // intercept the (incoming) STOP message to be able to do our own stop handling
@@ -122,8 +122,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     // intercept the (incoming) PLAY message to be able to do our own play handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PLAY, function (data) {
         console.log('bugg 20 play message data:', data)
-        return data
-        //return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.play(), data);
+        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.play(), data);
     });
 
     // intercept the (incoming) SEEK message to be able to do our own seek handling
