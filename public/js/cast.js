@@ -84,15 +84,18 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
         // returning null.
         if (response instanceof Promise) {
             return response.then(function(r) {
+                console.log('bugg 15 response:', r, data)
                 if (r === null) {
                     data = null;
                 }
                 return data;
             })
-            .catch(function(){})
+            .catch(function(e){
+                console.log('bugg 17 error', e)
+            })
             .then(function() { return data;});
         }
-
+        console.log('bugg 16 response:', response, data)
         return (response === null) ? null : data;
     }
 
