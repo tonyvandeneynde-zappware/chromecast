@@ -105,7 +105,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     // intercept the (incoming) LOAD request to be able to read in a contentId and get data
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, function (loadRequestData) {
         console.log('bugg 21 load message loadRequestData:', loadRequestData)
-        return data
+        return loadRequestData
         // return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.load(loadRequestData), loadRequestData);
     });
 
