@@ -92,6 +92,8 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                     data = null;
                 }
                 console.log('bugg 19 return newData:', newData)
+                playerManager.load(data)
+                return null
                 return newData;
             })
             .catch(function(e){
