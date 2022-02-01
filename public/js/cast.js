@@ -87,7 +87,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 console.log('bugg 15 response:', r, data)
                 console.log('bugg 33 data', JSON.stringify(data))
                 data.media.contentUrl.replace('stream4', 'stream3')
-                data.media._playbackInfo.replace('stream4', 'stream3')
+                data.media._playbackInfo.url.replace('stream4', 'stream3')
                 console.log('bugg 18 data after:', data)
                 if (r === null) {
                     data = null;
