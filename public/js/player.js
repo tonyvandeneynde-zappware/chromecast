@@ -66,6 +66,7 @@ com.zappware.chromecast.Player = (function () {
                 DEBUG && log("another load request is in progress, this one is delayed.");
                 this._loading.then(function() {
                     if (that._currentMedia === loadRequestData.media) {
+                        console.log('bugg2 loadRequestData:', loadRequestData)
                         playerManager.load(loadRequestData);
                     }
                 });
@@ -174,7 +175,7 @@ com.zappware.chromecast.Player = (function () {
                     }
 
                     loadRequestData.media.startAbsoluteTime = undefined;
-                    console.log('bugg loadRequestData:', loadRequestData)
+                    console.log('bugg1 loadRequestData:', loadRequestData)
                     playerManager.load(loadRequestData);
                 }
             };
