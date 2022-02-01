@@ -36,6 +36,8 @@ com.zappware.chromecast.Player = (function () {
 
         // load ////////////////////////////////////////////////////////////////////////////////////////
         load(loadRequestData) {
+            console.log('bugg4 load:')
+
             DEBUG && log("load(); loadRequestData = " + JSON.stringify(loadRequestData) + "; playerState: " + playerManager.getPlayerState());
 
             DEBUG && assert(loadRequestData.customData, "Missing property 'customData' on loadRequestData.");
@@ -60,6 +62,8 @@ com.zappware.chromecast.Player = (function () {
                 return loadRequestData;
             }
 
+            console.log('bugg5 load:')
+
             var that = this;
             this._currentMedia = loadRequestData.media;
             if (this._loading) {
@@ -76,6 +80,8 @@ com.zappware.chromecast.Player = (function () {
                 return null;
             }
 
+            console.log('bugg6 load:')
+
             // Hold off new load requests for a short while
             this._loading = new Promise(function(resolve) {
                 setTimeout(function() {
@@ -83,6 +89,8 @@ com.zappware.chromecast.Player = (function () {
                     resolve();
                 }, 3000);
             });
+            
+            console.log('bugg7 load:')
 
             // Piggy back the mediaSessionToken on the media's customData
             if (loadRequestData.customData.mediaSessionToken) {
@@ -95,6 +103,8 @@ com.zappware.chromecast.Player = (function () {
                 loadRequestData.media.customData.mediaSessionToken = loadRequestData.customData.mediaSessionToken;
             }
 
+            console.log('bugg8 load:')
+
             this._media.push(loadRequestData.media);
             this._state = com.zappware.chromecast.PlayerState.LOADING;
 
@@ -102,6 +112,7 @@ com.zappware.chromecast.Player = (function () {
             if (loadRequestData.media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 loadRequestData.media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
 
+                console.log('bugg9 load:')
                 // If we have a currentTime set, we want to start in PLTV.
                 if (loadRequestData.currentTime) {
                     if (!loadRequestData.customData.currentPosition && loadRequestData.currentTime > 0) {
@@ -121,6 +132,7 @@ com.zappware.chromecast.Player = (function () {
                 };
             }
             else {
+                console.log('bugg10 load:')
                 if (loadRequestData.customData.currentPosition !== undefined) {
                     loadRequestData.currentTime = loadRequestData.customData.currentPosition;
                 }
@@ -140,7 +152,7 @@ com.zappware.chromecast.Player = (function () {
 
             // Reload function (no fuzz)
             this._reload = function(properties) {
-
+                console.log('bugg11 load:')
                 if (loadRequestData) {
                     com.zappware.chromecast.receiver.onBuffering(true); // Show the loading indicator
 
@@ -166,6 +178,8 @@ com.zappware.chromecast.Player = (function () {
                         DEBUG && log("Unexpected exception " + e + " while applying tracks");
                     }
 
+                    console.log('bugg12 load:')
+
                     if (properties) {
                         for (var p in properties) {
                             if (properties.hasOwnProperty(p)) {
@@ -178,7 +192,11 @@ com.zappware.chromecast.Player = (function () {
                     console.log('bugg1 loadRequestData:', loadRequestData)
                     playerManager.load(loadRequestData);
                 }
+
+                console.log('bugg13 load:')
             };
+
+            console.log('bugg14 load:')
 
             return this._load(loadRequestData);
         };
@@ -651,6 +669,7 @@ com.zappware.chromecast.Player = (function () {
             this.playbackConfig.autoResumeNumberOfSegments = qos.autoResumeNumberOfSegments;
             this.playbackConfig.initialBandwidth   = qos.initialBandwidth;
 
+            console.log('bugg3 set loadingTimeout:')
             var loadingTimeout = setTimeout(function() {
                 if (media === that._currentMedia && that._state !== com.zappware.chromecast.PlayerState.ERROR) {
                     DEBUG && log("Load failure: Did not receive PLAYING event in time.") ;
