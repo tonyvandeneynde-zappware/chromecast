@@ -678,6 +678,7 @@ com.zappware.chromecast.Player = (function () {
             }, qos.maxLoadDuration);
 
             var _onPlaying = function() {
+                console.log('bugg44 _onPlaying:')
                 if (that._state !== com.zappware.chromecast.PlayerState.PLAYING) {
                     DEBUG && log(`${that._state} -> PLAYING`);
                     that._state = com.zappware.chromecast.PlayerState.PLAYING;
