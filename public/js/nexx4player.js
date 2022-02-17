@@ -466,7 +466,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             } catch (error) {
                   console.log(error)
             }
-            // return manifest
+            return manifest
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV      ||
