@@ -1346,6 +1346,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 console.log('bugg scteTag to remove:', scteTag)
                 manifest.replace(scteTag, '')
             }
+            console.log('bugg manifest after', manifest)
         }
 
     };
