@@ -481,12 +481,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             const shouldRemoveSCTEFromManifest = this._versionCompare(shakaVersion, '3.0.14') === -1
             console.log('bugg shouldRemoveSCTEFromManifest:', shouldRemoveSCTEFromManifest)
             if (shouldRemoveSCTEFromManifest) {
-                console.log('bugg manifest before', manifest)
-                const scteStart = '<EventStream schemeIdUri="urn:scte:scte35'
-                const scteEnd = '</EventStream>'
-                let scteTag = this._extractString(manifest, scteStart, scteEnd)
-                scteTag = scteStart + scteTag + scteEnd
-                console.log('bugg scteTag:', scteTag)
+
             }
             if (!isOldVersion) return manifest
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
@@ -1286,6 +1281,8 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 let extracted = (str.substring(startindex , endindex ))
                 extracted = extracted.replace(start, '')
                 return extracted
+            } else {
+                return -1
             }
         }
 
@@ -1335,6 +1332,22 @@ com.zappware.chromecast.Nexx4Player = (function () {
         
             return 0;
         }
+
+        _removeScteTags(manifest){
+            console.log('bugg manifest before', manifest)
+            const scteStart = '<EventStream schemeIdUri="urn:scte:scte35'
+            const scteEnd = '</EventStream>'
+            while (true){
+                let scteTag = this._extractString(manifest, scteStart, scteEnd)
+                if (scteTag === -1) {
+                    break
+                }
+                scteTag = scteStart + scteTag + scteEnd
+                console.log('bugg scteTag to remove:', scteTag)
+                manifest.replace(scteTag, '')
+            }
+        }
+
     };
 
 })();
