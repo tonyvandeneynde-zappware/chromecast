@@ -460,15 +460,15 @@ com.zappware.chromecast.Nexx4Player = (function () {
             console.log('bugg scripts:', header)
             const shakaVersion = this._extractString(header, 'shaka-player/', '/shaka-player.compiled')
             console.log('bugg shakaVersion:', shakaVersion)
-            let isOldVersion = this._compareVersions(shakaVersion, '3.0.13') === -1
+            let isOldVersion = this._versionCompare(shakaVersion, '3.0.13')
             console.log('bugg isOldVersion:', isOldVersion)
-            isOldVersion = this._compareVersions('3.0.13', '3.0.13') === -1
+            isOldVersion = this._versionCompare('3.0.13', '3.0.13')
             console.log('bugg isOldVersion:', isOldVersion)
-            isOldVersion = this._compareVersions('3.0.14', '3.0.13') === -1
+            isOldVersion = this._versionCompare('3.0.14', '3.0.13')
             console.log('bugg isOldVersion:', isOldVersion)
-            isOldVersion = this._compareVersions('3.1.14', '3.0.13') === -1
+            isOldVersion = this._versionCompare('3.1.14', '3.0.13')
             console.log('bugg isOldVersion:', isOldVersion)
-            isOldVersion = this._compareVersions('2.4.4', '3.0.13') === -1
+            isOldVersion = this._versionCompare('2.4.4', '3.0.13')
             console.log('bugg isOldVersion:', isOldVersion)
             
 
@@ -1284,40 +1284,51 @@ com.zappware.chromecast.Nexx4Player = (function () {
             }
         }
 
-        _compareVersions(a, b) {
-            if (a === b) {
-               return 0;
+        _versionCompare(v1, v2, options) {
+            var lexicographical = options && options.lexicographical,
+                zeroExtend = options && options.zeroExtend,
+                v1parts = v1.split('.'),
+                v2parts = v2.split('.');
+        
+            function isValidPart(x) {
+                return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
             }
         
-            const a_components = a.split(".")
-            const b_components = b.split(".")
+            if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
+                return NaN;
+            }
         
-            const len = Math.min(a_components.length, b_components.length)
+            if (zeroExtend) {
+                while (v1parts.length < v2parts.length) v1parts.push("0");
+                while (v2parts.length < v1parts.length) v2parts.push("0");
+            }
         
-            // loop while the components are equal
-            for (i = 0; i < len; i++) {
-                // A bigger than B
-                if (parseInt(a_components[i]) > parseInt(b_components[i])) {
-                    return 1
+            if (!lexicographical) {
+                v1parts = v1parts.map(Number);
+                v2parts = v2parts.map(Number);
+            }
+        
+            for (var i = 0; i < v1parts.length; ++i) {
+                if (v2parts.length == i) {
+                    return 1;
                 }
         
-                // B bigger than A
-                if (parseInt(a_components[i]) < parseInt(b_components[i])) {
-                    return -1
+                if (v1parts[i] == v2parts[i]) {
+                    continue;
+                }
+                else if (v1parts[i] > v2parts[i]) {
+                    return 1;
+                }
+                else {
+                    return -1;
                 }
             }
         
-            // If one's a prefix of the other, the longer one is greater.
-            if (a_components.length > b_components.length) {
-                return 1
+            if (v1parts.length != v2parts.length) {
+                return -1;
             }
         
-            if (a_components.length < b_components.length) {
-                return -1
-            }
-        
-            // They are the same.
-            return 0
+            return 0;
         }
     };
 
