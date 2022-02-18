@@ -458,7 +458,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             // return manifest
             const header = document.getElementsByTagName('head')[0].innerHTML
             console.log('bugg scripts:', header)
-            const shakaVersion = this._extractword(header, 'shaka-player/', '/shaka-player.compiled')
+            const shakaVersion = this._extractString(header, 'shaka-player/', '/shaka-player.compiled')
             console.log('bugg shakaVersion:', shakaVersion)
             let media = playerManager.getMediaInformation() || this._currentMedia;
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
@@ -1261,10 +1261,13 @@ com.zappware.chromecast.Nexx4Player = (function () {
         _graphql(request) { }
 
         _extractString(str, start, end) {
-            var startindex = str.indexOf(start)
-            var endindex = str.indexOf(end, startindex)
-            if (startindex !=-1 && endindex !=-1 &&  endindex  > startindex )
-              return str.substring(startindex , endindex ).replace(start, '')
+            const startindex = str.indexOf(start)
+            const endindex = str.indexOf(end, startindex)
+            if (startindex !=-1 && endindex !=-1 &&  endindex  > startindex ) {
+                let extracted = (str.substring(startindex , endindex ))
+                extracted = extracted.replace(start, '')
+                return extracted
+            }
         }
     };
 
