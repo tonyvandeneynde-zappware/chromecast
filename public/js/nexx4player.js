@@ -460,9 +460,8 @@ com.zappware.chromecast.Nexx4Player = (function () {
             console.log('bugg scripts:', header)
             const shakaVersion = this._extractString(header, 'shaka-player/', '/shaka-player.compiled')
             console.log('bugg shakaVersion:', shakaVersion)
-            const isOldVersion = this._versionCompare(shakaVersion, '3.0.0') === -1
             console.log('bugg isOldVersion:', isOldVersion)
-            if (!isOldVersion) return manifest
+            
             
 
 
@@ -477,6 +476,14 @@ com.zappware.chromecast.Nexx4Player = (function () {
             } catch (error) {
                   console.log(error)
             }
+
+            const isOldVersion = this._versionCompare(shakaVersion, '3.0.0') === -1
+            const shouldRemoveSCTEFromManifest = this._versionCompare(shakaVersion, '3.0.13') === -1
+            if (shouldRemoveSCTEFromManifest) {
+                console.log('manifest before', manifest)
+                
+            }
+            if (!isOldVersion) return manifest
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV      ||
