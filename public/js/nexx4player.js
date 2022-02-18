@@ -482,7 +482,11 @@ com.zappware.chromecast.Nexx4Player = (function () {
             console.log('bugg shouldRemoveSCTEFromManifest:', shouldRemoveSCTEFromManifest)
             if (shouldRemoveSCTEFromManifest) {
                 console.log('bugg manifest before', manifest)
-                
+                const scteStart = '<EventStream schemeIdUri="urn:scte:scte35'
+                const scteEnd = '</EventStream>'
+                let scteTag = this._extractString(manifest, scteStart, scteEnd)
+                scteTag = scteStart + scteTag + scteEnd
+                console.log('bugg scteTag:', scteTag)
             }
             if (!isOldVersion) return manifest
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
