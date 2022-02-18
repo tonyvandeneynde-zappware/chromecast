@@ -13,7 +13,6 @@ com.zappware.chromecast.Player = (function () {
         constructor() {
             // playback config
             this.playbackConfig = new cast.framework.PlaybackConfig();
-            console.log('bugg this.playbackConfig:', this.playbackConfig)
 
             // We assume we're not using DRM.
             this.playbackConfig.protectionSystem = cast.framework.ContentProtection.NONE;
