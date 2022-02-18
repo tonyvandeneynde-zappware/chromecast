@@ -455,35 +455,25 @@ com.zappware.chromecast.Nexx4Player = (function () {
         }
 
         _manifestHandler(manifest) {
-            // return manifest
             const header = document.getElementsByTagName('head')[0].innerHTML
-            console.log('bugg scripts:', header)
             const shakaVersion = this._extractString(header, 'shaka-player/', '/shaka-player.compiled')
-            console.log('bugg shakaVersion:', shakaVersion)
-            
-            
-            
-            
-            
+
             let media = playerManager.getMediaInformation() || this._currentMedia;
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
             try {
                 const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
                 const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
-                const  { adBlocks } =  isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
-                isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
+                 const  { adBlocks } =  isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
+                 isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
             } catch (error) {
-                console.log(error)
+                  console.log(error)
             }
             
             const isOldVersion = this._versionCompare(shakaVersion, '3.0.0') === -1
-            console.log('bugg isOldVersion:', isOldVersion)
-            const shouldRemoveSCTEFromManifest = this._versionCompare(shakaVersion, '3.0.14') === -1
-            console.log('bugg shouldRemoveSCTEFromManifest:', shouldRemoveSCTEFromManifest)
+            const shouldRemoveSCTEFromManifest = this._versionCompare(shakaVersion, '3.0.13') === -1
             if (shouldRemoveSCTEFromManifest) {
                 manifest = this._removeScteTags(manifest)
             }
-            console.log('manifest:', manifest)
             if (!isOldVersion) return manifest
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||

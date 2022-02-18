@@ -31,7 +31,6 @@ com.zappware.chromecast.Player = (function () {
         // initialize //////////////////////////////////////////////////////////////////////////////////
         initialize(config) {
             DEBUG && log("_initialize()");
-            log('bugg cast.framework.media', cast.framework)
             this._config = com.zappware.chromecast.util.cloneObject(config);
         }
 
