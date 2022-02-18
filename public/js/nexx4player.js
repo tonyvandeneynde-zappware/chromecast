@@ -460,16 +460,9 @@ com.zappware.chromecast.Nexx4Player = (function () {
             console.log('bugg scripts:', header)
             const shakaVersion = this._extractString(header, 'shaka-player/', '/shaka-player.compiled')
             console.log('bugg shakaVersion:', shakaVersion)
-            let isOldVersion = this._versionCompare(shakaVersion, '3.0.13')
+            const isOldVersion = this._versionCompare(shakaVersion, '3.0.0') === -1
             console.log('bugg isOldVersion:', isOldVersion)
-            isOldVersion = this._versionCompare('3.0.13', '3.0.13')
-            console.log('bugg isOldVersion:', isOldVersion)
-            isOldVersion = this._versionCompare('3.0.14', '3.0.13')
-            console.log('bugg isOldVersion:', isOldVersion)
-            isOldVersion = this._versionCompare('3.1.14', '3.0.13')
-            console.log('bugg isOldVersion:', isOldVersion)
-            isOldVersion = this._versionCompare('2.4.4', '3.0.13')
-            console.log('bugg isOldVersion:', isOldVersion)
+            if (!isOldVersion) return manifest
             
 
 
