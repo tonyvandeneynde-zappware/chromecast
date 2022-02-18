@@ -481,8 +481,9 @@ com.zappware.chromecast.Nexx4Player = (function () {
             const shouldRemoveSCTEFromManifest = this._versionCompare(shakaVersion, '3.0.14') === -1
             console.log('bugg shouldRemoveSCTEFromManifest:', shouldRemoveSCTEFromManifest)
             if (shouldRemoveSCTEFromManifest) {
-                this._removeScteTags(manifest)
+                manifest = this._removeScteTags(manifest)
             }
+            console.log('manifest:', manifest)
             if (!isOldVersion) return manifest
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
