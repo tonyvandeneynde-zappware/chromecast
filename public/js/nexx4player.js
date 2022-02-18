@@ -1260,11 +1260,11 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
         _graphql(request) { }
 
-        _extractword(str, start, end) {
+        _extractString(str, start, end) {
             var startindex = str.indexOf(start)
             var endindex = str.indexOf(end, startindex)
             if (startindex !=-1 && endindex !=-1 &&  endindex  > startindex )
-              return str.substring(startindex , endindex )
+              return str.substring(startindex , endindex ).replace(start, '')
         }
     };
 
