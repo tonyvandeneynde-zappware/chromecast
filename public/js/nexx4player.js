@@ -456,6 +456,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
         _manifestHandler(manifest) {
             // return manifest
+            log('bugg cast.framework.media:', cast.framework.media)
             let media = playerManager.getMediaInformation() || this._currentMedia;
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
             try {
@@ -466,7 +467,6 @@ com.zappware.chromecast.Nexx4Player = (function () {
             } catch (error) {
                   console.log(error)
             }
-            return manifest
             // DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "MANIFEST: \n" + manifest);
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.STARTOVER ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.CUTV      ||
