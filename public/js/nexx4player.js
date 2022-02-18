@@ -464,6 +464,13 @@ com.zappware.chromecast.Nexx4Player = (function () {
             console.log('bugg isOldVersion:', isOldVersion)
             isOldVersion = this._compareVersions('3.0.13', '3.0.13') === -1
             console.log('bugg isOldVersion:', isOldVersion)
+            isOldVersion = this._compareVersions('2.4.4', '3.0.13') === -1
+            console.log('bugg isOldVersion:', isOldVersion)
+            isOldVersion = this._compareVersions('3.0.14', '3.0.13') === -1
+            console.log('bugg isOldVersion:', isOldVersion)
+            isOldVersion = this._compareVersions('3.1.14', '3.0.13') === -1
+            console.log('bugg isOldVersion:', isOldVersion)
+            
 
 
 
