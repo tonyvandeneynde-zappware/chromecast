@@ -460,27 +460,28 @@ com.zappware.chromecast.Nexx4Player = (function () {
             console.log('bugg scripts:', header)
             const shakaVersion = this._extractString(header, 'shaka-player/', '/shaka-player.compiled')
             console.log('bugg shakaVersion:', shakaVersion)
-            console.log('bugg isOldVersion:', isOldVersion)
             
             
-
-
-
+            
+            
+            
             let media = playerManager.getMediaInformation() || this._currentMedia;
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
             try {
                 const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
                 const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
-                 const  { adBlocks } =  isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
-                 isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
+                const  { adBlocks } =  isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
+                isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
             } catch (error) {
-                  console.log(error)
+                console.log(error)
             }
-
+            
             const isOldVersion = this._versionCompare(shakaVersion, '3.0.0') === -1
+            console.log('bugg isOldVersion:', isOldVersion)
             const shouldRemoveSCTEFromManifest = this._versionCompare(shakaVersion, '3.0.13') === -1
+            console.log('bugg shouldRemoveSCTEFromManifest:', shouldRemoveSCTEFromManifest)
             if (shouldRemoveSCTEFromManifest) {
-                console.log('manifest before', manifest)
+                console.log('bugg manifest before', manifest)
                 
             }
             if (!isOldVersion) return manifest
