@@ -458,7 +458,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             // return manifest
             const header = document.getElementsByTagName('head')[0].innerHTML
             console.log('bugg scripts:', header)
-            const shakaVersion = _extractword(header, 'shaka-player/', '/shaka-player.compiled')
+            const shakaVersion = this._extractword(header, 'shaka-player/', '/shaka-player.compiled')
             console.log('bugg shakaVersion:', shakaVersion)
             let media = playerManager.getMediaInformation() || this._currentMedia;
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
