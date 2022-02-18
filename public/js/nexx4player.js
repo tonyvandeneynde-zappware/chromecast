@@ -478,7 +478,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             
             const isOldVersion = this._versionCompare(shakaVersion, '3.0.0') === -1
             console.log('bugg isOldVersion:', isOldVersion)
-            const shouldRemoveSCTEFromManifest = this._versionCompare(shakaVersion, '3.0.13') === -1
+            const shouldRemoveSCTEFromManifest = this._versionCompare(shakaVersion, '3.0.14') === -1
             console.log('bugg shouldRemoveSCTEFromManifest:', shouldRemoveSCTEFromManifest)
             if (shouldRemoveSCTEFromManifest) {
                 console.log('bugg manifest before', manifest)
