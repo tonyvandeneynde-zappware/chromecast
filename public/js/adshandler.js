@@ -68,7 +68,8 @@
   const validateRequestedPlaybackPosition = (time) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
-    const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
+    console.log('bugg mediaInfo:', mediaInfo)
+    const customData = (mediaInfo !== undefined) && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
     if (customData && customData.startOverTVBeforeTime) {
       if (time === customData.startOverTVBeforeTime) return time
     }
