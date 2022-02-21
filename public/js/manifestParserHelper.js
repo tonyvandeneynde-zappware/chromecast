@@ -45,6 +45,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
           if (per.EventStream && per.EventStream[0].schemeIdUri.indexOf("scte")) {
             let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
             let adsInfo = getAdsBlockInfo(per, per.EventStream[0], typeManifest, mdp);
+            console.log('bugg adsInfo:', adsInfo)
             adsInfo && adBlocks.push(adsInfo);
           } else {
             console.log("");
