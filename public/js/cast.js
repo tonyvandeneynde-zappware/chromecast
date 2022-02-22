@@ -157,12 +157,16 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 if (canSeek && canSeekEpoch){
                     // Check if an ad can be detected when the seek time has the same reference as the ads blocks.
                     newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position)
-                    console.log('adsh newPosition 1:', newPosition)
+                    console.log('adsha newPosition 1:', newPosition)
                     if (newPosition === _position) {
                         // Also check if an ad can be detected when the seek time with reference to the buffer start but the ads are in epoch time
-                        console.log('adsh startAbsoluteTime:', startAbsoluteTime)
-                        newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position + startAbsoluteTime) - startAbsoluteTime
-                        console.log('adsh newPosition 2:', newPosition)
+                        const adsBlocks = com.zappware.chromecast.adshandler.getAdsBlocks()
+                        console.log('adsha adsBlocks[adsBlocks.length-1]:', adsBlocks[adsBlocks.length-1])
+                        if (Math.abs(adsBlocks[adsBlocks.length-1].adStartTime) > Math.abs(_position)+946681200) {
+                            console.log('adsha startAbsoluteTime:', startAbsoluteTime)
+                            newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position + startAbsoluteTime) - startAbsoluteTime
+                            console.log('adsha newPosition 2:', newPosition)
+                        }
                     }
                 } else {
                     newPosition = playerManager.getCurrentTimeSec()
@@ -170,7 +174,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 data.currentTime = newPosition
             }
         }
-        console.log('adsh seek return position:', data.currentTime)
+        console.log('adsha seek return position:', data.currentTime)
         return data;
     });
 

@@ -237,6 +237,10 @@
 
   }
 
+  const getAdsBlocks = () => {
+    return adsBlocks
+  }
+
   //
   // AD BLOCK HELPERS
   //
@@ -342,6 +346,7 @@
     checkAdEnterExit: checkAdEnterExit,
     setAdPolicy: setAdPolicy,
     setAdsBlocks: setAdsBlocks,
+    getAdsBlocks: getAdsBlocks,
     reset: reset,
     getAdSignallingType: getAdSignallingType,
     initAdsHandler: initAdsHandler,
