@@ -401,7 +401,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             media._playbackInfo = this._acquirePlaybackInfo(query, media)
             .then(function(playbackInfo) {
                 const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
-                const isAdSignallingTypeEnabled = (media._playbackMode !== com.zappware.chromecast.PlaybackMode.VOD) && (CONFIG.adSignallingTypeEnabled || false)
+                const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
                 isAdSkippingEnabled && playbackInfo && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null)
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned

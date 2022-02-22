@@ -68,7 +68,8 @@
   const validateRequestedPlaybackPosition = (time) => {
     if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
-    const customData = mediaInfo && mediaInfo !== undefined && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
+    const mediaInfo = playerManager.getMediaInformation()
+    const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
     if (customData && customData.startOverTVBeforeTime) {
       if (time === customData.startOverTVBeforeTime) return time
     }
@@ -116,9 +117,15 @@
   const canSeek = (position) => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec()
+    const media = playerManager.getMediaInformation()
+    const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
     if (signallingType === 'UNKNOWN') { // Block on channel-level
-      const shouldBlockTrickPlay =  blockTrickPlay(position, currentTime)
-      return shouldBlockTrickPlay ? false : true
+        if (!isVod) {
+          const shouldBlockTrickPlay =  blockTrickPlay(position, currentTime)
+          return shouldBlockTrickPlay ? false : true
+        } else {
+          return true
+        }
     } else {
       if (activeAd && position > currentTime ) {
         showAdSkippingMessage()
