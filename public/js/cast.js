@@ -169,7 +169,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 data.currentTime = newPosition
             }
         }
-        console.log('adsh seek return position:', data.newPosition)
+        console.log('adsh seek return position:', data.currentTime)
         return data;
     });
 
