@@ -196,8 +196,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
 
       // for dynamic streams
       let utcTimeUrl = typeManifest === "dynamic" && ((mdp && mdp.UTCTiming[0].value) || "https://time.akamai.com/?iso");
-      let adsStartDynamicStream = typeManifest === "dynamic" && dynamicLogicForNonZeroPTime(typeManifest, utcTimeUrl, event,timeScale);
-
+      let adsStartDynamicStream = typeManifest === "dynamic" && dynamicLogicForNonZeroPTime(typeManifest, utcTimeUrl, event,timeScale, periodStartTime);
       let start = typeManifest === "dynamic" ? adsStartDynamicStream : periodStartTime || (event.presentationTime / timeScale)
       let duration = (event.duration / timeScale)
       let end = parseFloat(start) + parseFloat(duration)
@@ -213,13 +212,13 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     });
   }
 
-  function dynamicLogicForNonZeroPTime(typeManifest, url, event, timeScale) {
+  function dynamicLogicForNonZeroPTime(typeManifest, url, event, timeScale, periodStartTime) {
     if (typeManifest !== "dynamic") return;
     let currentTime = com.zappware.chromecast.util.getCurrentTime();
     let utcTime = fetchManifestUtcTime(url);
     let utcTimeToSeconds = convertDateToSeconds(utcTime);
-    let diff = currentTime - utcTimeToSeconds;
-    let start = (event.presentationTime / timeScale);
+    let diff = parseInt(currentTime - utcTimeToSeconds);
+    let start = periodStartTime || (event.presentationTime / timeScale);
     let adsStartTime = start - diff;
     return adsStartTime;
   }

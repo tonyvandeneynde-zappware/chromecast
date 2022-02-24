@@ -75,17 +75,13 @@
     }
     let updatedTime = time
 
-    console.log('adsh adPolicy:', adPolicy)
     if (adPolicy) {
       // skipping not allowed
       if (!activeAd) {
         const jumpedBackward = getCurrentTimeSec() >= time
-        console.log('adsh getCurrentTimeSec():', getCurrentTimeSec())
-        console.log('adsh jumpedBackward:', jumpedBackward)
         // ad blocks
         if (!jumpedBackward) {
           const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
-          console.log('adsh firstAdsBlock:', firstAdsBlock)
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
             updatedTime = firstAdsBlock.adStartTime + 0.2 // +0.2 because when jumping to adStartTime exactly the player hangs for some currently unknown reason
@@ -241,10 +237,6 @@
 
   }
 
-  const getAdsBlocks = () => {
-    return adsBlocks
-  }
-
   //
   // AD BLOCK HELPERS
   //
@@ -350,7 +342,6 @@
     checkAdEnterExit: checkAdEnterExit,
     setAdPolicy: setAdPolicy,
     setAdsBlocks: setAdsBlocks,
-    getAdsBlocks: getAdsBlocks,
     reset: reset,
     getAdSignallingType: getAdSignallingType,
     initAdsHandler: initAdsHandler,
