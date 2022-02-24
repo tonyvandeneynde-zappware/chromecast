@@ -151,7 +151,10 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 const startAbsoluteTime = playerManager.getMediaInformation().startAbsoluteTime
                 const canSeek = com.zappware.chromecast.adshandler.canSeek(_position)
                 console.log('adsha canSeek:', canSeek)
-                const canSeekEpoch = com.zappware.chromecast.adshandler.canSeek(_position + startAbsoluteTime)
+                let canSeekEpoch = false
+                if (adsBlocks.length === 0 || adsBlocks[adsBlocks.length-1].adEndTime > _position + 946681200) { // Don't do the check if the position is in epoch time and the ads are a time with reference to the buffer start.
+                    canSeekEpoch = com.zappware.chromecast.adshandler.canSeek(_position + startAbsoluteTime)
+                }
                 console.log('adsha canSeekEpoch:', canSeekEpoch)
                 let newPosition = _position
                 if (canSeek && canSeekEpoch){
