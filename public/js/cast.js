@@ -162,7 +162,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                         // Also check if an ad can be detected when the seek time with reference to the buffer start but the ads are in epoch time
                         const adsBlocks = com.zappware.chromecast.adshandler.getAdsBlocks()
                         console.log('adsha adsBlocks[adsBlocks.length-1]:', adsBlocks[adsBlocks.length-1])
-                        if (Math.abs(adsBlocks[adsBlocks.length-1].adEndTime) > Math.abs(_position)+946681200) {
+                        if (adsBlocks.length > 0 && adsBlocks[adsBlocks.length-1].adEndTime > _position + 946681200) { // Don't do the check if the position is in epoch time and the ads are a time with reference to the buffer start.
                             console.log('adsha startAbsoluteTime:', startAbsoluteTime)
                             newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position + startAbsoluteTime) - startAbsoluteTime
                             console.log('adsha newPosition 2:', newPosition)
