@@ -148,6 +148,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
                 // TEMPORARY workaround for strange iOS implementation NEXX4-30295
                 // In PLTV a seek from iOS sometimes has a time with reference to the start of the buffer and sometimes it is an epoch time. Depends on weather the buttons or dragging the progress bar was used to trigger the seek.
+                const adsBlocks = com.zappware.chromecast.adshandler.getAdsBlocks()
                 const startAbsoluteTime = playerManager.getMediaInformation().startAbsoluteTime
                 const canSeek = com.zappware.chromecast.adshandler.canSeek(_position)
                 console.log('adsha canSeek:', canSeek)
@@ -163,7 +164,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                     console.log('adsha newPosition 1:', newPosition)
                     if (newPosition === _position) {
                         // Also check if an ad can be detected when the seek time with reference to the buffer start but the ads are in epoch time
-                        const adsBlocks = com.zappware.chromecast.adshandler.getAdsBlocks()
                         console.log('adsha adsBlocks[adsBlocks.length-1]:', adsBlocks[adsBlocks.length-1])
                         if (adsBlocks.length > 0 && adsBlocks[adsBlocks.length-1].adEndTime > _position + 946681200) { // Don't do the check if the position is in epoch time and the ads are a time with reference to the buffer start.
                             console.log('adsha startAbsoluteTime:', startAbsoluteTime)
