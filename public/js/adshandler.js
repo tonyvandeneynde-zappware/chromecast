@@ -75,6 +75,7 @@
     }
     let updatedTime = time
 
+    console.log('adsh adPolicy:', adPolicy)
     if (adPolicy) {
       // skipping not allowed
       if (!activeAd) {
