@@ -368,6 +368,13 @@ com.zappware.chromecast.Player = (function () {
 
             if (!this.canSeek(mediaInfo, position)) {
                 DEBUG && log("setPosition(" + position + ") ignored: setPosition not supported.");
+                const isPaused = resumeState === com.zappware.chromecast.PlayerState.PAUSED
+               if (isPaused){
+                setTimeout(() => {
+                    playerManager.pause();
+                    }, 0);
+                    playerManager.play();
+               }
                 return;
             }
 
@@ -885,6 +892,7 @@ com.zappware.chromecast.Player = (function () {
                 DEBUG && log("calling seek " + position);
                 playerManager.seek(position);
                 promise = this._waitForEvent('SEEKED');
+
             }
 
             // If no or bad resumeState, assume it is PLAYING
@@ -910,8 +918,21 @@ com.zappware.chromecast.Player = (function () {
                 }
             }).then(function(event) {
                 if (media === that._currentMedia) {
+                    const isPaused = resumeState === com.zappware.chromecast.PlayerState.PAUSED
+                    const pauseRes = com.zappware.chromecast.adshandler.checkPauseResOnPLTV(mediaInfo)
+                    if (isPaused){
+                        if (pauseRes) {
+                            playerManager.pause();
+                        } else {
+                            setTimeout(() => {
+                                playerManager.pause();
+                            }, 3000);
+                            playerManager.play();
+                        }
+                    }
                     that._state = resumeState;
                     com.zappware.chromecast.receiver.onSeeked();
+
                 }
             });
         }

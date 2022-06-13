@@ -145,12 +145,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
         playChannel: {
             "operationName":"playChannel",
             "variables":{ input: undefined },
-            "query":"mutation playChannel($input: PlayChannelInput!) {\n  playChannel(input: $input) {\n    playbackInfo {\n      sessionId\n      url\n    adPlaybackRestrictions\n     adSignallingType\n      channel {\n        id\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation playChannel($input: PlayChannelInput!) {\n  playChannel(input: $input) {\n    playbackInfo {\n      sessionId\n      url\n    adPlaybackRestrictions\n     adSignallingType\n     trickplayRestrictions\n      channel {\n        id\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         pauseLiveChannel: {
             "operationName":"pauseLiveChannel",
             "variables":{ input: undefined },
-            "query":"mutation pauseLiveChannel($input: PauseLiveChannelInput!) {\n  pauseLiveChannel(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n    adPlaybackRestrictions\n      adSignallingType\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      playbackRestrictions {\n        message\n        __typename\n      }\n      event {\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      streamStart\n      streamEnd\n      maximumBufferSize\n      endOfStreamBehaviour\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation pauseLiveChannel($input: PauseLiveChannelInput!) {\n  pauseLiveChannel(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n    adPlaybackRestrictions\n      adSignallingType\n     trickplayRestrictions\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      playbackRestrictions {\n        message\n        __typename\n      }\n      event {\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      streamStart\n      streamEnd\n      maximumBufferSize\n      endOfStreamBehaviour\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         playVODAsset: {
             "operationName":"playVODAsset",
@@ -170,7 +170,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
         playRecording: {
             "operationName":"playRecording",
             "variables":{ input: undefined },
-            "query":"mutation playRecording($input: PlayRecordingInput!) {\n  playRecording(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n    adPlaybackRestrictions\n      adSignallingType\n      recording {\n        start\n        end\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation playRecording($input: PlayRecordingInput!) {\n  playRecording(input: $input) {\n    playbackInfo {\n      url\n      sessionId\n    adPlaybackRestrictions\n      adSignallingType\n     trickplayRestrictions\n      recording {\n        start\n        end\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         setRecordingBookmark: {
             "operationName":"setRecordingBookmark",
@@ -180,12 +180,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
         restartEvent: {
             "operationName":"restartEvent",
             "variables":{ input: undefined },
-            "query":"mutation restartEvent($input: RestartEventInput!) {\n  restartEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n    adPlaybackRestrictions\n      adSignallingType\n     event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation restartEvent($input: RestartEventInput!) {\n  restartEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n    adPlaybackRestrictions\n      adSignallingType\n     trickplayRestrictions\n     event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         catchupEvent: {
             "operationName":"catchupEvent",
             "variables":{ input: undefined },
-            "query":"mutation catchupEvent($input: CatchupEventInput!) {\n  catchupEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n    adPlaybackRestrictions\n      adSignallingType\n      event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+            "query":"mutation catchupEvent($input: CatchupEventInput!) {\n  catchupEvent(input: $input) {\n    playbackInfo {\n      url\n      streamStart\n      streamEnd\n      sessionId\n    adPlaybackRestrictions\n      adSignallingType\n     trickplayRestrictions\n      event {\n        id\n        channel {\n          id\n          __typename\n        }\n        __typename\n      }\n      heartbeat {\n        ... on HttpHeartbeat {\n          url\n          interval\n          includeAuthHeaders\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
         },
         setEventBookmark: {
             "operationName":"setEventBookmark",
@@ -401,8 +401,11 @@ com.zappware.chromecast.Nexx4Player = (function () {
             media._playbackInfo = this._acquirePlaybackInfo(query, media)
             .then(function(playbackInfo) {
                 const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+                const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
                 const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
-                isAdSkippingEnabled && playbackInfo && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null)
+                const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
+
+                restrictionsEnabled && playbackInfo && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null, playbackInfo.trickplayRestrictions)
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned
                                                         // session id as replaceSessionId (WINPUB-1604)
@@ -432,7 +435,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     let details;
                     if (e) {
                         if (e.errors) {
-                            code = com.zappware.chromecast.Error.GRAPHQL_ERROR;
+                            const graphqlCode = e.errors[0].errorCode.toLowerCase()
+                            if (graphqlCode === '0x02000704' || graphqlCode === '0x04020001') { // Stream Limitation error
+                                code = '[' + graphqlCode + '] ' + com.zappware.chromecast.Error.SESSION_LIMIT_REACHED
+                            } else {
+                                code = '[' + graphqlCode + '] ' + com.zappware.chromecast.Error.GRAPHQL_ERROR;
+                            }
                             details = e.errors;
                         }
                         if (typeof e === 'string' && Object.values(com.zappware.chromecast.Error).includes(e)) {
@@ -463,12 +471,14 @@ com.zappware.chromecast.Nexx4Player = (function () {
             try {
                 const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
                 const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
-                 const  { adBlocks } =  isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
-                 isAdSkippingEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
+                const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
+                const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
+                const  { adBlocks } =  restrictionsEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
+                restrictionsEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
             } catch (error) {
                   console.log(error)
             }
-            
+
             const isOldVersion = this._versionCompare(shakaVersion, '3.0.0') === -1
             const shouldRemoveSCTEFromManifest = this._versionCompare(shakaVersion, '3.0.13') === -1
             if (shouldRemoveSCTEFromManifest) {
@@ -555,7 +565,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             var that = this;
 
             // Start the keepAlive (MW)
-            if (!this._keepSessionAliveTimer) {
+            if (CONFIG.sendKeepAliveMutation && !this._keepSessionAliveTimer) {
                 var altSessionTimeout = 300;
                 (function keepSessionAlive() {
                     that._keepAlive().then(function(sessionTimeout) {
@@ -630,8 +640,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
             com.zappware.chromecast.receiver.setPlaybackMode(com.zappware.chromecast.PlaybackMode.PLTV);
             media._playbackMode = com.zappware.chromecast.PlaybackMode.PLTV;
+            com.zappware.chromecast.adshandler.setLastLivePoint(com.zappware.chromecast.util.getCurrentTime())
+            com.zappware.chromecast.adshandler.setPausePoint(com.zappware.chromecast.util.getCurrentTime())
             if (!media._startPLTVat) {
                 media._startPLTVat = com.zappware.chromecast.util.getCurrentTime();
+                com.zappware.chromecast.adshandler.setLastLivePoint(com.zappware.chromecast.util.getCurrentTime())
+                com.zappware.chromecast.adshandler.setPausePoint(com.zappware.chromecast.util.getCurrentTime())
             }
         }
 
@@ -716,17 +730,20 @@ com.zappware.chromecast.Nexx4Player = (function () {
             .then(function(playbackInfo) {
                 if (playbackInfo && playbackInfo.url) {
                     const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+                    const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
                     const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
-                    isAdSkippingEnabled && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null)
+                    const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
+
+                    restrictionsEnabled && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null, playbackInfo.trickplayRestrictions)
                     media.contentUrl = playbackInfo.url;
                     media._playingStartedAt = com.zappware.chromecast.util.getCurrentTime();
                     media._playbackInfo = playbackInfo;
 
                     // Start keep alive timers etc.
                     that._inauguratePlaybackInfo(media._playbackInfo);
-
+                    const trickplayResOnPltv = com.zappware.chromecast.adshandler.checkTrickplayRestrictionOnPLTV(position)
                     // Reload should trigger a new loadRequest
-                    return that._reloadAndSeek(position, resumeState)
+                    return that._reloadAndSeek(trickplayResOnPltv !== undefined ? trickplayResOnPltv : position, resumeState)
                     .then(function(_media) {
                         if (_media) {
                             _media.contentUrl = playbackInfo.url;
@@ -915,9 +932,11 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     if (!query.query) {
                         const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
                         const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
-                        query.query = isAdSkippingEnabled ? (isAdSignallingTypeEnabled ? tempQueriesWithAdSignallingType[query.operationName].query : tempQueries[query.operationName].query) : queries[query.operationName].query;
+                        const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
+                        const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
+                        query.query = restrictionsEnabled ? (isAdSignallingTypeEnabled ? tempQueriesWithAdSignallingType[query.operationName].query : tempQueries[query.operationName].query) : queries[query.operationName].query;
 
-                        var variables = isAdSkippingEnabled ? (isAdSignallingTypeEnabled ? tempQueriesWithAdSignallingType[query.operationName].variables : tempQueries[query.operationName].variables) : queries[query.operationName].variables;
+                        var variables = restrictionsEnabled ? (isAdSignallingTypeEnabled ? tempQueriesWithAdSignallingType[query.operationName].variables : tempQueries[query.operationName].variables) : queries[query.operationName].variables;
                         for (var v in variables) {
                             if (variables.hasOwnProperty(v) && !query.variables.hasOwnProperty(v)) {
                                 query.variables[v] = variables[v];
@@ -1042,7 +1061,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     query.variables.input = {
                         sessionId: media._playbackInfo.sessionId
                     };
-                    this._graphql(query, media, true); // synchronous HTTP request to insist this is processed.
+                    this._graphql(query, media);
                 }
             }
         }
@@ -1089,10 +1108,10 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                return this._hasPLTV(mediaInfo);
+                   return this._hasPLTV(mediaInfo) && com.zappware.chromecast.adshandler.canPause()
             }
 
-            return true;
+            return com.zappware.chromecast.adshandler.canPause()
         }
 
         // isTimeshiftEnabled /////////////////////////////////////////////////////////////////////////
@@ -1121,7 +1140,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
         _canPause(media) {
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                return this._hasPLTV(media);
+                return this._hasPLTV(media)
             }
 
             return true;
@@ -1282,30 +1301,30 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 zeroExtend = options && options.zeroExtend,
                 v1parts = v1.split('.'),
                 v2parts = v2.split('.');
-        
+
             function isValidPart(x) {
                 return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
             }
-        
+
             if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
                 return NaN;
             }
-        
+
             if (zeroExtend) {
                 while (v1parts.length < v2parts.length) v1parts.push("0");
                 while (v2parts.length < v1parts.length) v2parts.push("0");
             }
-        
+
             if (!lexicographical) {
                 v1parts = v1parts.map(Number);
                 v2parts = v2parts.map(Number);
             }
-        
+
             for (var i = 0; i < v1parts.length; ++i) {
                 if (v2parts.length == i) {
                     return 1;
                 }
-        
+
                 if (v1parts[i] == v2parts[i]) {
                     continue;
                 }
@@ -1316,11 +1335,11 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     return -1;
                 }
             }
-        
+
             if (v1parts.length != v2parts.length) {
                 return -1;
             }
-        
+
             return 0;
         }
 

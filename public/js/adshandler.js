@@ -6,6 +6,8 @@
 
  com.zappware.chromecast.adshandler = (function () {
 
+  const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+
   let activeAd = null
 
   let adPolicy = null
@@ -14,13 +16,18 @@
 
   let adsBlocks = []
 
-  let isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
-
   let removedAds = {}
 
   let adSkippingWindows = []
 
   let playbackMode = ''
+
+  // Trickplay blocking restrictions
+  const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
+  let trickplayPolicy = null
+  let lastLivePoint = null
+  let pausePoint = null
+  let trickplayRes = null
 
   //
   // AD RESTRICTIONS
@@ -35,31 +42,41 @@
   * clients must be able to ignore unknown AdPlaybackResctriction scenarios.
   * BLOCK_SKIP_AND_FAST_FORWARD => Indicates that fast forwarding through ads and skipping in ads is not allowed.
   */
-  const setAdPolicy = (adPlayBackRestrictions, adSignallingType) => {
-    if (!isAdSkippingEnabled) return
-    _.map(adPlayBackRestrictions, res => {
-      if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
-        adPolicy = {
-          allow_skip: false
-        }
-      } else {
-        adPolicy = undefined
-      }
-    })
+  const setAdPolicy = (adPlayBackRestrictions, adSignallingType, trickplayRestrictions = null) => {
+    if (!isAdSkippingEnabled || !isTrickplayBlockingEnabled) return
     /**
-     * null => DEFAULT ads handling
-     * SCTE35_ZW_1 => orf2
-     * not-supported / UNKNOWN => block on channel-level
+     *If for a given timeshift mode and device category trick modes
+     are blocked on the channel level, all trick modes restrictions
+     on the ad level are dropped for this timeshift mode and device category.
      */
-    if (adSignallingType === 'SCTE35_ZW_1') { // orf-2
-      signallingType = com.zappware.chromecast.AdSignallingTypes.SCTE35_ZW_1
-    } else if (adSignallingType === null) { // standard
-      signallingType = com.zappware.chromecast.AdSignallingTypes.DEFAULT
-    }
-    else {
-      signallingType = com.zappware.chromecast.AdSignallingTypes.UNKNOWN
+    if (!trickplayRestrictions) {
+      _.forEach(adPlayBackRestrictions, res => {
+        if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
+          adPolicy = {
+            allow_skip: false
+          }
+        } else {
+          adPolicy = undefined
+        }
+      })
+      /**
+       * null => DEFAULT ads handling
+       * SCTE35_ZW_1 => orf2
+       * not-supported / UNKNOWN => block on channel-level
+       */
+      if (adSignallingType === 'SCTE35_ZW_1') { // orf-2
+        signallingType = com.zappware.chromecast.AdSignallingTypes.SCTE35_ZW_1
+      } else if (adSignallingType === null) { // standard
+        signallingType = com.zappware.chromecast.AdSignallingTypes.DEFAULT
+      }
+      else {
+        signallingType = com.zappware.chromecast.AdSignallingTypes.UNKNOWN
+      }
     }
 
+    // trickplayRestrictions
+    trickplayRes = trickplayRestrictions
+    setTrickPlayRestrictions(trickplayRestrictions)
 }
 
   //
@@ -92,6 +109,10 @@
     return updatedTime
   }
 
+  const resetTrickplayRestriction = () => {
+    reset()
+    trickplayPolicy = null
+  }
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
     const currentTime = getCurrentTimeSec();
@@ -115,10 +136,15 @@
   }
 
   const canSeek = (position) => {
-    if (!isAdSkippingEnabled) return
+    if (!isAdSkippingEnabled || !isTrickplayBlockingEnabled) return
     const currentTime = getCurrentTimeSec()
     const media = playerManager.getMediaInformation()
     const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
+    const trickplayRestrictionPolicy = getTrickplayRestrictionPolicy()
+    if (trickplayRestrictionPolicy) {
+      if (isVod) return true
+      return checkOnTrickplayPolicy(position, currentTime)
+    }
     if (signallingType === 'UNKNOWN') { // Block on channel-level
         if (!isVod) {
           const shouldBlockTrickPlay =  blockTrickPlay(position, currentTime)
@@ -170,7 +196,7 @@
   }
 
   const showAdSkippingMessage = () => {
-    if (!isAdSkippingEnabled) return
+    if (!isAdSkippingEnabled  || !isTrickplayBlockingEnabled) return
     if (document.querySelector('#adInfo').innerText === '')
     {
       document.querySelector('#adInfo').innerText = com.zappware.chromecast.globaltext.getString('blockSkipAd');
@@ -269,10 +295,11 @@
 
   const reset = () => {
     console.log('adshandler - RESET ads:')
-    if (!isAdSkippingEnabled) return
+    if (!isAdSkippingEnabled || !isTrickplayBlockingEnabled) return
     adsBlocks = [];
     activeAd = null;
     adPolicy = null;
+    trickplayPolicy = null;
     removedAds = {}
     let playerState = com.zappware.chromecast.player.getState();
     if (playerState === com.zappware.chromecast.PlayerState.STOPPED) {
@@ -284,7 +311,11 @@
   const showBlockTrickplayMessage = () => {
     const blocktrickPlayInfo = document.querySelector('#blocktrickplayInfo')
     if (blocktrickPlayInfo.innerText === '') {
-      blocktrickPlayInfo.innerText = com.zappware.chromecast.globaltext.getString('blockTrickPlayOnChannelLevel');
+      if (trickplayPolicy && trickplayPolicy !== null) {
+        blocktrickPlayInfo.innerText = com.zappware.chromecast.globaltext.getString('trickPlayRestrictions');
+      } else {
+        blocktrickPlayInfo.innerText = com.zappware.chromecast.globaltext.getString('blockTrickPlayOnChannelLevel');
+      }
       setTimeout(() => {
         blocktrickPlayInfo.innerText = '';
       }, 7000);
@@ -306,7 +337,7 @@
   }
 
   const initAdsHandler = () => {
-    if (!isAdSkippingEnabled) return
+    if (!isAdSkippingEnabled || !isTrickplayBlockingEnabled) return
     reset()
     let playbackMode = getPlaybackMode()
     console.log('adshandler - initAdsHandler ')
@@ -339,10 +370,142 @@
   }
 
 
+    /****************************************************/
+    // trickplayRestrition
+    /****************************************************/
+  const setTrickPlayRestrictions = (trickplayRestrictions) => {
+    const restrictions = isTrickplayRestricted()
+    if (!restrictions) return
+    /**
+     * trickplay restriction possibilities
+     * ['SKIP_FORWARD','SKIP_BACKWARD', 'PAUSE']
+     * ['SKIP_FORWARD','SKIP_BACKWARD']
+     * ['SKIP_FORWARD']
+     * ['SKIP_BACKWARD']
+     * ['PAUSE']
+     * ['SKIP_FORWARD', 'PAUSE']
+     * ['SKIP_BACKWARD', 'PAUSE']
+     *
+     */
+    const forwardRestricted = _.includes(trickplayRestrictions, (com.zappware.chromecast.TrickPlayRestriction.SKIP_FORWARD))
+    const backwardRestricted = _.includes(trickplayRestrictions, (com.zappware.chromecast.TrickPlayRestriction.SKIP_BACKWARD))
+    const pauseRestricted = _.includes(trickplayRestrictions, (com.zappware.chromecast.TrickPlayRestriction.PAUSE))
+    trickplayPolicy = {
+      allow_forward: !forwardRestricted,
+      allow_backward: !backwardRestricted,
+      allow_pause: !pauseRestricted
+    }
+  }
+
+  const isTrickplayRestricted = () => {
+    if (!isTrickplayBlockingEnabled) return false
+    return trickplayRes && trickplayRes !== null && trickplayRes !== undefined && !_.isEmpty(trickplayRes)
+  }
+
+  const setLastLivePoint = (position) => {
+    lastLivePoint = position
+  }
+
+  const setPausePoint = (position) => {
+    pausePoint = position
+  }
+
+  const getPausePoint = () => {
+    return pausePoint
+ }
+
+  const getLastLivePoint = () => {
+     return lastLivePoint
+  }
+
+  const getTrickplayRestrictionPolicy = () => trickplayPolicy
+
+  const canPause = () => {
+    if (!isTrickplayBlockingEnabled) return true
+    const media = playerManager.getMediaInformation()
+    const mode = media._playbackMode
+    const previousMode = playbackMode
+    if (mode === com.zappware.chromecast.PlaybackMode.LIVETV || (mode === com.zappware.chromecast.PlaybackMode.PLTV && previousMode === com.zappware.chromecast.PlaybackMode.LIVETV)) return true
+    const trickplayPolicy = getTrickplayRestrictionPolicy()
+    if (!trickplayPolicy) return true
+    const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
+    if (trickplayPolicy && trickplayPolicy.allow_pause === false) {
+          if (isVod) return true
+          const playerState = com.zappware.chromecast.player.getState();
+          const pausePoint = getPausePoint()
+          if (mode === com.zappware.chromecast.PlaybackMode.PLTV && pausePoint) {
+            setPausePoint(null)
+            return true
+          }
+          playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING && com.zappware.chromecast.adshandler.showBlockTrickplayMessage()
+          return playerState === com.zappware.chromecast.PlayerState.PAUSED ? true : false
+    } else {
+       return true
+    }
+  }
+
+  const checkOnTrickplayPolicy = (position, currentTime) => {
+    if (!trickplayPolicy || trickplayPolicy === null) return
+    if (trickplayPolicy.allow_forward === false && position > currentTime) {
+      showBlockTrickplayMessage()
+      return false
+    } else if (trickplayPolicy.allow_backward === false && position < currentTime ) {
+      showBlockTrickplayMessage()
+      return false
+    }
+    return true
+  }
+
+  const checkTrickplayRestrictionOnPLTV = (position) => {
+    if (!isTrickplayBlockingEnabled) return
+    const restrictions = getTrickplayRestrictionPolicy()
+    if (!restrictions) return
+    const currentTime = position || getCurrentTimeSec()
+    const lastLivePoint = getLastLivePoint()
+    const media = playerManager.getMediaInformation()
+    const mode = media._playbackMode
+    let updatedPosition = null
+    if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
+      if (lastLivePoint && currentTime < lastLivePoint  && trickplayPolicy.allow_backward === false) {
+        updatedPosition = lastLivePoint
+        return trickplayResMessage(updatedPosition)
+      } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
+        updatedPosition = lastLivePoint
+        return trickplayResMessage(updatedPosition)
+      } else {
+        resetDragPosition()
+      }
+    } else {
+      return updatedPosition
+    }
+  }
+
+  const trickplayResMessage = (updatedPosition) => {
+    showAdSkippingMessage()
+    resetDragPosition()
+    return updatedPosition
+  }
+  const resetDragPosition = () => {
+    lastLivePoint = null
+  }
+
+  const checkPauseResOnPLTV = (mediaInfo) => {
+    const pltvMode = mediaInfo && mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV
+    const restrictions = getTrickplayRestrictionPolicy()
+    const pauseRes = restrictions && restrictions.allow_pause === false
+    if (restrictions && pltvMode && pauseRes){
+      return true
+    } else {
+      return false
+    }
+  }
+
+
   /* return the public functions */
   return {
     validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
     canSeek: canSeek,
+    canPause: canPause,
     checkAdEnterExit: checkAdEnterExit,
     setAdPolicy: setAdPolicy,
     setAdsBlocks: setAdsBlocks,
@@ -350,7 +513,15 @@
     reset: reset,
     getAdSignallingType: getAdSignallingType,
     initAdsHandler: initAdsHandler,
-    setTimingForViewedWindow: setTimingForViewedWindow
+    setTimingForViewedWindow: setTimingForViewedWindow,
+    getTrickplayRestrictionPolicy: getTrickplayRestrictionPolicy,
+    showBlockTrickplayMessage: showBlockTrickplayMessage,
+    resetTrickplayRestriction: resetTrickplayRestriction,
+    setLastLivePoint: setLastLivePoint,
+    setPausePoint: setPausePoint,
+    checkTrickplayRestrictionOnPLTV: checkTrickplayRestrictionOnPLTV,
+    resetDragPosition: resetDragPosition,
+    checkPauseResOnPLTV: checkPauseResOnPLTV
   }
 
 }())
@@ -359,6 +530,12 @@ com.zappware.chromecast.AdSignallingTypes = {
   DEFAULT: 'DEFAULT',
   SCTE35_ZW_1: 'SCTE35_ZW_1',
   UNKNOWN: 'UNKNOWN'
+};
+
+com.zappware.chromecast.TrickPlayRestriction = {
+  PAUSE: 'PAUSE', // Indicates that pausing is not allowed.
+  SKIP_FORWARD: 'SKIP_FORWARD', // Indicates that skipping and dragging forward (if applicable) is not allowed.
+  SKIP_BACKWARD: 'SKIP_BACKWARD' // Indicates that skipping and dragging backward (if applicable) is not allowed.
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

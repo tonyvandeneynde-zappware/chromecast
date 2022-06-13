@@ -124,7 +124,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
         adStartTime: parseInt(adStartTime),
         adEndTime: parseInt(adEndTime),
         totalDuration,
-        adType,
+        adType
       };
 
 

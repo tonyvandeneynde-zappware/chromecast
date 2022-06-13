@@ -352,6 +352,24 @@ com.zappware.chromecast.util = (function () {
         });
     }
 
+    function httpDelete(url, headers) {
+        const xmlHttp = new XMLHttpRequest();
+
+        xmlHttp.open("DELETE", url, true);
+
+        if (headers) {
+            for (var key in headers) {
+                if (headers.hasOwnProperty(key)) {
+                    xmlHttp.setRequestHeader(key, headers[key]);
+                }
+            }
+        }
+
+        xmlHttp.send();
+
+        return xmlHttp;
+    }
+
     /**
      * Converts an XML tree into an object tree.
      *
@@ -767,6 +785,7 @@ com.zappware.chromecast.util = (function () {
         httpGetRedirectURL: httpGetRedirectURL,
         httpPost: httpPost,
         httpPostSync: httpPostSync,
+        httpDelete: httpDelete,
         xmlToObj: xmlToObj,
         normalizeLanguageIsoCode: normalizeLanguageIsoCode,
         getLanguageFromIsoCode: getLanguageFromIsoCode,
