@@ -76,6 +76,7 @@
 
     // trickplayRestrictions
     trickplayRes = trickplayRestrictions
+    trickplayRestrictions = ['SKIP_FORWARD','SKIP_BACKWARD', 'REWIND', 'FAST_FORWARD']
     setTrickPlayRestrictions(trickplayRestrictions)
 }
 
