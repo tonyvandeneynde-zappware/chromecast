@@ -98,6 +98,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) LOAD request to be able to read in a contentId and get data
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, function (loadRequestData) {
+        console.log('buggg incoming LOAD initercepted')
         return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.load(loadRequestData), loadRequestData);
     });
 
@@ -118,6 +119,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) SEEK message to be able to do our own seek handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.SEEK, function (data) {
+        console.log('buggg incominig SEEK message:')
         DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "Message intercepted: " + JSON.stringify(data));
 
         // If we did the request ourselves, allow it to pass
