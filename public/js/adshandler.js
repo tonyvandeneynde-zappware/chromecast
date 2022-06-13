@@ -23,7 +23,7 @@
   let playbackMode = ''
 
   // Trickplay blocking restrictions
-  const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
+  let isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
   let trickplayPolicy = null
   let lastLivePoint = null
   let pausePoint = null
