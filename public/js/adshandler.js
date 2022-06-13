@@ -43,12 +43,14 @@
   * BLOCK_SKIP_AND_FAST_FORWARD => Indicates that fast forwarding through ads and skipping in ads is not allowed.
   */
   const setAdPolicy = (adPlayBackRestrictions, adSignallingType, trickplayRestrictions = null) => {
+    isTrickplayBlockingEnabled = true
     if (!isAdSkippingEnabled || !isTrickplayBlockingEnabled) return
     /**
      *If for a given timeshift mode and device category trick modes
      are blocked on the channel level, all trick modes restrictions
      on the ad level are dropped for this timeshift mode and device category.
      */
+     trickplayRestrictions = ['SKIP_FORWARD','SKIP_BACKWARD', 'REWIND', 'FAST_FORWARD']
     if (!trickplayRestrictions) {
       _.forEach(adPlayBackRestrictions, res => {
         if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
@@ -76,7 +78,6 @@
 
     // trickplayRestrictions
     trickplayRes = trickplayRestrictions
-    trickplayRestrictions = ['SKIP_FORWARD','SKIP_BACKWARD', 'REWIND', 'FAST_FORWARD']
     setTrickPlayRestrictions(trickplayRestrictions)
 }
 
