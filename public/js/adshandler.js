@@ -137,6 +137,7 @@
   }
 
   const canSeek = (position) => {
+    console.log('buuggg DO canSeek:')
     if (!isAdSkippingEnabled || !isTrickplayBlockingEnabled) return
     const currentTime = getCurrentTimeSec()
     const media = playerManager.getMediaInformation()
