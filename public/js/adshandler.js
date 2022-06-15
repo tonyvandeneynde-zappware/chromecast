@@ -535,7 +535,8 @@
     setPausePoint: setPausePoint,
     checkTrickplayRestrictionOnPLTV: checkTrickplayRestrictionOnPLTV,
     resetDragPosition: resetDragPosition,
-    checkPauseResOnPLTV: checkPauseResOnPLTV
+    checkPauseResOnPLTV: checkPauseResOnPLTV,
+    getCurrentTimeSec: getCurrentTimeSec
   }
 
 }())
