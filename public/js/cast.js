@@ -158,6 +158,8 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                     canSeekEpoch = com.zappware.chromecast.adshandler.canSeek(_position + startAbsoluteTime)
                 }
                 let newPosition = _position
+                console.log('buggg canSeek:', canSeek)
+                console.log('buggg canSeekEpoch:', canSeekEpoch)
                 if (canSeek && canSeekEpoch){
                     // Check if an ad can be detected when the seek time has the same reference as the ads blocks.
                     newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position)
