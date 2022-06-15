@@ -153,6 +153,7 @@
         if (!isVod) {
           console.log('buggg shouldBlockTrickPlay:', shouldBlockTrickPlay)
           const shouldBlockTrickPlay =  blockTrickPlay(position, currentTime)
+          console.log('buggg shouldBlockTrickPlay:', shouldBlockTrickPlay)
           return shouldBlockTrickPlay ? false : true
         } else {
           return true
@@ -451,14 +452,18 @@
   }
 
   const checkOnTrickplayPolicy = (position, currentTime) => {
+    console.log('buggg checkOnTrickplayPolicy:', position, currentTime)
     if (!trickplayPolicy || trickplayPolicy === null) return
     if (trickplayPolicy.allow_forward === false && position > currentTime) {
+      console.log('buggg trickplayPolicy.allow_forward not allowed:')
       showBlockTrickplayMessage()
       return false
     } else if (trickplayPolicy.allow_backward === false && position < currentTime ) {
+      console.log('buggg trickplayPolicy.allow_backward not allowed:')
       showBlockTrickplayMessage()
       return false
     }
+    console.log('buggg return true at end of checkOnTrickplayPolicy:')
     return true
   }
 
