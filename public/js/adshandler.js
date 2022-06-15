@@ -146,7 +146,9 @@
     if (trickplayRestrictionPolicy) {
       console.log('buggg isVod:', isVod)
       if (isVod) return true
-      return checkOnTrickplayPolicy(position, currentTime)
+      const canSeek = checkOnTrickplayPolicy(position, currentTime)
+      console.log('buggg canSeek:', canSeek)
+      return canSeek
     }
     console.log('buggg signallingType:', signallingType)
     if (signallingType === 'UNKNOWN') { // Block on channel-level
