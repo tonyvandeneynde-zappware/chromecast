@@ -6,7 +6,7 @@
 
  com.zappware.chromecast.adshandler = (function () {
 
-  const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+  const isAdSkippingEnabled = true // CONFIG.adSkippingEnabled || false
 
   let activeAd = null
 
@@ -23,7 +23,7 @@
   let playbackMode = ''
 
   // Trickplay blocking restrictions
-  let isTrickplayBlockingEnabled = true // CONFIG.trickplayBlockingEnabled || false
+  const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
   let trickplayPolicy = null
   let lastLivePoint = null
   let pausePoint = null
@@ -43,7 +43,6 @@
   * BLOCK_SKIP_AND_FAST_FORWARD => Indicates that fast forwarding through ads and skipping in ads is not allowed.
   */
   const setAdPolicy = (adPlayBackRestrictions, adSignallingType, trickplayRestrictions = null) => {
-    isTrickplayBlockingEnabled = true
     if (!isAdSkippingEnabled || !isTrickplayBlockingEnabled) return
     /**
      *If for a given timeshift mode and device category trick modes
@@ -143,12 +142,16 @@
     const media = playerManager.getMediaInformation()
     const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
     const trickplayRestrictionPolicy = getTrickplayRestrictionPolicy()
+    console.log('buggg trickplayRestrictionPolicy:', trickplayRestrictionPolicy)
     if (trickplayRestrictionPolicy) {
+      console.log('buggg isVod:', isVod)
       if (isVod) return true
       return checkOnTrickplayPolicy(position, currentTime)
     }
+    console.log('buggg signallingType:', signallingType)
     if (signallingType === 'UNKNOWN') { // Block on channel-level
         if (!isVod) {
+          console.log('buggg shouldBlockTrickPlay:', shouldBlockTrickPlay)
           const shouldBlockTrickPlay =  blockTrickPlay(position, currentTime)
           return shouldBlockTrickPlay ? false : true
         } else {
@@ -160,6 +163,7 @@
         return false
       }
     }
+    console.log('buggg return true at end:')
     return true
   }
 
