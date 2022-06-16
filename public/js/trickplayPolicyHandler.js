@@ -39,10 +39,12 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     if (isVod) return true
 
     if (trickplayPolicy.allow_forward === false && newPosition > currentTime) {
+      com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
       return false
     }
 
     if (trickplayPolicy.allow_backward === false && newPosition < currentTime ) {
+      com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
       return false
     }
 
