@@ -1,0 +1,146 @@
+com.zappware.chromecast.trickplayPolicyHandler = (function () {
+
+  const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
+  let trickplayPolicy = {}
+  let lastLivePoint = null
+  let pausePoint = null
+  let restricted = false
+
+  const init = () => {
+    trickplayPolicy = {
+      allow_forward: true,
+      allow_backward: true,
+      allow_pause: true
+    }
+    lastLivePoint = null
+    pausePoint = null
+    restricted = false
+  }
+
+  const setPolicy = (restrictions = null) => {
+    restrictions = ['SKIP_FORWARD', 'REWIND', 'FAST_FORWARD']
+    setTrickPlayRestrictions(restrictions)
+  }
+
+  const hasRestrictions = () => {
+    return isTrickplayBlockingEnabled && restricted
+  }
+
+  const canSeek = (newPosition, currentTime) => {
+    const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
+    const trickplayPolicy = getTrickplayRestrictionPolicy()
+    console.log('buggg trickplayRestrictionPolicy:', trickplayRestrictionPolicy)
+
+    if (isVod) return false
+
+    if (trickplayPolicy.allow_forward === false && newPosition > currentTime) {
+      return true
+    }
+
+    if (trickplayPolicy.allow_backward === false && newPosition < currentTime ) {
+      return true
+    }
+  }
+
+  const canPause = () => {
+    const media = playerManager.getMediaInformation()
+    const mode = media._playbackMode
+    const previousMode = playbackMode
+    if (mode === com.zappware.chromecast.PlaybackMode.LIVETV || (mode === com.zappware.chromecast.PlaybackMode.PLTV && previousMode === com.zappware.chromecast.PlaybackMode.LIVETV)) return true
+    const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
+    if (trickplayPolicy.allow_pause === false) {
+          if (isVod) return true
+          const playerState = com.zappware.chromecast.player.getState();
+          const pausePoint = getPausePoint()
+          if (mode === com.zappware.chromecast.PlaybackMode.PLTV) {
+            if (pausePoint) {
+              setPausePoint(null)
+              return true
+            } else {
+              return false
+            }
+          }
+          playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING && com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
+          return playerState === com.zappware.chromecast.PlayerState.PAUSED ? true : false
+    } else {
+       return true
+    }
+  }
+
+  const validateRequestedPlaybackPosition = (position) => {
+    const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
+    const lastLivePoint = getLastLivePoint()
+    const media = playerManager.getMediaInformation()
+    const isPLTV = media._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV
+    let updatedPosition = position
+    if (isPLTV && currentTime !== null && lastLivePoint !== null) {
+      if (lastLivePoint && currentTime < lastLivePoint  && trickplayPolicy.allow_backward === false) {
+        updatedPosition =  lastLivePoint
+      } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
+        updatedPosition =  lastLivePoint
+      }
+      resetDragPosition()
+    }
+    return updatedPosition
+  }
+
+  const setLastLivePoint = (position) => {
+    lastLivePoint = position
+  }
+
+  const setPausePoint = (position) => {
+    pausePoint = position
+  }
+
+  //////////////////////////////
+  // Private Methods
+  //////////////////////////////
+
+  const setTrickPlayRestrictions = (restrictions) => {
+    if (!restrictions) return
+    if (!_.isEmpty(restrictions)) restricted = true
+
+    const forwardRestricted = _.includes(trickplayRestrictions, (com.zappware.chromecast.TrickPlayRestriction.SKIP_FORWARD))
+    const backwardRestricted = _.includes(trickplayRestrictions, (com.zappware.chromecast.TrickPlayRestriction.SKIP_BACKWARD))
+    const pauseRestricted = _.includes(trickplayRestrictions, (com.zappware.chromecast.TrickPlayRestriction.PAUSE))
+
+    trickplayPolicy = {
+      allow_forward: !forwardRestricted,
+      allow_backward: !backwardRestricted,
+      allow_pause: !pauseRestricted
+    }
+  }
+
+  const getPausePoint = () => {
+    return pausePoint
+ }
+
+  const getLastLivePoint = () => {
+     return lastLivePoint
+  }
+
+  const getTrickplayRestrictionPolicy = () => trickplayPolicy
+
+  const resetDragPosition = () => {
+    lastLivePoint = null
+  }
+
+  /* return the public functions */
+  return {
+    init: init,
+    setPolicy: setPolicy,
+    hasRestrictions: hasRestrictions,
+    canSeek: canSeek,
+    canPause: canPause,
+    validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
+    setLastLivePoint: setLastLivePoint,
+    setPausePoint: setPausePoint
+  }
+
+}())
+
+com.zappware.chromecast.TrickPlayRestriction = {
+  PAUSE: 'PAUSE', // Indicates that pausing is not allowed.
+  SKIP_FORWARD: 'SKIP_FORWARD', // Indicates that skipping and dragging forward (if applicable) is not allowed.
+  SKIP_BACKWARD: 'SKIP_BACKWARD' // Indicates that skipping and dragging backward (if applicable) is not allowed.
+}
