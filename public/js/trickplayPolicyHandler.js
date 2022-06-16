@@ -36,15 +36,17 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     console.log('buggg trickplayPolicy:', trickplayPolicy)
 
     console.log('buggg isVod:', isVod)
-    if (isVod) return false
+    if (isVod) return true
 
     if (trickplayPolicy.allow_forward === false && newPosition > currentTime) {
-      return true
+      return false
     }
 
     if (trickplayPolicy.allow_backward === false && newPosition < currentTime ) {
-      return true
+      return false
     }
+
+    return true
   }
 
   const canPause = () => {
