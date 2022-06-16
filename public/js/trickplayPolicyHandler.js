@@ -32,7 +32,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   const canSeek = (newPosition, currentTime) => {
     const isVod = playbackMode === com.zappware.chromecast.PlaybackMode.VOD
     const trickplayPolicy = getTrickplayRestrictionPolicy()
-    console.log('buggg trickplayRestrictionPolicy:', trickplayRestrictionPolicy)
 
     if (isVod) return false
 
