@@ -43,16 +43,6 @@ com.zappware.chromecast.trickplayHandler = (function () {
     }
   }
 
-  const showBlockTrickplayMessage = (message) => {
-    const blocktrickPlayInfo = document.querySelector('#blocktrickplayInfo')
-    if (blocktrickPlayInfo.innerText === '') {
-      blocktrickPlayInfo.innerText = com.zappware.chromecast.globaltext.getString(message)
-      setTimeout(() => {
-        blocktrickPlayInfo.innerText = ''
-      }, 7000)
-    }
-  }
-
   /////////////////////
   // Private Methods
   /////////////////////
@@ -68,6 +58,16 @@ com.zappware.chromecast.trickplayHandler = (function () {
     return currentTime
   }
 
+  const showBlockTrickplayMessage = (message) => {
+    const blocktrickPlayInfo = document.querySelector('#blocktrickplayInfo')
+    if (blocktrickPlayInfo.innerText === '') {
+      blocktrickPlayInfo.innerText = com.zappware.chromecast.globaltext.getString(message)
+      setTimeout(() => {
+        blocktrickPlayInfo.innerText = ''
+      }, 7000)
+    }
+  }
+
 
   /* return the public functions */
   return {
@@ -76,6 +76,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
     canSeek: canSeek,
     getCurrentTimeSec: getCurrentTimeSec,
     validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
-    canPause: canPause
+    canPause: canPause,
+    showBlockTrickplayMessage: showBlockTrickplayMessage
   }
 }())
