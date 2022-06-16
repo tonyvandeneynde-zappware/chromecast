@@ -100,9 +100,9 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     if (!restrictions) return
     if (!_.isEmpty(restrictions)) restricted = true
 
-    const forwardRestricted = _.includes(trickplayRestrictions, (com.zappware.chromecast.TrickPlayRestriction.SKIP_FORWARD))
-    const backwardRestricted = _.includes(trickplayRestrictions, (com.zappware.chromecast.TrickPlayRestriction.SKIP_BACKWARD))
-    const pauseRestricted = _.includes(trickplayRestrictions, (com.zappware.chromecast.TrickPlayRestriction.PAUSE))
+    const forwardRestricted = _.includes(restrictions, (com.zappware.chromecast.TrickPlayRestriction.SKIP_FORWARD))
+    const backwardRestricted = _.includes(restrictions, (com.zappware.chromecast.TrickPlayRestriction.SKIP_BACKWARD))
+    const pauseRestricted = _.includes(restrictions, (com.zappware.chromecast.TrickPlayRestriction.PAUSE))
 
     trickplayPolicy = {
       allow_forward: !forwardRestricted,
