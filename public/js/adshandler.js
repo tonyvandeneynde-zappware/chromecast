@@ -6,7 +6,7 @@
 
  com.zappware.chromecast.adsHandler = (function () {
 
-  const isAdSkippingEnabled = true // CONFIG.adSkippingEnabled || false
+  const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
 
   let activeAd = null
   let adPolicy = null
@@ -133,7 +133,6 @@
   }
 
   const handleAdsBlockEnterEvent = (adsBlock) => {
-    if (!isAdSkippingEnabled) return
     if (adPolicy) {
       activeAd = adsBlock
       console.log('adsHandler - Entered SCTE35 ad block:', adsBlock)
@@ -141,7 +140,6 @@
   }
 
   const handleAdsBlockExitEvent = (adsBlock) => {
-    if (!isAdSkippingEnabled) return
     console.log('adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
     removedAds[adsBlock.adId] = true
     removeAdsBlock(adsBlock)
@@ -153,7 +151,6 @@
   }
 
   const  removeAdsBlocksInWindow = () => {
-    if (!isAdSkippingEnabled) return
     if (adPolicy && adPolicy.allow_skip) return
     console.log('adsHandler - Removing all ads blocks in live viewed window')
     _.remove(adsBlocks, (adsBlock) => {
@@ -162,7 +159,6 @@
   }
 
   const addAdsBlock = (adId, adStartTime, adEndTime, adType) => {
-    if (!isAdSkippingEnabled) return
     if(!adId) return
     if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
@@ -202,7 +198,6 @@
 
   const setAdsBlocks = (newAdBlocks) => {
     adsBlocks = []
-    if (!isAdSkippingEnabled) return
     if (!newAdBlocks) return
     _.map(newAdBlocks, (ad) => {
       if (!ad) return
@@ -226,7 +221,6 @@
   // AD BLOCK HELPERS
   //
   const findFirstAdsBlock = (time, currentTime) => {
-    if (!isAdSkippingEnabled) return
     console.log('adsHandler - Finding ads before', time)
     return _.find(adsBlocks, (adsBlock) => (time > adsBlock.adStartTime && adsBlock.adEndTime > currentTime))
   }
@@ -237,7 +231,6 @@
 
   const reset = () => {
     console.log('adsHandler - RESET ads:')
-    if (!isAdSkippingEnabled || !isTrickplayBlockingEnabled) return
     adsBlocks = [];
     activeAd = null;
     adPolicy = null;
@@ -254,7 +247,7 @@
   }
 
   const init = () => {
-    if (!isAdSkippingEnabled || !isTrickplayBlockingEnabled) return
+    if (!isAdSkippingEnabled) return
     reset()
     let playbackMode = getPlaybackMode()
     console.log('adsHandler - init')
@@ -270,7 +263,6 @@
   }
 
   const  setTimingForViewedWindow = (currentTime) => {
-    if (!isAdSkippingEnabled) return
     const windowForAdskipping = _.last(adSkippingWindows)
     let playbackMode = getPlaybackMode()
     if (playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV) {
