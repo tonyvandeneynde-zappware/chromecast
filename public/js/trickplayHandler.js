@@ -13,11 +13,15 @@ com.zappware.chromecast.trickplayHandler = (function () {
   const canSeek = (newPosition) => {
     const currentTime = getCurrentTimeSec()
 
-    console.log('buuggg DO canSeek:')
+    console.log('bugg DO canSeek:')
     if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
-      return com.zappware.chromecast.trickplayPolicyHandler.canSeek(newPosition, currentTime)
+      const canSeek = com.zappware.chromecast.trickplayPolicyHandler.canSeek(newPosition, currentTime)
+      console.log('canSeek trickplayhandler:', canSeek)
+      return canSeek
     } else {
-      return com.zappware.chromecast.adsHandler.canSeek(newPosition, currentTime)
+      const canSeek = com.zappware.chromecast.adsHandler.canSeek(newPosition, currentTime)
+      console.log('canSeek adshandler:', canSeek)
+      return canSeek
     }
   }
 
