@@ -5,6 +5,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   let lastLivePoint = null
   let pausePoint = null
   let restricted = false
+  let playbackMode = ''
 
   const init = () => {
     trickplayPolicy = {
@@ -15,6 +16,8 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     lastLivePoint = null
     pausePoint = null
     restricted = false
+    const media = playerManager.getMediaInformation()
+    playbackMode = media._playbackMode
   }
 
   const setPolicy = (restrictions = null) => {

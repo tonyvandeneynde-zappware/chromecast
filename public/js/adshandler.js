@@ -257,7 +257,7 @@
   }
 
   const getPlaybackMode = () => {
-    let media = playerManager.getMediaInformation()
+    const media = playerManager.getMediaInformation()
     playbackMode = media._playbackMode
     return playbackMode
   }
