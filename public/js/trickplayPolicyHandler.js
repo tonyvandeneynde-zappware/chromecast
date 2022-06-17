@@ -58,6 +58,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     console.log('bugg mode:', mode)
     const previousMode = playbackMode
     console.log('bugg previousMode:', previousMode)
+    playbackMode = mode
     if (mode === com.zappware.chromecast.PlaybackMode.LIVETV || (mode === com.zappware.chromecast.PlaybackMode.PLTV && previousMode === com.zappware.chromecast.PlaybackMode.LIVETV)) return true
     const isVod = media && mode === com.zappware.chromecast.PlaybackMode.VOD
     console.log('bugg trickplayPolicy:', trickplayPolicy)
@@ -93,7 +94,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
       } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
         updatedPosition =  lastLivePoint
       }
-      resetDragPosition()
+      lastLivePoint = null
     }
     return updatedPosition
   }
@@ -134,10 +135,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const getTrickplayRestrictionPolicy = () => trickplayPolicy
-
-  const resetDragPosition = () => {
-    lastLivePoint = null
-  }
 
   /* return the public functions */
   return {
