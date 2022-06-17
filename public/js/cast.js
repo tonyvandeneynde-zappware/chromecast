@@ -98,7 +98,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) LOAD request to be able to read in a contentId and get data
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.LOAD, function (loadRequestData) {
-        console.log('buggg incoming LOAD initercepted')
         return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.load(loadRequestData), loadRequestData);
     });
 
@@ -119,7 +118,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) SEEK message to be able to do our own seek handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.SEEK, function (data) {
-        console.log('buggg incominig SEEK message:')
         DEBUG && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "Message intercepted: " + JSON.stringify(data));
 
         // If we did the request ourselves, allow it to pass
@@ -150,28 +148,21 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
                 // TEMPORARY workaround for strange iOS implementation NEXX4-30295
                 // In PLTV a seek from iOS sometimes has a time with reference to the start of the buffer and sometimes it is an epoch time. Depends on weather the buttons or dragging the progress bar was used to trigger the seek.
-                const adsBlocks = com.zappware.chromecast.adsHandler.getAdsBlocks()
+                const adsBlocks = com.zappware.chromecast.adshandler.getAdsBlocks()
                 const startAbsoluteTime = playerManager.getMediaInformation().startAbsoluteTime
-                const seekPossible = com.zappware.chromecast.trickplayHandler.canSeek(_position)
-                console.log('buggg canSeek cast:', seekPossible)
-                console.log('buggg getCurrentTimeSec():', com.zappware.chromecast.trickplayHandler.getCurrentTimeSec())
-                console.log('buggg _position:', _position)
-                console.log('buggg check canseek epoch')
+                const canSeek = com.zappware.chromecast.adshandler.canSeek(_position)
                 let canSeekEpoch = true
                 if (adsBlocks.length > 0 && adsBlocks[adsBlocks.length-1].adEndTime > _position + 946681200) { // Don't do the check if the position is in epoch time and the ads are a time with reference to the buffer start.
-                    canSeekEpoch = com.zappware.chromecast.trickplayHandler.canSeek(_position + startAbsoluteTime)
-                }  else if (Math.abs(_position - com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()) > 31536000) {
-                    canSeekEpoch = com.zappware.chromecast.trickplayHandler.canSeek(_position + startAbsoluteTime)
+                    canSeekEpoch = com.zappware.chromecast.adshandler.canSeek(_position + startAbsoluteTime)
                 }
                 let newPosition = _position
-                console.log('buggg canSeekEpoch cast:', canSeekEpoch)
-                if (seekPossible && canSeekEpoch){
+                if (canSeek && canSeekEpoch){
                     // Check if an ad can be detected when the seek time has the same reference as the ads blocks.
-                    newPosition = com.zappware.chromecast.trickplayHandler.validateRequestedPlaybackPosition(_position)
+                    newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position)
                     if (newPosition === _position) {
                         // Also check if an ad can be detected when the seek time with reference to the buffer start but the ads are in epoch time
                         if (adsBlocks.length > 0 && adsBlocks[adsBlocks.length-1].adEndTime > _position + 946681200) { // Don't do the check if the position is in epoch time and the ads are a time with reference to the buffer start.
-                            newPosition = com.zappware.chromecast.trickplayHandler.validateRequestedPlaybackPosition(_position + startAbsoluteTime) - startAbsoluteTime
+                            newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position + startAbsoluteTime) - startAbsoluteTime
                         }
                     }
                 } else {
