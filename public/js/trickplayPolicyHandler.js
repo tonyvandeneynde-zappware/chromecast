@@ -21,7 +21,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const setPolicy = (restrictions = null) => {
-    restrictions = ['invalid']
     setTrickPlayRestrictions(restrictions)
   }
 
