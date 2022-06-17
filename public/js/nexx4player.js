@@ -1110,7 +1110,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                    return this._hasPLTV(mediaInfo) && com.zappware.chromecast.trickplayHandler.canPause()
             }
 
-            return com.zappware.chromecast.adsHandler.canPause()
+            return com.zappware.chromecast.trickplayHandler.canPause()
         }
 
         // isTimeshiftEnabled /////////////////////////////////////////////////////////////////////////
