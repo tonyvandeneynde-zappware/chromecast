@@ -127,7 +127,7 @@
     } else {
       if (activeAd && newPosition > currentTime ) {
         com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('blockSkipAd')
-        return true
+        return false
       }
     }
     return true
