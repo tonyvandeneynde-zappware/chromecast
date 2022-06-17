@@ -63,20 +63,21 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     const isVod = media && mode === com.zappware.chromecast.PlaybackMode.VOD
     console.log('bugg trickplayPolicy:', trickplayPolicy)
     if (trickplayPolicy.allow_pause === false) {
-          if (isVod) return true
-          const playerState = com.zappware.chromecast.player.getState();
-          const pausePoint = getPausePoint()
-          console.log('bugg pausePoint:', pausePoint)
-          if (mode === com.zappware.chromecast.PlaybackMode.PLTV) {
-            if (pausePoint) {
-              setPausePoint(null)
-              return true
-            } else {
-              return false
-            }
-          }
-          playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING && com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
-          return playerState === com.zappware.chromecast.PlayerState.PAUSED ? true : false
+      if (isVod) return true
+      const playerState = com.zappware.chromecast.player.getState();
+      const pausePoint = getPausePoint()
+      console.log('bugg pausePoint:', pausePoint)
+      if (mode === com.zappware.chromecast.PlaybackMode.PLTV) {
+        if (pausePoint) {
+          setPausePoint(null)
+          return true
+        } else {
+          com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
+          return false
+        }
+      }
+      playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING && com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
+      return playerState === com.zappware.chromecast.PlayerState.PAUSED ? true : false
     } else {
        return true
     }
