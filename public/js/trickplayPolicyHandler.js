@@ -64,8 +64,8 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     if (trickplayPolicy.allow_pause === false) {
           if (isVod) return true
           const playerState = com.zappware.chromecast.player.getState();
-          console.log('bugg pausePoint:', pausePoint)
           const pausePoint = getPausePoint()
+          console.log('bugg pausePoint:', pausePoint)
           if (mode === com.zappware.chromecast.PlaybackMode.PLTV) {
             if (pausePoint) {
               setPausePoint(null)
