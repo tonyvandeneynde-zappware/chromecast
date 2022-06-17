@@ -72,8 +72,8 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
           setPausePoint(null)
           return true
         } else {
-          // com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
-          // return false
+          com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
+          return false
         }
       }
       playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING && com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')

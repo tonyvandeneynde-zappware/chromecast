@@ -784,7 +784,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             }
 
             var media = playerManager.getMediaInformation();
-            if (!media || !this._canPause(media, false)) {
+            if (!media || !this._canPause(media)) {
                 DEBUG && log("Play not supported.");
                 com.zappware.chromecast.receiver.onPlay();
                 return null;
@@ -1102,18 +1102,15 @@ com.zappware.chromecast.Nexx4Player = (function () {
         }
 
         // canPause /////////////////////////////////////////////////////////////////////////////////////
-        canPause(mediaInfo, checkTrickplayRestrictions=true) {
+        canPause(mediaInfo, checkTrickplayRestrictions = true) {
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                   console.log('bugg canPause 2:')
-                   console.log('bugg mediaInfo:', mediaInfo)
-                   const canPause = checkTrickplayRestrictions ? com.zappware.chromecast.trickplayHandler.canPause() : true
-                   return this._hasPLTV(mediaInfo) && canPause
+                    canPause = checkTrickplayRestrictions ? com.zappware.chromecast.adshandler.canPause() : true
+                    return this._hasPLTV(mediaInfo) && canPause
             }
 
-            console.log('bugg canPause 3:')
             return com.zappware.chromecast.trickplayHandler.canPause()
         }
 
