@@ -16,11 +16,11 @@ com.zappware.chromecast.trickplayHandler = (function () {
     console.log('bugg DO canSeek ?:')
     if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
       const canSeek = com.zappware.chromecast.trickplayPolicyHandler.canSeek(newPosition, currentTime)
-      console.log('bugg canSeek trickplayhandler:', canSeek)
+      console.log('bugg canSeek trickplayhandler:')
       return canSeek
     } else {
       const canSeek = com.zappware.chromecast.adsHandler.canSeek(newPosition, currentTime)
-      console.log('bugg canSeek adshandler:', canSeek)
+      console.log('bugg canSeek adshandler:')
       return canSeek
     }
   }
