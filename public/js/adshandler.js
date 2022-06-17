@@ -112,6 +112,7 @@
   }
 
   const canSeek = (newPosition, currentTime) => {
+    const media = playerManager.getMediaInformation()
     const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
 
     if (signallingType === 'UNKNOWN') { // Block on channel-level
