@@ -1107,9 +1107,11 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+                   console.log('bugg canPause 2:')
                    return this._hasPLTV(mediaInfo) && com.zappware.chromecast.trickplayHandler.canPause()
             }
 
+            console.log('bugg canPause 3:')
             return com.zappware.chromecast.trickplayHandler.canPause()
         }
 
