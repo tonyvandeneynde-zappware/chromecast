@@ -94,7 +94,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
       } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
         updatedPosition =  lastLivePoint
       }
-      lastLivePoint = null
+      setLastLivePoint(null)
     }
     return updatedPosition
   }
