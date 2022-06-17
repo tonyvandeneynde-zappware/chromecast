@@ -49,6 +49,7 @@
      are blocked on the channel level, all trick modes restrictions
      on the ad level are dropped for this timeshift mode and device category.
      */
+     trickplayRestrictions = ['PAUSE']
     if (!trickplayRestrictions) {
       _.forEach(adPlayBackRestrictions, res => {
         if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
