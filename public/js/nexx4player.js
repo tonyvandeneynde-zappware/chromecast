@@ -1102,13 +1102,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
         }
 
         // canPause /////////////////////////////////////////////////////////////////////////////////////
-        canPause(mediaInfo, checkTrickplayRestrictions = true) {
+        canPause(mediaInfo) {
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                    const canPause = checkTrickplayRestrictions ? com.zappware.chromecast.trickplayHandler.canPause() : true
-                    return this._hasPLTV(mediaInfo) && canPause
+                   return this._hasPLTV(mediaInfo) && com.zappware.chromecast.trickplayHandler.canPause()
             }
 
             return com.zappware.chromecast.trickplayHandler.canPause()

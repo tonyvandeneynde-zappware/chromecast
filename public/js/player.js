@@ -186,7 +186,7 @@ com.zappware.chromecast.Player = (function () {
 
         // play ///////////////////////////////////////////////////////////////////////////////////////
         play() {
-            if (this.canPause(null, false)) {
+            if (this.canPause()) {
                 switch(this._state) {
                     case com.zappware.chromecast.PlayerState.SEEKING:
                     case com.zappware.chromecast.PlayerState.PAUSED:
