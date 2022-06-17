@@ -97,9 +97,8 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
 
   const checkPauseResOnPLTV = (mediaInfo) => {
     const pltvMode = mediaInfo && mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV
-    const restrictions = getTrickplayRestrictionPolicy()
-    const pauseRes = restrictions && restrictions.allow_pause === false
-    if (restrictions && pltvMode && pauseRes){
+    const pauseRes = trickplayPolicy && trickplayPolicy.allow_pause === false
+    if (trickplayPolicy && pltvMode && pauseRes){
       return true
     } else {
       return false
