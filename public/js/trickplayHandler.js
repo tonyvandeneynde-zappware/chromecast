@@ -32,6 +32,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
   }
 
   const validateRequestedPlaybackPosition = (newPosition) => {
+    console.log('bugg trickplay handler validateRequestedPlaybackPosition:')
     const currentTime = getCurrentTimeSec()
 
     if (!com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
