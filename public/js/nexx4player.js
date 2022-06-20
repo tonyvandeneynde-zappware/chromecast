@@ -636,13 +636,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
         _initiatePLTV(media){
             DEBUG && log("_initiatePLTV()");
-            console.log('bugg test 3')
+
             com.zappware.chromecast.receiver.setPlaybackMode(com.zappware.chromecast.PlaybackMode.PLTV);
             media._playbackMode = com.zappware.chromecast.PlaybackMode.PLTV;
             com.zappware.chromecast.trickplayPolicyHandler.setLastLivePoint(com.zappware.chromecast.util.getCurrentTime())
             com.zappware.chromecast.trickplayPolicyHandler.setPausePoint(com.zappware.chromecast.util.getCurrentTime())
             if (!media._startPLTVat) {
-                console.log('bugg test 4')
                 media._startPLTVat = com.zappware.chromecast.util.getCurrentTime();
                 com.zappware.chromecast.trickplayPolicyHandler.setLastLivePoint(com.zappware.chromecast.util.getCurrentTime())
                 com.zappware.chromecast.trickplayPolicyHandler.setPausePoint(com.zappware.chromecast.util.getCurrentTime())
@@ -733,7 +732,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
                     const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
                     const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
-                    console.log('bugg test 5')
+
                     restrictionsEnabled && com.zappware.chromecast.trickplayHandler.setPolicies(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null, playbackInfo.trickplayRestrictions)
                     media.contentUrl = playbackInfo.url;
                     media._playingStartedAt = com.zappware.chromecast.util.getCurrentTime();
@@ -741,10 +740,9 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
                     // Start keep alive timers etc.
                     that._inauguratePlaybackInfo(media._playbackInfo);
-                    const trickplayResOnPltv = com.zappware.chromecast.trickplayHandler.checkTrickplayRestrictionOnPLTV(position)
-                    console.log('bugg trickplayResOnPltv:', trickplayResOnPltv)
+                    position = com.zappware.chromecast.trickplayHandler.checkTrickplayRestrictionOnPLTV(position)
                     // Reload should trigger a new loadRequest
-                    return that._reloadAndSeek(trickplayResOnPltv !== undefined ? trickplayResOnPltv : position, resumeState)
+                    return that._reloadAndSeek(position, resumeState)
                     .then(function(_media) {
                         if (_media) {
                             _media.contentUrl = playbackInfo.url;
@@ -1109,10 +1107,9 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                    console.log('bugg test 2')
                    return this._hasPLTV(mediaInfo) && com.zappware.chromecast.trickplayHandler.canPause()
             }
-            console.log('bugg test 6')
+
             return com.zappware.chromecast.trickplayHandler.canPause()
         }
 

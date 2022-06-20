@@ -29,7 +29,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const canSeek = (newPosition, currentTime) => {
-    console.log('buggg trickplay policy handler canSeek:')
     const isVod = playbackMode === com.zappware.chromecast.PlaybackMode.VOD
     const trickplayPolicy = getTrickplayRestrictionPolicy()
 
@@ -71,20 +70,21 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const checkTrickplayRestrictionOnPLTV = (position) => {
-    const currentTime = position || getCurrentTimeSec()
-    const lastLivePoint = getLastLivePoint()
+    const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
-    let updatedPosition = null
+    let updatedPosition = position
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
-      if (lastLivePoint && currentTime < lastLivePoint  && trickplayPolicy.allow_backward === false) {
+      if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
         updatedPosition = lastLivePoint
-        return trickplayResMessage(updatedPosition)
+        lastLivePoint = null
+        return updatedPosition
       } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
         updatedPosition = lastLivePoint
-        return trickplayResMessage(updatedPosition)
+        lastLivePoint = null
+        return updatedPosition
       } else {
-        resetDragPosition()
+        lastLivePoint = null
       }
     } else {
       return updatedPosition

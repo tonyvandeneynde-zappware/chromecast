@@ -114,7 +114,6 @@
 
   const canSeek = (newPosition, currentTime) => {
     if (!isAdSkippingEnabled) return true
-    console.log('buggg ads handler canSeek:')
     const media = playerManager.getMediaInformation()
     const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
 
