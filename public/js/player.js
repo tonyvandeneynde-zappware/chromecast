@@ -919,8 +919,7 @@ com.zappware.chromecast.Player = (function () {
             }).then(function(event) {
                 if (media === that._currentMedia) {
                     const isPaused = resumeState === com.zappware.chromecast.PlayerState.PAUSED
-                    console.log('bugg canPause 1:')
-                    const pauseRes = com.zappware.chromecast.trickplayPolicyHandler.checkPauseResOnPLTV(mediaInfo)
+                    const pauseRes = com.zappware.chromecast.trickplayHandler.checkPauseResOnPLTV(mediaInfo)
                     if (isPaused){
                         if (pauseRes) {
                             playerManager.pause();

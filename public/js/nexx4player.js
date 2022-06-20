@@ -1343,7 +1343,6 @@ com.zappware.chromecast.Nexx4Player = (function () {
         }
 
         _removeScteTags(manifest){
-            console.log('bugg manifest before', manifest)
             const scteStart = '<EventStream schemeIdUri="urn:scte:scte35'
             const scteEnd = '</EventStream>'
             while (true){
@@ -1352,10 +1351,8 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     break
                 }
                 scteTag = scteStart + scteTag + scteEnd
-                console.log('bugg scteTag to remove:', scteTag)
                 manifest = manifest.replace(scteTag, '')
             }
-            console.log('bugg manifest after', manifest)
             return manifest
         }
 
