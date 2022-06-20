@@ -35,6 +35,8 @@ com.zappware.chromecast.trickplayHandler = (function () {
 
     if (!com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
       return com.zappware.chromecast.adsHandler.validateRequestedPlaybackPosition(newPosition, currentTime)
+    } else {
+      return position
     }
   }
 
