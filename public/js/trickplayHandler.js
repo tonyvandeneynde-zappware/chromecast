@@ -34,7 +34,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
     const currentTime = getCurrentTimeSec()
 
     if (!com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
-      return com.zappware.chromecast.trickplayPolicyHandler.checkTrickplayRestrictionOnPLTV(position)
+      return com.zappware.chromecast.trickplayPolicyHandler.checkTrickplayRestrictionOnPLTV(newPosition)
     } else {
       return com.zappware.chromecast.adsHandler.validateRequestedPlaybackPosition(newPosition, currentTime)
     }
