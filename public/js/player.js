@@ -348,6 +348,7 @@ com.zappware.chromecast.Player = (function () {
 
         // setPosition ////////////////////////////////////////////////////////////////////////////////
         setPosition(position, resumeState) {
+            console.log('buggg setPosition:', position)
             var mediaInfo = playerManager.getMediaInformation();
             switch(this._state) {
                 case com.zappware.chromecast.PlayerState.LOADING:
@@ -386,6 +387,7 @@ com.zappware.chromecast.Player = (function () {
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
             position = com.zappware.chromecast.trickplayHandler.validateRequestedPlaybackPosition(position)
+            console.log('bugg position:', position)
             // Fix the requested position in the _positionInfo to avoid positions jumping back and forth
             if (mediaInfo._positionInfo) {
                 mediaInfo._positionInfo.curPosition = position;
