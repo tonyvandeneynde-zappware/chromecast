@@ -386,6 +386,7 @@ com.zappware.chromecast.Player = (function () {
             if (this.getMaxPosition() > this.getMinPosition()) {
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
+            console.log('bugg test 9')
             position = com.zappware.chromecast.trickplayHandler.validateRequestedPlaybackPosition(position)
             console.log('bugg position:', position)
             // Fix the requested position in the _positionInfo to avoid positions jumping back and forth
@@ -440,9 +441,10 @@ com.zappware.chromecast.Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+                    console.log('bugg test 7')
                 return this.isTimeshiftEnabled(mediaInfo) && com.zappware.chromecast.trickplayHandler.canSeek(position)
             }
-
+            console.log('bugg test 8')
             return com.zappware.chromecast.trickplayHandler.canSeek(position)
         }
 
@@ -495,6 +497,7 @@ com.zappware.chromecast.Player = (function () {
 
             // Update the position info and return it
             this._updatePositionInfo(mediaInfo);
+            console.log('bugg test 10')
             com.zappware.chromecast.adsHandler.setTimingForViewedWindow(com.zappware.chromecast.util.getCurrentTime())
             com.zappware.chromecast.adsHandler.checkAdEnterExit()
             return mediaInfo._positionInfo;
@@ -921,6 +924,7 @@ com.zappware.chromecast.Player = (function () {
             }).then(function(event) {
                 if (media === that._currentMedia) {
                     const isPaused = resumeState === com.zappware.chromecast.PlayerState.PAUSED
+                    console.log('bugg test 11')
                     const pauseRes = com.zappware.chromecast.trickplayHandler.checkPauseResOnPLTV(mediaInfo)
                     if (isPaused){
                         if (pauseRes) {
