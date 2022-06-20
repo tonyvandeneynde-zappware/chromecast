@@ -69,7 +69,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     }
   }
 
-  const checkTrickplayRestrictionOnPLTV = (position) => {
+  const validateRequestedPlaybackPositionOnGoingToPLTV = (position) => {
     const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
@@ -144,7 +144,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     setLastLivePoint: setLastLivePoint,
     setPausePoint: setPausePoint,
     checkPauseResOnPLTV: checkPauseResOnPLTV,
-    checkTrickplayRestrictionOnPLTV: checkTrickplayRestrictionOnPLTV
+    validateRequestedPlaybackPositionOnGoingToPLTV: validateRequestedPlaybackPositionOnGoingToPLTV
   }
 }())
 

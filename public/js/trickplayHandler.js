@@ -34,9 +34,9 @@ com.zappware.chromecast.trickplayHandler = (function () {
     const currentTime = getCurrentTimeSec()
 
     if (!com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
-      return com.zappware.chromecast.trickplayPolicyHandler.checkTrickplayRestrictionOnPLTV(newPosition)
-    } else {
       return com.zappware.chromecast.adsHandler.validateRequestedPlaybackPosition(newPosition, currentTime)
+    } else {
+      return newPosition
     }
   }
 
@@ -48,9 +48,9 @@ com.zappware.chromecast.trickplayHandler = (function () {
     }
   }
 
-  const checkTrickplayRestrictionOnPLTV = (position) => {
+  const validateRequestedPlaybackPositionOnGoingToPLTV = (position) => {
     if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
-      return com.zappware.chromecast.trickplayPolicyHandler.checkTrickplayRestrictionOnPLTV(position)
+      return com.zappware.chromecast.trickplayPolicyHandler.validateRequestedPlaybackPositionOnGoingToPLTV(position)
     } else {
       return position
     }
@@ -91,6 +91,6 @@ com.zappware.chromecast.trickplayHandler = (function () {
     canPause: canPause,
     showBlockTrickplayMessage: showBlockTrickplayMessage,
     checkPauseResOnPLTV: checkPauseResOnPLTV,
-    checkTrickplayRestrictionOnPLTV: checkTrickplayRestrictionOnPLTV
+    validateRequestedPlaybackPositionOnGoingToPLTV: validateRequestedPlaybackPositionOnGoingToPLTV
   }
 }())
