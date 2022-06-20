@@ -392,7 +392,8 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
             this.playbackConfig.___workaround = {};
             this.playbackConfig.___workaround.manifestHandler = this.playbackConfig.manifestHandler;
-            com.zappware.chromecast.trickplayHandler.init()
+            // com.zappware.chromecast.adshandler.reset()
+            com.zappware.chromecast.adshandler.initAdsHandler()
 
             this.playbackConfig.manifestHandler = this._manifestHandler.bind(this);
 
@@ -404,7 +405,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
                 const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
 
-                restrictionsEnabled && playbackInfo && com.zappware.chromecast.trickplayHandler.setPolicies(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null, playbackInfo.trickplayRestrictions)
+                restrictionsEnabled && playbackInfo && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null, playbackInfo.trickplayRestrictions)
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned
                                                         // session id as replaceSessionId (WINPUB-1604)
@@ -473,7 +474,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
                 const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
                 const  { adBlocks } =  restrictionsEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
-                restrictionsEnabled && !isVod && media && manifest && com.zappware.chromecast.adsHandler.setAdsBlocks(adBlocks)
+                restrictionsEnabled && !isVod && media && manifest && com.zappware.chromecast.adshandler.setAdsBlocks(adBlocks)
             } catch (error) {
                   console.log(error)
             }
@@ -639,12 +640,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
             com.zappware.chromecast.receiver.setPlaybackMode(com.zappware.chromecast.PlaybackMode.PLTV);
             media._playbackMode = com.zappware.chromecast.PlaybackMode.PLTV;
-            com.zappware.chromecast.trickplayPolicyHandler.setLastLivePoint(com.zappware.chromecast.util.getCurrentTime())
-            com.zappware.chromecast.trickplayPolicyHandler.setPausePoint(com.zappware.chromecast.util.getCurrentTime())
+            com.zappware.chromecast.adshandler.setLastLivePoint(com.zappware.chromecast.util.getCurrentTime())
+            com.zappware.chromecast.adshandler.setPausePoint(com.zappware.chromecast.util.getCurrentTime())
             if (!media._startPLTVat) {
                 media._startPLTVat = com.zappware.chromecast.util.getCurrentTime();
-                com.zappware.chromecast.trickplayPolicyHandler.setLastLivePoint(com.zappware.chromecast.util.getCurrentTime())
-                com.zappware.chromecast.trickplayPolicyHandler.setPausePoint(com.zappware.chromecast.util.getCurrentTime())
+                com.zappware.chromecast.adshandler.setLastLivePoint(com.zappware.chromecast.util.getCurrentTime())
+                com.zappware.chromecast.adshandler.setPausePoint(com.zappware.chromecast.util.getCurrentTime())
             }
         }
 
@@ -733,16 +734,16 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
                     const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
 
-                    restrictionsEnabled && com.zappware.chromecast.trickplayHandler.setPolicies(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null, playbackInfo.trickplayRestrictions)
+                    restrictionsEnabled && com.zappware.chromecast.adshandler.setAdPolicy(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null, playbackInfo.trickplayRestrictions)
                     media.contentUrl = playbackInfo.url;
                     media._playingStartedAt = com.zappware.chromecast.util.getCurrentTime();
                     media._playbackInfo = playbackInfo;
 
                     // Start keep alive timers etc.
                     that._inauguratePlaybackInfo(media._playbackInfo);
-                    position = com.zappware.chromecast.trickplayHandler.validateRequestedPlaybackPosition(position)
+                    const trickplayResOnPltv = com.zappware.chromecast.adshandler.checkTrickplayRestrictionOnPLTV(position)
                     // Reload should trigger a new loadRequest
-                    return that._reloadAndSeek(position, resumeState)
+                    return that._reloadAndSeek(trickplayResOnPltv !== undefined ? trickplayResOnPltv : position, resumeState)
                     .then(function(_media) {
                         if (_media) {
                             _media.contentUrl = playbackInfo.url;
@@ -1107,10 +1108,10 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                   return this._hasPLTV(mediaInfo) && com.zappware.chromecast.trickplayHandler.canPause()
+                   return this._hasPLTV(mediaInfo) && com.zappware.chromecast.adshandler.canPause()
             }
 
-            return com.zappware.chromecast.trickplayHandler.canPause()
+            return com.zappware.chromecast.adshandler.canPause()
         }
 
         // isTimeshiftEnabled /////////////////////////////////////////////////////////////////////////
@@ -1343,6 +1344,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
         }
 
         _removeScteTags(manifest){
+            console.log('bugg manifest before', manifest)
             const scteStart = '<EventStream schemeIdUri="urn:scte:scte35'
             const scteEnd = '</EventStream>'
             while (true){
@@ -1351,8 +1353,10 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     break
                 }
                 scteTag = scteStart + scteTag + scteEnd
+                console.log('bugg scteTag to remove:', scteTag)
                 manifest = manifest.replace(scteTag, '')
             }
+            console.log('bugg manifest after', manifest)
             return manifest
         }
 
