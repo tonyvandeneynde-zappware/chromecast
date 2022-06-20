@@ -33,7 +33,9 @@ com.zappware.chromecast.trickplayHandler = (function () {
   const validateRequestedPlaybackPosition = (newPosition) => {
     const currentTime = getCurrentTimeSec()
 
-    return com.zappware.chromecast.adsHandler.validateRequestedPlaybackPosition(newPosition, currentTime)
+    if (!com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
+      return com.zappware.chromecast.adsHandler.validateRequestedPlaybackPosition(newPosition, currentTime)
+    }
   }
 
   const checkPauseResOnPLTV = (mediaInfo) => {
