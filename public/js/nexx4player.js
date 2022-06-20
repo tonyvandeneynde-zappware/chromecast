@@ -740,9 +740,9 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
                     // Start keep alive timers etc.
                     that._inauguratePlaybackInfo(media._playbackInfo);
-                    position = com.zappware.chromecast.trickplayHandler.checkTrickplayRestrictionOnPLTV(position)
+                    const trickplayResOnPltv = com.zappware.chromecast.trickplayHandler.checkTrickplayRestrictionOnPLTV(position)
                     // Reload should trigger a new loadRequest
-                    return that._reloadAndSeek(position, resumeState)
+                    return that._reloadAndSeek(trickplayResOnPltv !== undefined ? trickplayResOnPltv : position, resumeState)
                     .then(function(_media) {
                         if (_media) {
                             _media.contentUrl = playbackInfo.url;
