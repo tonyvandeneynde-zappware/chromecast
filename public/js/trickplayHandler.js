@@ -54,7 +54,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
     if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
       return com.zappware.chromecast.trickplayPolicyHandler.checkTrickplayRestrictionOnPLTV(position)
     } else {
-      return false
+      return position
     }
   }
 

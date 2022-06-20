@@ -741,7 +741,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
                     // Start keep alive timers etc.
                     that._inauguratePlaybackInfo(media._playbackInfo);
-                    const trickplayResOnPltv = undefined // com.zappware.chromecast.trickplayHandler.checkTrickplayRestrictionOnPLTV(position)
+                    const trickplayResOnPltv = com.zappware.chromecast.trickplayHandler.checkTrickplayRestrictionOnPLTV(position)
                     console.log('bugg trickplayResOnPltv:', trickplayResOnPltv)
                     // Reload should trigger a new loadRequest
                     return that._reloadAndSeek(trickplayResOnPltv !== undefined ? trickplayResOnPltv : position, resumeState)

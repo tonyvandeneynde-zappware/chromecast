@@ -71,7 +71,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const checkTrickplayRestrictionOnPLTV = (position) => {
-    return
     const currentTime = position || getCurrentTimeSec()
     const lastLivePoint = getLastLivePoint()
     const media = playerManager.getMediaInformation()
