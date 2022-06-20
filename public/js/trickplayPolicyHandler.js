@@ -21,7 +21,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const setPolicy = (restrictions = null) => {
-    restrictions = ['SKIP_FORWARD','SKIP_BACKWARD', 'PAUSE']
+    restrictions = ['SKIP_FORWARD']
     setTrickPlayRestrictions(restrictions)
   }
 
@@ -40,7 +40,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
       return false
     }
 
-    if (trickplayPolicy.allow_backward === false && newPosition < currentTime ) {
+    if (trickplayPolicy.allow_backward === false && newPosition < currentTime) {
       com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
       return false
     }
@@ -66,7 +66,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
       playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING && com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
       return playerState === com.zappware.chromecast.PlayerState.PAUSED ? true : false
     } else {
-       return true
+      return true
     }
   }
 
@@ -76,7 +76,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     const mode = media._playbackMode
     let updatedPosition = position
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
-      if (lastLivePoint && currentTime < lastLivePoint  && trickplayPolicy.allow_backward === false) {
+      if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
         updatedPosition = lastLivePoint
         lastLivePoint = null
         return updatedPosition
@@ -95,7 +95,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   const checkPauseResOnPLTV = (mediaInfo) => {
     const pltvMode = mediaInfo && mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV
     const pauseRes = trickplayPolicy && trickplayPolicy.allow_pause === false
-    if (trickplayPolicy && pltvMode && pauseRes){
+    if (trickplayPolicy && pltvMode && pauseRes) {
       return true
     } else {
       return false
@@ -131,7 +131,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
 
   const getPausePoint = () => {
     return pausePoint
- }
+  }
 
   const getTrickplayRestrictionPolicy = () => trickplayPolicy
 
@@ -147,7 +147,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     setPausePoint: setPausePoint,
     checkPauseResOnPLTV: checkPauseResOnPLTV
   }
-
 }())
 
 com.zappware.chromecast.TrickPlayRestriction = {

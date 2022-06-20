@@ -73,7 +73,6 @@ com.zappware.chromecast.trickplayHandler = (function () {
     }
   }
 
-
   /* return the public functions */
   return {
     init: init,
