@@ -48,6 +48,14 @@ com.zappware.chromecast.trickplayHandler = (function () {
     }
   }
 
+  const checkTrickplayRestrictionOnPLTV = (position) => {
+    if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
+      return com.zappware.chromecast.trickplayPolicyHandler.checkTrickplayRestrictionOnPLTV(position)
+    } else {
+      return false
+    }
+  }
+
   /////////////////////
   // Private Methods
   /////////////////////
@@ -82,6 +90,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
     validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
     canPause: canPause,
     showBlockTrickplayMessage: showBlockTrickplayMessage,
-    checkPauseResOnPLTV: checkPauseResOnPLTV
+    checkPauseResOnPLTV: checkPauseResOnPLTV,
+    checkTrickplayRestrictionOnPLTV: checkTrickplayRestrictionOnPLTV
   }
 }())

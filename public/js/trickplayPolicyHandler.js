@@ -21,7 +21,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const setPolicy = (restrictions = null) => {
-    restrictions = ['SKIP_FORWARD']
     setTrickPlayRestrictions(restrictions)
   }
 
@@ -70,22 +69,21 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     }
   }
 
-  const validateRequestedPlaybackPosition = (position) => {
-    const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
+  const checkTrickplayRestrictionOnPLTV = (position) => {
+    const currentTime = position || getCurrentTimeSec()
+    const lastLivePoint = getLastLivePoint()
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
     let updatedPosition = position
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
-      if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
+      if (lastLivePoint && currentTime < lastLivePoint  && trickplayPolicy.allow_backward === false) {
         updatedPosition = lastLivePoint
-        lastLivePoint = null
-        return updatedPosition
+        return trickplayResMessage(updatedPosition)
       } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
         updatedPosition = lastLivePoint
-        lastLivePoint = null
-        return updatedPosition
+        return trickplayResMessage(updatedPosition)
       } else {
-        lastLivePoint = null
+        resetDragPosition()
       }
     } else {
       return updatedPosition
@@ -142,10 +140,10 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     hasRestrictions: hasRestrictions,
     canSeek: canSeek,
     canPause: canPause,
-    validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
     setLastLivePoint: setLastLivePoint,
     setPausePoint: setPausePoint,
-    checkPauseResOnPLTV: checkPauseResOnPLTV
+    checkPauseResOnPLTV: checkPauseResOnPLTV,
+    checkTrickplayRestrictionOnPLTV: checkTrickplayRestrictionOnPLTV
   }
 }())
 
