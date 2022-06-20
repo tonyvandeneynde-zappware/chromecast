@@ -64,6 +64,7 @@
   // Check if the playback position needs to be forced to the start of an ads block.
   //
   const validateRequestedPlaybackPosition = (time, currentTime) => {
+    if (!isAdSkippingEnabled) return time
     console.log('adsHandler - Validating requested playback position', time, '...')
     const mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
@@ -112,6 +113,7 @@
   }
 
   const canSeek = (newPosition, currentTime) => {
+    if (!isAdSkippingEnabled) return true
     const media = playerManager.getMediaInformation()
     const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
 
