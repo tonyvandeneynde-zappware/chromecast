@@ -12,6 +12,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   let trickplayRes = null
 
   const setPolicy = (trickplayRestrictions = null) => {
+    trickplayRestrictions = ['PAUSE']
     if (!isTrickplayBlockingEnabled) return
 
     trickplayRes = trickplayRestrictions
