@@ -101,17 +101,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     }
   }
 
-  const checkPauseResOnPLTV = (mediaInfo) => {
-    return false
-    const pltvMode = mediaInfo && mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV
-    const pauseRes = trickplayPolicy && trickplayPolicy.allow_pause === false
-    if (trickplayPolicy && pltvMode && pauseRes) {
-      return true
-    } else {
-      return false
-    }
-  }
-
   const setLastLivePoint = (position) => {
     lastLivePoint = position
   }
@@ -154,7 +143,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     canPause: canPause,
     setLastLivePoint: setLastLivePoint,
     setPausePoint: setPausePoint,
-    checkPauseResOnPLTV: checkPauseResOnPLTV,
     validateRequestedPlaybackStartPositionForPLTV: validateRequestedPlaybackStartPositionForPLTV,
     setPlaybackMode: setPlaybackMode
   }

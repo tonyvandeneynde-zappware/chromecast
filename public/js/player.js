@@ -918,19 +918,14 @@ com.zappware.chromecast.Player = (function () {
             }).then(function(event) {
                 if (media === that._currentMedia) {
                     const isPaused = resumeState === com.zappware.chromecast.PlayerState.PAUSED
-                    const pauseRes = com.zappware.chromecast.trickplayHandler.checkPauseResOnPLTV(mediaInfo)
-                    console.log('bugg pauseRes:', pauseRes)
                     if (isPaused){
-                        if (pauseRes) {
+                        setTimeout(() => {
                             playerManager.pause();
                             com.zappware.chromecast.trickplayPolicyHandler.setPlaybackMode()
-                        } else {
-                            setTimeout(() => {
-                                playerManager.pause();
-                                com.zappware.chromecast.trickplayPolicyHandler.setPlaybackMode()
-                            }, 3000);
-                            playerManager.play();
-                        }
+                        }, 3000);
+                        playerManager.play();
+                    } else {
+                        com.zappware.chromecast.trickplayPolicyHandler.setPlaybackMode()
                     }
                     that._state = resumeState;
                     com.zappware.chromecast.receiver.onSeeked();
