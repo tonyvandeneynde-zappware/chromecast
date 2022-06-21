@@ -1,7 +1,5 @@
 com.zappware.chromecast.trickplayPolicyHandler = (function () {
 
-  const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
-
   let playbackMode = ''
 
   // Trickplay blocking restrictions
