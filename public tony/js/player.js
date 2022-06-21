@@ -385,7 +385,7 @@ com.zappware.chromecast.Player = (function () {
             if (this.getMaxPosition() > this.getMinPosition()) {
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
-            position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(position)
+            position = com.zappware.chromecast.trickplayHandler.validateRequestedSeekPosition(position)
             // Fix the requested position in the _positionInfo to avoid positions jumping back and forth
             if (mediaInfo._positionInfo) {
                 mediaInfo._positionInfo.curPosition = position;
@@ -438,10 +438,9 @@ com.zappware.chromecast.Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                return this.isTimeshiftEnabled(mediaInfo) && com.zappware.chromecast.adshandler.canSeek(position)
+                return this.isTimeshiftEnabled(mediaInfo) && com.zappware.chromecast.trickplayHandler.canSeek(position)
             }
-
-            return com.zappware.chromecast.adshandler.canSeek(position)
+            return com.zappware.chromecast.trickplayHandler.canSeek(position)
         }
 
         // canJump //////////////////////////////////////////////////////////////////////////////////
@@ -493,8 +492,8 @@ com.zappware.chromecast.Player = (function () {
 
             // Update the position info and return it
             this._updatePositionInfo(mediaInfo);
-            com.zappware.chromecast.adshandler.setTimingForViewedWindow(com.zappware.chromecast.util.getCurrentTime())
-            com.zappware.chromecast.adshandler.checkAdEnterExit()
+            com.zappware.chromecast.adsHandler.setTimingForViewedWindow(com.zappware.chromecast.util.getCurrentTime())
+            com.zappware.chromecast.adsHandler.checkAdEnterExit()
             return mediaInfo._positionInfo;
         }
 
@@ -919,7 +918,7 @@ com.zappware.chromecast.Player = (function () {
             }).then(function(event) {
                 if (media === that._currentMedia) {
                     const isPaused = resumeState === com.zappware.chromecast.PlayerState.PAUSED
-                    const pauseRes = com.zappware.chromecast.adshandler.checkPauseResOnPLTV(mediaInfo)
+                    const pauseRes = com.zappware.chromecast.trickplayHandler.checkPauseResOnPLTV(mediaInfo)
                     if (isPaused){
                         if (pauseRes) {
                             playerManager.pause();
