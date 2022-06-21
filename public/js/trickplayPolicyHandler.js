@@ -188,7 +188,8 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     setPausePoint: setPausePoint,
     checkTrickplayRestrictionOnPLTV: checkTrickplayRestrictionOnPLTV,
     resetDragPosition: resetDragPosition,
-    checkPauseResOnPLTV: checkPauseResOnPLTV
+    checkPauseResOnPLTV: checkPauseResOnPLTV,
+    isTrickplayRestricted: isTrickplayRestricted
   }
 }())
 
