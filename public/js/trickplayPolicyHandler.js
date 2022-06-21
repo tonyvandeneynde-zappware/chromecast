@@ -100,7 +100,9 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     if (!isTrickplayBlockingEnabled) return true
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
+    console.log('bugg mode:', mode)
     const previousMode = playbackMode
+    console.log('bugg previousMode:', previousMode)
     if (mode === com.zappware.chromecast.PlaybackMode.LIVETV || (mode === com.zappware.chromecast.PlaybackMode.PLTV && previousMode === com.zappware.chromecast.PlaybackMode.LIVETV)) return true
     const trickplayPolicy = getTrickplayRestrictionPolicy()
     console.log('bugg trickplayPolicy:', trickplayPolicy)
