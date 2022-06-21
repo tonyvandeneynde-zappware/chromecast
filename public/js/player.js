@@ -494,7 +494,6 @@ com.zappware.chromecast.Player = (function () {
             this._updatePositionInfo(mediaInfo);
             com.zappware.chromecast.adsHandler.setTimingForViewedWindow(com.zappware.chromecast.util.getCurrentTime())
             com.zappware.chromecast.adsHandler.checkAdEnterExit()
-            com.zappware.chromecast.trickplayPolicyHandler.setPlaybackMode()
             return mediaInfo._positionInfo;
         }
 
@@ -924,9 +923,11 @@ com.zappware.chromecast.Player = (function () {
                     if (isPaused){
                         if (pauseRes) {
                             playerManager.pause();
+                            com.zappware.chromecast.trickplayPolicyHandler.setPlaybackMode()
                         } else {
                             setTimeout(() => {
                                 playerManager.pause();
+                                com.zappware.chromecast.trickplayPolicyHandler.setPlaybackMode()
                             }, 3000);
                             playerManager.play();
                         }
