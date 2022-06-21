@@ -84,6 +84,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
     let updatedPosition = null
+    setPlaybackMode()
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
       if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
         updatedPosition = lastLivePoint
