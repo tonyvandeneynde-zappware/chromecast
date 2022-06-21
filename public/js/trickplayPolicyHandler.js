@@ -16,8 +16,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     lastLivePoint = null
     pausePoint = null
     restricted = false
-    const media = playerManager.getMediaInformation()
-    playbackMode = media._playbackMode
+    setPlaybackMode()
   }
 
   const setPolicy = (restrictions = null) => {
@@ -47,6 +46,11 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     }
 
     return true
+  }
+
+  const setPlaybackMode = () => {
+    const media = playerManager.getMediaInformation()
+    playbackMode = media._playbackMode
   }
 
   const canPause = () => {
@@ -151,7 +155,8 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     setLastLivePoint: setLastLivePoint,
     setPausePoint: setPausePoint,
     checkPauseResOnPLTV: checkPauseResOnPLTV,
-    validateRequestedPlaybackStartPositionForPLTV: validateRequestedPlaybackStartPositionForPLTV
+    validateRequestedPlaybackStartPositionForPLTV: validateRequestedPlaybackStartPositionForPLTV,
+    setPlaybackMode: setPlaybackMode
   }
 }())
 

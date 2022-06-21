@@ -466,6 +466,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             const shakaVersion = this._extractString(header, 'shaka-player/', '/shaka-player.compiled')
 
             let media = playerManager.getMediaInformation() || this._currentMedia;
+            com.zappware.chromecast.trickplayPolicyHandler.setPlaybackMode()
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
             try {
                 const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
