@@ -159,11 +159,11 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 let newPosition = _position
                 if (canSeek){
                     // Check if an ad can be detected when the seek time has the same reference as the ads blocks.
-                    newPosition = com.zappware.chromecast.trickplayHandler.validateRequestedPlaybackPosition(_position)
+                    newPosition = com.zappware.chromecast.trickplayHandler.validateRequestedSeekPosition(_position)
                     if (newPosition === _position) {
                         // Also check if an ad can be detected when the seek time with reference to the buffer start but the ads are in epoch time
                         if (adsBlocks.length > 0 && adsBlocks[adsBlocks.length-1].adEndTime > _position + 946681200) { // Don't do the check if the position is in epoch time and the ads are a time with reference to the buffer start.
-                            newPosition = com.zappware.chromecast.trickplayHandler.validateRequestedPlaybackPosition(_position + startAbsoluteTime) - startAbsoluteTime
+                            newPosition = com.zappware.chromecast.trickplayHandler.validateRequestedSeekPosition(_position + startAbsoluteTime) - startAbsoluteTime
                         }
                     }
                 } else {

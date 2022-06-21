@@ -30,11 +30,11 @@ com.zappware.chromecast.trickplayHandler = (function () {
     }
   }
 
-  const validateRequestedPlaybackPosition = (newPosition) => {
+  const validateRequestedSeekPosition = (newPosition) => {
     const currentTime = getCurrentTimeSec()
 
     if (!com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
-      return com.zappware.chromecast.adsHandler.validateRequestedPlaybackPosition(newPosition, currentTime)
+      return com.zappware.chromecast.adsHandler.validateRequestedSeekPosition(newPosition, currentTime)
     } else {
       return newPosition
     }
@@ -48,9 +48,9 @@ com.zappware.chromecast.trickplayHandler = (function () {
     }
   }
 
-  const validateRequestedPlaybackPositionOnGoingToPLTV = (position) => {
+  const validateRequestedPlaybackStartPositionForPLTV = (position) => {
     if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
-      return com.zappware.chromecast.trickplayPolicyHandler.validateRequestedPlaybackPositionOnGoingToPLTV(position)
+      return com.zappware.chromecast.trickplayPolicyHandler.validateRequestedPlaybackStartPositionForPLTV(position)
     } else {
       return position
     }
@@ -87,10 +87,10 @@ com.zappware.chromecast.trickplayHandler = (function () {
     setPolicies: setPolicies,
     canSeek: canSeek,
     getCurrentTimeSec: getCurrentTimeSec,
-    validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
+    validateRequestedSeekPosition: validateRequestedSeekPosition,
     canPause: canPause,
     showBlockTrickplayMessage: showBlockTrickplayMessage,
     checkPauseResOnPLTV: checkPauseResOnPLTV,
-    validateRequestedPlaybackPositionOnGoingToPLTV: validateRequestedPlaybackPositionOnGoingToPLTV
+    validateRequestedPlaybackStartPositionForPLTV: validateRequestedPlaybackStartPositionForPLTV
   }
 }())
