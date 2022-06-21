@@ -68,7 +68,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
         return true
       }
       console.log('bugg playerState:', playerState)
-      playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING && com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
+      playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING && playerState !== com.zappware.chromecast.PlayerState.PAUSED && com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
       return playerState === com.zappware.chromecast.PlayerState.PAUSED ? true : false
     } else {
       return true
@@ -101,6 +101,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   const checkPauseResOnPLTV = (mediaInfo) => {
     const media = playerManager.getMediaInformation()
     playbackMode = media._playbackMode
+    return false
     const pltvMode = mediaInfo && mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV
     const pauseRes = trickplayPolicy && trickplayPolicy.allow_pause === false
     if (trickplayPolicy && pltvMode && pauseRes) {
