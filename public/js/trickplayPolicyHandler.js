@@ -74,7 +74,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
-    let updatedPosition = position
+    let updatedPosition = null
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
       if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
         updatedPosition = lastLivePoint
@@ -87,8 +87,9 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
       } else {
         lastLivePoint = null
       }
+    } else {
+      return updatedPosition
     }
-    return updatedPosition
   }
 
   const checkPauseResOnPLTV = (mediaInfo) => {
