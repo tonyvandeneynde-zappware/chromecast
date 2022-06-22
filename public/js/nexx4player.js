@@ -1105,9 +1105,9 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
         // canPause /////////////////////////////////////////////////////////////////////////////////////
         canPause(mediaInfo) {
-            console.log('bugg canPause 1:', this.senderId)
+            console.log('bugg canPause 1:', this._senderId, that._senderId)
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
-            const userInitiated = this.senderId !== 'local'
+            const userInitiated = this._senderId !== 'local'
             const trickplayCanPause = userInitiated ? com.zappware.chromecast.trickplayHandler.canPause() : true
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
