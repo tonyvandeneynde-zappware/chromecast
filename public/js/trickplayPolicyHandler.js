@@ -5,14 +5,12 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   let lastLivePoint = null
   let pausePoint = null
   let restricted = false
-  let playbackMode = ''
 
   const init = () => {
     trickplayPolicy = null
     lastLivePoint = null
     pausePoint = null
     restricted = false
-    setPlaybackMode()
   }
 
   const setPolicy = (restrictions = null) => {
@@ -46,11 +44,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     return true
   }
 
-  const setPlaybackMode = () => {
-    const media = playerManager.getMediaInformation()
-    playbackMode = media._playbackMode
-  }
-
   const canPause = () => {
     console.log('bugg trickplaypolicy handler canPause:')
     const media = playerManager.getMediaInformation()
@@ -77,6 +70,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const validateRequestedPlaybackStartPositionForPLTV = (position) => {
+    console.log('bugg validateRequestedPlaybackStartPositionForPLTV:', position)
     const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
     setPlaybackMode()
     const media = playerManager.getMediaInformation()
@@ -86,15 +80,18 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
       if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
         updatedPosition = lastLivePoint
         lastLivePoint = null
+        console.log('bugg updatedPosition 1:', updatedPosition)
         return updatedPosition
       } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
         updatedPosition = lastLivePoint
         lastLivePoint = null
+        console.log('bugg updatedPosition 2:', updatedPosition)
         return updatedPosition
       } else {
         lastLivePoint = null
       }
     }
+    console.log('bugg updatedPosition 3:', updatedPosition)
     return updatedPosition
   }
 
@@ -152,7 +149,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     setLastLivePoint: setLastLivePoint,
     setPausePoint: setPausePoint,
     validateRequestedPlaybackStartPositionForPLTV: validateRequestedPlaybackStartPositionForPLTV,
-    setPlaybackMode: setPlaybackMode,
     checkPauseResOnPLTV: checkPauseResOnPLTV
   }
 }())
