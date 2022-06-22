@@ -45,7 +45,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const canPause = () => {
-    return true
     console.log('bugg trickplaypolicy handler canPause:')
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
