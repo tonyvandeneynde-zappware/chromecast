@@ -758,7 +758,8 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
                     // Start keep alive timers etc.
                     that._inauguratePlaybackInfo(media._playbackInfo);
-                    position = com.zappware.chromecast.trickplayHandler.validateRequestedPlaybackStartPositionForPLTV(position)
+                    // position = com.zappware.chromecast.trickplayHandler.validateRequestedPlaybackStartPositionForPLTV(position)
+                    console.log('bugg reloadAndSeek position:', position)
                     // Reload should trigger a new loadRequest
                     return that._reloadAndSeek(position, resumeState)
                     .then(function(_media) {
