@@ -11,12 +11,11 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     lastLivePoint = null
     pausePoint = null
     restricted = false
-    playbackMode = null
   }
 
   const setPolicy = (restrictions = null) => {
     console.log('bugg trickplayHandler setPolicy:', setPolicy)
-    restrictions = ['PAUSE']
+    restrictions = ['PAUSE', 'SKIP_FORWARD']
     setTrickPlayRestrictions(restrictions)
   }
 
@@ -96,17 +95,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     pausePoint = position
   }
 
-  const checkPauseResOnPLTV = (mediaInfo) => {
-    const pltvMode = mediaInfo && mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV
-    const restrictions = getTrickplayRestrictionPolicy()
-    const pauseRes = restrictions && restrictions.allow_pause === false
-    if (restrictions && pltvMode && pauseRes){
-      return true
-    } else {
-      return false
-    }
-  }
-
   //////////////////////////////
   // Private Methods
   //////////////////////////////
@@ -126,10 +114,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     }
   }
 
-  const getPausePoint = () => {
-    return pausePoint
-  }
-
   const getTrickplayRestrictionPolicy = () => trickplayPolicy
 
   /* return the public functions */
@@ -141,8 +125,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     canPause: canPause,
     setLastLivePoint: setLastLivePoint,
     setPausePoint: setPausePoint,
-    validateRequestedPlaybackStartPositionForPLTV: validateRequestedPlaybackStartPositionForPLTV,
-    checkPauseResOnPLTV: checkPauseResOnPLTV
+    validateRequestedPlaybackStartPositionForPLTV: validateRequestedPlaybackStartPositionForPLTV
   }
 }())
 

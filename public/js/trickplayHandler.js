@@ -40,14 +40,6 @@ com.zappware.chromecast.trickplayHandler = (function () {
     }
   }
 
-  const checkPauseResOnPLTV = (mediaInfo) => {
-    if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
-      return com.zappware.chromecast.trickplayPolicyHandler.checkPauseResOnPLTV(mediaInfo)
-    } else {
-      return false
-    }
-  }
-
   const validateRequestedPlaybackStartPositionForPLTV = (position) => {
     if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
       return com.zappware.chromecast.trickplayPolicyHandler.validateRequestedPlaybackStartPositionForPLTV(position)
@@ -90,7 +82,6 @@ com.zappware.chromecast.trickplayHandler = (function () {
     validateRequestedSeekPosition: validateRequestedSeekPosition,
     canPause: canPause,
     showBlockTrickplayMessage: showBlockTrickplayMessage,
-    checkPauseResOnPLTV: checkPauseResOnPLTV,
     validateRequestedPlaybackStartPositionForPLTV: validateRequestedPlaybackStartPositionForPLTV
   }
 }())
