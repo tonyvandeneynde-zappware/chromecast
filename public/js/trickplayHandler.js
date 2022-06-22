@@ -13,7 +13,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
   const canSeek = (newPosition) => {
     const currentTime = getCurrentTimeSec()
 
-    if (com.zappware.chromecast.trickplayPolicyHandler.isTrickplayRestricted()) {
+    if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
       const canSeek = com.zappware.chromecast.trickplayPolicyHandler.canSeek(newPosition, currentTime)
       return canSeek
     } else {
@@ -23,7 +23,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
   }
 
   const canPause = () => {
-    if (com.zappware.chromecast.trickplayPolicyHandler.isTrickplayRestricted()) {
+    if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
       return com.zappware.chromecast.trickplayPolicyHandler.canPause()
     } else {
       return true
@@ -33,7 +33,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
   const validateRequestedSeekPosition = (newPosition) => {
     const currentTime = getCurrentTimeSec()
 
-    if (!com.zappware.chromecast.trickplayPolicyHandler.isTrickplayRestricted()) {
+    if (!com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
       return com.zappware.chromecast.adsHandler.validateRequestedSeekPosition(newPosition, currentTime)
     } else {
       return newPosition
@@ -41,7 +41,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
   }
 
   const checkPauseResOnPLTV = (mediaInfo) => {
-    if (com.zappware.chromecast.trickplayPolicyHandler.isTrickplayRestricted()) {
+    if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
       return com.zappware.chromecast.trickplayPolicyHandler.checkPauseResOnPLTV(mediaInfo)
     } else {
       return false
@@ -49,8 +49,8 @@ com.zappware.chromecast.trickplayHandler = (function () {
   }
 
   const validateRequestedPlaybackStartPositionForPLTV = (position) => {
-    if (com.zappware.chromecast.trickplayPolicyHandler.isTrickplayRestricted()) {
-      return com.zappware.chromecast.trickplayPolicyHandler.checkTrickplayRestrictionOnPLTV(position)
+    if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
+      return com.zappware.chromecast.trickplayPolicyHandler.validateRequestedPlaybackStartPositionForPLTV(position)
     } else {
       return
     }

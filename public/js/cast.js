@@ -108,7 +108,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) PAUSE message to be able to do our own pause handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PAUSE, function (data) {
-        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.pause(), data);
+        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.pause(true), data);
     });
 
     // intercept the (incoming) PLAY message to be able to do our own play handling

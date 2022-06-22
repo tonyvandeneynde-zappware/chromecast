@@ -604,7 +604,8 @@ com.zappware.chromecast.Nexx4Player = (function () {
             return super._selectPreferredTracks(config);
         }
 
-        pause(){
+        pause(userInitiated = false){
+            console.log('bugg canPause 2:', userInitiated)
             DEBUG && log("pause(); state = " + this._state);
 
             if (this._state === com.zappware.chromecast.PlayerState.LOADING) {
@@ -623,7 +624,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             var playbackInfo = media._playbackInfo;
             if (playbackInfo instanceof Promise) {
                 return playbackInfo.then(function(){
-                    return that.pause();
+                    return that.pause(userInitiated);
                 });
             }
 
@@ -1102,15 +1103,17 @@ com.zappware.chromecast.Nexx4Player = (function () {
         }
 
         // canPause /////////////////////////////////////////////////////////////////////////////////////
-        canPause(mediaInfo) {
+        canPause(mediaInfo, userInitiated = false) {
+            console.log('bugg canPause 1:', userInitiated)
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
+            const trickplayCanPause = userInitiated ? com.zappware.chromecast.trickplayHandler.canPause() : true
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                   return this._hasPLTV(mediaInfo) && com.zappware.chromecast.trickplayHandler.canPause()
+                   return this._hasPLTV(mediaInfo) && trickplayCanPause
             }
 
-            return com.zappware.chromecast.trickplayHandler.canPause()
+            return trickplayCanPause
         }
 
         // isTimeshiftEnabled /////////////////////////////////////////////////////////////////////////
