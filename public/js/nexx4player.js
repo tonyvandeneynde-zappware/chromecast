@@ -298,7 +298,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             });
         }
 
-        setSenderId = (id) => {
+        setSenderId(id) {
             this._senderId = id
         }
 
