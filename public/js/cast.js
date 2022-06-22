@@ -110,10 +110,12 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PAUSE, function (data) {
         console.log('bugg =0-=00=0=-0=0 pause MessageInterceptor:', data)
         console.log('bugg localrequests', com.zappware.chromecast.cast._externalRequests)
-        if (com.zappware.chromecast.cast._externalRequests && com.zappware.chromecast.cast._externalRequests.indexOf(data.requestId) < 0) {
-            console.log('bugg pauseniterceptor is local request')
+        let userInitiated = false
+        if (com.zappware.chromecast.cast._externalRequests && com.zappware.chromecast.cast._externalRequests.indexOf(data.requestId) >= 0) {
+            console.log('bugg pauseniterceptor is external request')
+            userInitiated = true
         }
-        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.pause(), data);
+        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.pause(userInitiated), data);
     });
 
     // intercept the (incoming) PLAY message to be able to do our own play handling
