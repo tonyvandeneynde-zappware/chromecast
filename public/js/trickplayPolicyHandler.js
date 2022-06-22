@@ -72,7 +72,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   const validateRequestedPlaybackStartPositionForPLTV = (position) => {
     console.log('bugg validateRequestedPlaybackStartPositionForPLTV:', position)
     const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
-    setPlaybackMode()
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
     let updatedPosition = position
