@@ -604,7 +604,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             return super._selectPreferredTracks(config);
         }
 
-        pause(){
+        pause(userInitiated = false){
             DEBUG && log("pause(); state = " + this._state);
 
             if (this._state === com.zappware.chromecast.PlayerState.LOADING) {
@@ -631,7 +631,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 that._initiatePLTV(media);
             }
 
-            return super.pause();
+            return super.pause(userInitiated);
         }
 
         _initiatePLTV(media){
