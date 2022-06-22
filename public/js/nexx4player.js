@@ -226,24 +226,6 @@ com.zappware.chromecast.Nexx4Player = (function () {
             var heartbeatTimer;
             playerManager.addEventListener(['PLAYER_LOAD_COMPLETE','MEDIA_FINISHED'], (event) => {
                 DEBUG && log("onPlayerManagerEvent(" + event.type + ")");
-                console.log("bugg onPlayerManagerEvent", event.type)
-                if (event.type.senderId && event.type.senderId !== 'local') {
-                    console.log('bugg -=0=00-=0=0=- external event detected:', event)
-                    if (!com.zappware.chromecast.Nexx4Player._externalRequests) {
-                        com.zappware.chromecast.Nexx4Player._externalRequests = [];
-                    }
-                    let requestId = event.type.requestData && event.type.requestData.hasOwnProperty('requestId') && event.type.requestData.requestId;
-                    console.log('bugg add requestId to externalRequests:', requestId)
-                    if (com.zappware.chromecast.Nexx4Player._externalRequests.indexOf(requestId) < 0) {
-                        com.zappware.chromecast.Nexx4Player._externalRequests.unshift(requestId);
-        
-                        // Keep only 10
-                        if (com.zappware.chromecast.Nexx4Player._externalRequests.length > 100) {
-                            com.zappware.chromecast.Nexx4Player._externalRequests.pop();
-                        }
-                    }
-                }
-                console.log('bugg external requests:', com.zappware.chromecast.Nexx4Player._externalRequests)
 
                 if (!CONFIG.broadpeakHeartbeatInterval) {
                     return;
@@ -1122,7 +1104,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
         // canPause /////////////////////////////////////////////////////////////////////////////////////
         canPause(mediaInfo) {
             console.log('bugg =-0=0=-0=0=-0 canPause:')
-            console.log('bugg external requests:', com.zappware.chromecast.Nexx4Player._externalRequests)
+            console.log('bugg external requests:', com.zappware.chromecast.cast._externalRequests)
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
             const userInitiated = true
             const trickplayCanPause = userInitiated ? com.zappware.chromecast.trickplayHandler.canPause() : true

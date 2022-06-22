@@ -964,6 +964,7 @@ com.zappware.chromecast.Player = (function () {
 
                 // A listener for playerManagerEvents will handle things for us.
                 function _handlePlayerManagerEvent(event) {
+                    
                     if (event && event.type === 'PLAYER_LOAD_COMPLETE') {
                         player_load_complete = true;
                     }
