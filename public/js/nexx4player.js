@@ -632,7 +632,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 that._initiatePLTV(media);
             }
 
-            return super.pause();
+            return super.pause(userInitiated);
         }
 
         _initiatePLTV(media){
