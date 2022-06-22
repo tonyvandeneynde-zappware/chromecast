@@ -1105,7 +1105,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
         // canPause /////////////////////////////////////////////////////////////////////////////////////
         canPause(mediaInfo) {
-            console.log('bugg canPause 1:', this._senderId, that._senderId)
+            console.log('bugg canPause 1:', this._senderId)
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
             const userInitiated = this._senderId !== 'local'
             const trickplayCanPause = userInitiated ? com.zappware.chromecast.trickplayHandler.canPause() : true
