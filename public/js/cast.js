@@ -263,12 +263,12 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 break;
         }
 
-        console.log('bugg event.senderId:', event.senderId)
         if (event.senderId === 'local') {
             if (!com.zappware.chromecast.cast._localRequests) {
                 com.zappware.chromecast.cast._localRequests = [];
             }
             let requestId = event.requestData && event.requestData.hasOwnProperty('requestId') && event.requestData.requestId;
+            console.log('bugg event:', event)
             console.log('bugg requestId:', requestId)
             if (com.zappware.chromecast.cast._localRequests.indexOf(requestId) < 0) {
                 com.zappware.chromecast.cast._localRequests.unshift(requestId);

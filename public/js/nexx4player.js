@@ -227,6 +227,24 @@ com.zappware.chromecast.Nexx4Player = (function () {
             playerManager.addEventListener(['PLAYER_LOAD_COMPLETE','MEDIA_FINISHED'], (event) => {
                 DEBUG && log("onPlayerManagerEvent(" + event.type + ")");
 
+                if (event.type.senderId === 'local') {
+                    console.log('bugg local event:', event)
+                    if (!com.zappware.chromecast.Nexx4Player._localRequests) {
+                        com.zappware.chromecast.Nexx4Player._localRequests = [];
+                    }
+                    let requestId = event.type.requestData && event.type.requestData.hasOwnProperty('requestId') && event.type.requestData.requestId;
+                    console.log('bugg event:', event)
+                    console.log('bugg requestId:', requestId)
+                    if (com.zappware.chromecast.Nexx4Player._localRequests.indexOf(requestId) < 0) {
+                        com.zappware.chromecast.Nexx4Player._localRequests.unshift(requestId);
+        
+                        // Keep only 10
+                        if (com.zappware.chromecast.Nexx4Player._localRequests.length > 100) {
+                            com.zappware.chromecast.Nexx4Player._localRequests.pop();
+                        }
+                    }
+                }
+
                 if (!CONFIG.broadpeakHeartbeatInterval) {
                     return;
                 }
@@ -1104,7 +1122,8 @@ com.zappware.chromecast.Nexx4Player = (function () {
         // canPause /////////////////////////////////////////////////////////////////////////////////////
         canPause(mediaInfo) {
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
-            console.log('bugg canPause 1:')
+            console.log('bugg canPause: localrequests: ', com.zappware.chromecast.Nexx4Player._localRequests)
+            const userInitiated = true
             const trickplayCanPause = userInitiated ? com.zappware.chromecast.trickplayHandler.canPause() : true
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
