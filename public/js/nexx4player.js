@@ -226,7 +226,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             var heartbeatTimer;
             playerManager.addEventListener(['PLAYER_LOAD_COMPLETE','MEDIA_FINISHED'], (event) => {
                 DEBUG && log("onPlayerManagerEvent(" + event.type + ")");
-                log("bugg onPlayerManagerEvent", event.type)
+                console.log("bugg onPlayerManagerEvent", event.type)
                 if (event.type.senderId && event.type.senderId !== 'local') {
                     console.log('bugg -=0=00-=0=0=- external event detected:', event)
                     if (!com.zappware.chromecast.Nexx4Player._externalRequests) {
