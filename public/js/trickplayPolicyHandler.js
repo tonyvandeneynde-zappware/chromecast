@@ -67,10 +67,14 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const validateRequestedPlaybackStartPositionForPLTV = (position) => {
+    console.log('bugg validateRequestedPlaybackStartPositionForPLTV -=0=0-=0=-0=0=0= :')
     const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
     let updatedPosition = position
+    console.log('bugg mode:', mode)
+    console.log('bugg lastLivePoint:', lastLivePoint)
+    console.log('bugg trickplayPolicy:', trickplayPolicy)
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
       if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
         updatedPosition = lastLivePoint
@@ -88,6 +92,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const setLastLivePoint = (position) => {
+    console.log('bugg setLastLivePoint:', position)
     lastLivePoint = position
   }
 
