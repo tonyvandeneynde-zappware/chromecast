@@ -919,9 +919,8 @@ com.zappware.chromecast.Player = (function () {
                 if (media === that._currentMedia) {
                     const isPaused = resumeState === com.zappware.chromecast.PlayerState.PAUSED
                     if (isPaused){
-
                         setTimeout(() => {
-                            playerManager.pause()
+                            playerManager.pause({internalRequest})
                         }, 3000);
                         playerManager.play()
                     }
