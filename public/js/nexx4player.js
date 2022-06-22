@@ -629,6 +629,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
             if (media._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV) {
                 that._initiatePLTV(media);
+                userInitiated = false
             }
 
             return super.pause(userInitiated);
