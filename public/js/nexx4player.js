@@ -217,6 +217,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             this._state = com.zappware.chromecast.PlayerState.STOPPED;
             this._maxPlaybackOffset = 3600;
             this._keepSessionAliveTimer;
+            this.senderId = null
 
             // JIRA NEXX4-17023: The Zappware-User-Agent header is navigator.userAgent, prepended with 'chromecast/ (Nexx 4.0)'
             CONFIG.ZappwareUserAgent = `chromecast/${VERSION.split(' ')[0]} (Nexx 4.0) ${navigator.userAgent}`;
@@ -226,6 +227,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             var heartbeatTimer;
             playerManager.addEventListener(['PLAYER_LOAD_COMPLETE','MEDIA_FINISHED'], (event) => {
                 DEBUG && log("onPlayerManagerEvent(" + event.type + ")");
+                this.senderId = event.senderId
 
                 if (!CONFIG.broadpeakHeartbeatInterval) {
                     return;
@@ -604,8 +606,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             return super._selectPreferredTracks(config);
         }
 
-        pause(userInitiated = false){
-            console.log('bugg canPause 2:', userInitiated)
+        pause(){
             DEBUG && log("pause(); state = " + this._state);
 
             if (this._state === com.zappware.chromecast.PlayerState.LOADING) {
@@ -624,7 +625,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             var playbackInfo = media._playbackInfo;
             if (playbackInfo instanceof Promise) {
                 return playbackInfo.then(function(){
-                    return that.pause(userInitiated);
+                    return that.pause();
                 });
             }
 
@@ -632,7 +633,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 that._initiatePLTV(media);
             }
 
-            return super.pause(userInitiated);
+            return super.pause();
         }
 
         _initiatePLTV(media){
@@ -1103,9 +1104,10 @@ com.zappware.chromecast.Nexx4Player = (function () {
         }
 
         // canPause /////////////////////////////////////////////////////////////////////////////////////
-        canPause(mediaInfo, userInitiated = false) {
-            console.log('bugg canPause 1:', userInitiated)
+        canPause(mediaInfo) {
+            console.log('bugg canPause 1:', this.senderId)
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
+            const userInitiated = this.senderId !== 'local'
             const trickplayCanPause = userInitiated ? com.zappware.chromecast.trickplayHandler.canPause() : true
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
