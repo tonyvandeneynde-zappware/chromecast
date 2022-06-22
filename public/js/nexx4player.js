@@ -217,7 +217,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             this._state = com.zappware.chromecast.PlayerState.STOPPED;
             this._maxPlaybackOffset = 3600;
             this._keepSessionAliveTimer;
-            this.senderId = null
+            this._senderId = null
 
             // JIRA NEXX4-17023: The Zappware-User-Agent header is navigator.userAgent, prepended with 'chromecast/ (Nexx 4.0)'
             CONFIG.ZappwareUserAgent = `chromecast/${VERSION.split(' ')[0]} (Nexx 4.0) ${navigator.userAgent}`;
@@ -227,7 +227,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             var heartbeatTimer;
             playerManager.addEventListener(['PLAYER_LOAD_COMPLETE','MEDIA_FINISHED'], (event) => {
                 DEBUG && log("onPlayerManagerEvent(" + event.type + ")");
-                this.senderId = event.senderId
+                this._senderId = event.type.senderId
 
                 if (!CONFIG.broadpeakHeartbeatInterval) {
                     return;
