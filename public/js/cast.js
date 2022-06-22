@@ -109,8 +109,8 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     // intercept the (incoming) PAUSE message to be able to do our own pause handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PAUSE, function (data) {
         console.log('bugg =0-=00=0=-0=0 pause MessageInterceptor:', data)
-        console.log('bugg localrequests', com.zappware.chromecast.Nexx4Player._localRequests)
-        if (com.zappware.chromecast.cast._externalRequests && com.zappware.chromecast.Nexx4Player.cast.indexOf(data.requestId) < 0) {
+        console.log('bugg localrequests', com.zappware.chromecast.cast._localRequests)
+        if (com.zappware.chromecast.cast._externalRequests && com.zappware.chromecast.cast._localRequests.indexOf(data.requestId) < 0) {
             console.log('bugg pauseniterceptor is local request')
         }
         return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.pause(), data);
