@@ -57,7 +57,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     const mode = media._playbackMode
     if (mode === com.zappware.chromecast.PlaybackMode.LIVETV) return true
     const isVod = media && mode === com.zappware.chromecast.PlaybackMode.VOD
-    console.log('bugg trickplayPolicy:', trickplayPolicy)
     if (!trickplayPolicy) return true
     if (trickplayPolicy.allow_pause === false) {
       if (isVod) return true
@@ -67,7 +66,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
         setPausePoint(null)
         return true
       }
-      console.log('bugg playerState:', playerState)
       if (playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING) {
         com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
       }

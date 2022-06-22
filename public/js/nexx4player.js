@@ -228,13 +228,12 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 DEBUG && log("onPlayerManagerEvent(" + event.type + ")");
 
                 if (event.type.senderId === 'local') {
-                    console.log('bugg local event:', event)
+                    console.log('bugg -=0=00-=0=0=- local event detected:', event)
                     if (!com.zappware.chromecast.Nexx4Player._localRequests) {
                         com.zappware.chromecast.Nexx4Player._localRequests = [];
                     }
                     let requestId = event.type.requestData && event.type.requestData.hasOwnProperty('requestId') && event.type.requestData.requestId;
-                    console.log('bugg event:', event)
-                    console.log('bugg requestId:', requestId)
+                    console.log('bugg add requestId to localRequests:', requestId)
                     if (com.zappware.chromecast.Nexx4Player._localRequests.indexOf(requestId) < 0) {
                         com.zappware.chromecast.Nexx4Player._localRequests.unshift(requestId);
         
@@ -244,6 +243,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                         }
                     }
                 }
+                console.log('bugg local requests:', com.zappware.chromecast.Nexx4Player._localRequests)
 
                 if (!CONFIG.broadpeakHeartbeatInterval) {
                     return;
@@ -1121,8 +1121,9 @@ com.zappware.chromecast.Nexx4Player = (function () {
 
         // canPause /////////////////////////////////////////////////////////////////////////////////////
         canPause(mediaInfo) {
+            console.log('bugg =-0=0=-0=0=-0 canPause:')
+            console.log('bugg local requests:', com.zappware.chromecast.Nexx4Player._localRequests)
             mediaInfo = mediaInfo || playerManager.getMediaInformation();
-            console.log('bugg canPause: localrequests: ', com.zappware.chromecast.Nexx4Player._localRequests)
             const userInitiated = true
             const trickplayCanPause = userInitiated ? com.zappware.chromecast.trickplayHandler.canPause() : true
 

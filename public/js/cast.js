@@ -108,11 +108,11 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) PAUSE message to be able to do our own pause handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PAUSE, function (data) {
+        console.log('bugg =0-=00=0=-0=0 pause MessageInterceptor:', data)
+        console.log('bugg localrequests', com.zappware.chromecast.Nexx4Player._localRequests)
         if (com.zappware.chromecast.Nexx4Player._localRequests && com.zappware.chromecast.Nexx4Player._localRequests.indexOf(data.requestId) >= 0) {
             console.log('bugg pauseniterceptor is local request')
         }
-        console.log('bugg pauseniterceptor data:', data)
-        console.log('bugg localrequests', com.zappware.chromecast.Nexx4Player._localRequests)
         return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.pause(), data);
     });
 
@@ -268,8 +268,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 com.zappware.chromecast.cast._localRequests = [];
             }
             let requestId = event.requestData && event.requestData.hasOwnProperty('requestId') && event.requestData.requestId;
-            console.log('bugg event:', event)
-            console.log('bugg requestId:', requestId)
             if (com.zappware.chromecast.cast._localRequests.indexOf(requestId) < 0) {
                 com.zappware.chromecast.cast._localRequests.unshift(requestId);
 
