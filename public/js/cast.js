@@ -109,10 +109,8 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     // intercept the (incoming) PAUSE message to be able to do our own pause handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PAUSE, function (data) {
         console.log('bugg =0-=00=0=-0=0 pause MessageInterceptor:', data)
-        console.log('bugg localrequests', com.zappware.chromecast.cast._externalRequests)
         let userInitiated = false
         if (com.zappware.chromecast.cast._externalRequests && com.zappware.chromecast.cast._externalRequests.indexOf(data.requestId) >= 0) {
-            console.log('bugg pauseniterceptor is external request')
             userInitiated = true
         }
         return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.pause(userInitiated), data);
@@ -212,15 +210,11 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
     playerManager.addEventListener(cast.framework.events.category.CORE, function(event) {
         DEBUG && (event.type !== 'MEDIA_STATUS') && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "onPlayerManagerEvent(" + JSON.stringify(event) + ")");
 
-
-        console.log("bugg onPlayerManagerEvent", event)
         if (event.senderId && event.senderId !== 'local') {
-            console.log('bugg -=0=00-=0=0=- external event detected:', event)
             if (!com.zappware.chromecast.cast._externalRequests) {
                 com.zappware.chromecast.cast._externalRequests = [];
             }
             let requestId = event.requestData && event.requestData.hasOwnProperty('requestId') && event.requestData.requestId;
-            console.log('bugg add requestId to externalRequests:', requestId)
             if (com.zappware.chromecast.cast._externalRequests.indexOf(requestId) < 0) {
                 com.zappware.chromecast.cast._externalRequests.unshift(requestId);
 
@@ -230,8 +224,6 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 }
             }
         }
-        console.log('bugg external requests:', com.zappware.chromecast.cast._externalRequests)
-
 
         var state = com.zappware.chromecast.player.getState();
         switch (event.type) {
