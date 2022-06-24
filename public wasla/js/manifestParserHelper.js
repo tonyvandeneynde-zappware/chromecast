@@ -62,7 +62,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
 
   function getAdsBlockInfo(period, eventStream, typeManifest, mdp) {
     if (!period) return;
-    const adSignallingType = com.zappware.chromecast.adsHandler.getAdSignallingType()
+    const adSignallingType = com.zappware.chromecast.adshandler.getAdSignallingType()
     if (adSignallingType === com.zappware.chromecast.AdSignallingTypes.SCTE35_ZW_1) {
       return getAdBlockInfoOnPTZero(period, eventStream, typeManifest, mdp)
     } else if (adSignallingType === com.zappware.chromecast.AdSignallingTypes.DEFAULT) {
