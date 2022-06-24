@@ -14,8 +14,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const setPolicy = (restrictions = null) => {
-    console.log('bugg trickplayHandler setPolicy:', setPolicy)
-    restrictions = ['SKIP_FORWARD', 'PAUSE']
     setTrickPlayRestrictions(restrictions)
   }
 
@@ -24,13 +22,9 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const canSeek = (newPosition, currentTime) => {
-    console.log('bugg =-0=0=0=-00=0=0 canSeek:')
-    console.log('bugg currentTime:', currentTime)
-    console.log('bugg newPosition:', newPosition)
     const media = playerManager.getMediaInformation()
     const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
     const trickplayPolicy = getTrickplayRestrictionPolicy()
-    console.log('bugg trickplayPolicy:', trickplayPolicy)
 
     if (!trickplayPolicy) return true
 
@@ -50,10 +44,8 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const canPause = () => {
-    console.log('bugg trickplaypolicy handler canPause -=0=00-==-0=- :')
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
-    console.log('bugg mode:', mode)
     if (!trickplayPolicy) return true
     if (mode === com.zappware.chromecast.PlaybackMode.LIVETV) return true
     if (mode === com.zappware.chromecast.PlaybackMode.VOD) return true
@@ -63,7 +55,6 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
       if (playerState && playerState !== com.zappware.chromecast.PlayerState.SEEKING) {
         com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
       }
-
       return playerState === com.zappware.chromecast.PlayerState.PAUSED ? true : false
     } else {
       return true
@@ -71,37 +62,26 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const validateRequestedPlaybackStartPositionForPLTV = (position) => {
-    console.log('bugg validateRequestedPlaybackStartPositionForPLTV -=0=0-=0=-0=0=0= :')
     const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
-    console.log('bugg currentTime:', currentTime)
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
-    let updatedPosition = position
-    console.log('bugg mode:', mode)
-    console.log('bugg lastLivePoint:', lastLivePoint)
-    console.log('bugg trickplayPolicy:', trickplayPolicy)
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
       if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
-        console.log('bugg check 1')
         com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
-        updatedPosition = lastLivePoint
         lastLivePoint = null
-        return updatedPosition
+        return lastLivePoint
       } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
-        console.log('bugg check 2')
         com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
-        updatedPosition = lastLivePoint
         lastLivePoint = null
-        return updatedPosition
+        return lastLivePoint
       } else {
         lastLivePoint = null
       }
     }
-    return updatedPosition
+    return position
   }
 
   const setLastLivePoint = (position) => {
-    console.log('bugg setLastLivePoint:', position)
     lastLivePoint = position
   }
 
