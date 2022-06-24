@@ -15,7 +15,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
 
   const setPolicy = (restrictions = null) => {
     console.log('bugg trickplayHandler setPolicy:', setPolicy)
-    restrictions = ['SKIP_FORWARD']
+    restrictions = ['SKIP_FORWARD', 'PAUSE']
     setTrickPlayRestrictions(restrictions)
   }
 
