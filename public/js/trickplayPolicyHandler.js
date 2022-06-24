@@ -81,10 +81,12 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     console.log('bugg trickplayPolicy:', trickplayPolicy)
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
       if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
+        com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
         updatedPosition = lastLivePoint
         lastLivePoint = null
         return updatedPosition
       } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
+        com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
         updatedPosition = lastLivePoint
         lastLivePoint = null
         return updatedPosition
