@@ -108,7 +108,12 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     // intercept the (incoming) PAUSE message to be able to do our own pause handling
     playerManager.setMessageInterceptor(cast.framework.messages.MessageType.PAUSE, function (data) {
-        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.pause(), data);
+
+        let userInitiated = false
+        if (_.includes(com.zappware.chromecast.cast._externalRequests, data.requestId)) {
+            userInitiated = true
+        }
+        return _handleResponseFromInterceptedRequest(com.zappware.chromecast.player.pause(userInitiated), data);
     });
 
     // intercept the (incoming) PLAY message to be able to do our own play handling
@@ -148,21 +153,22 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
                 // TEMPORARY workaround for strange iOS implementation NEXX4-30295
                 // In PLTV a seek from iOS sometimes has a time with reference to the start of the buffer and sometimes it is an epoch time. Depends on weather the buttons or dragging the progress bar was used to trigger the seek.
-                const adsBlocks = com.zappware.chromecast.adshandler.getAdsBlocks()
+                const adsBlocks = com.zappware.chromecast.adsHandler.getAdsBlocks()
                 const startAbsoluteTime = playerManager.getMediaInformation().startAbsoluteTime
-                const canSeek = com.zappware.chromecast.adshandler.canSeek(_position)
-                let canSeekEpoch = true
-                if (adsBlocks.length > 0 && adsBlocks[adsBlocks.length-1].adEndTime > _position + 946681200) { // Don't do the check if the position is in epoch time and the ads are a time with reference to the buffer start.
-                    canSeekEpoch = com.zappware.chromecast.adshandler.canSeek(_position + startAbsoluteTime)
+                let canSeek = true
+                if (Math.abs(_position - com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()) > 31536000) {
+                    canSeek = com.zappware.chromecast.trickplayHandler.canSeek(_position + startAbsoluteTime)
+                } else {
+                    canSeek = com.zappware.chromecast.trickplayHandler.canSeek(_position)
                 }
                 let newPosition = _position
-                if (canSeek && canSeekEpoch){
+                if (canSeek){
                     // Check if an ad can be detected when the seek time has the same reference as the ads blocks.
-                    newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position)
+                    newPosition = com.zappware.chromecast.trickplayHandler.validateRequestedSeekPosition(_position)
                     if (newPosition === _position) {
                         // Also check if an ad can be detected when the seek time with reference to the buffer start but the ads are in epoch time
                         if (adsBlocks.length > 0 && adsBlocks[adsBlocks.length-1].adEndTime > _position + 946681200) { // Don't do the check if the position is in epoch time and the ads are a time with reference to the buffer start.
-                            newPosition = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(_position + startAbsoluteTime) - startAbsoluteTime
+                            newPosition = com.zappware.chromecast.trickplayHandler.validateRequestedSeekPosition(_position + startAbsoluteTime) - startAbsoluteTime
                         }
                     }
                 } else {
@@ -203,6 +209,11 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
 
     playerManager.addEventListener(cast.framework.events.category.CORE, function(event) {
         DEBUG && (event.type !== 'MEDIA_STATUS') && com.zappware.chromecast.util.log("com.zappware.chromecast.cast", "onPlayerManagerEvent(" + JSON.stringify(event) + ")");
+
+        if (event.senderId && event.senderId !== 'local') {
+            _addExternalRequest(event)
+        }
+
         var state = com.zappware.chromecast.player.getState();
         switch (event.type) {
             case 'RATE_CHANGE':
@@ -272,6 +283,21 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
             }
         }
     });
+
+    function _addExternalRequest(event) {
+        if (!com.zappware.chromecast.cast._externalRequests) {
+            com.zappware.chromecast.cast._externalRequests = [];
+        }
+        const requestId = event.requestData && event.requestData.hasOwnProperty('requestId') && event.requestData.requestId;
+        if (!_.includes(com.zappware.chromecast.cast._externalRequests, requestId)) {
+            com.zappware.chromecast.cast._externalRequests.unshift(requestId);
+
+            // Keep only 50
+            if (com.zappware.chromecast.cast._externalRequests.length > 50) {
+                com.zappware.chromecast.cast._externalRequests.pop();
+            }
+        }
+    }
 
     function _onEventThatRequiresStop(event) {
         if (!event) {

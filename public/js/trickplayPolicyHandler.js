@@ -23,6 +23,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const canSeek = (newPosition, currentTime) => {
+    console.log('bugg canSeek:', newPosition, currentTime)
     const media = playerManager.getMediaInformation()
     const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
     const trickplayPolicy = getTrickplayRestrictionPolicy()
@@ -63,9 +64,12 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const validateRequestedPlaybackStartPositionForPLTV = (position) => {
+    console.log('bugg validateRequestedPlaybackStartPositionForPLTV:')
     const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
+    console.log('bugg currentTime:', currentTime)
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
+    console.log('bugg lastLivePoint:', lastLivePoint)
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
       if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
         com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
