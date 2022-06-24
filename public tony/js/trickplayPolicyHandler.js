@@ -24,9 +24,13 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   }
 
   const canSeek = (newPosition, currentTime) => {
+    console.log('bugg =-0=0=0=-00=0=0 canSeek:')
+    console.log('bugg currentTime:', currentTime)
+    console.log('bugg newPosition:', newPosition)
     const media = playerManager.getMediaInformation()
     const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
     const trickplayPolicy = getTrickplayRestrictionPolicy()
+    console.log('bugg trickplayPolicy:', trickplayPolicy)
 
     if (!trickplayPolicy) return true
 
@@ -69,6 +73,7 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
   const validateRequestedPlaybackStartPositionForPLTV = (position) => {
     console.log('bugg validateRequestedPlaybackStartPositionForPLTV -=0=0-=0=-0=0=0= :')
     const currentTime = position || com.zappware.chromecast.trickplayHandler.getCurrentTimeSec()
+    console.log('bugg currentTime:', currentTime)
     const media = playerManager.getMediaInformation()
     const mode = media._playbackMode
     let updatedPosition = position
@@ -77,10 +82,14 @@ com.zappware.chromecast.trickplayPolicyHandler = (function () {
     console.log('bugg trickplayPolicy:', trickplayPolicy)
     if (mode === com.zappware.chromecast.PlaybackMode.PLTV && currentTime !== null && lastLivePoint !== null) {
       if (lastLivePoint && currentTime < lastLivePoint && trickplayPolicy.allow_backward === false) {
+        console.log('bugg check 1')
+        com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
         updatedPosition = lastLivePoint
         lastLivePoint = null
         return updatedPosition
       } else if (lastLivePoint && currentTime > lastLivePoint && trickplayPolicy.allow_forward === false) {
+        console.log('bugg check 2')
+        com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('trickPlayRestrictions')
         updatedPosition = lastLivePoint
         lastLivePoint = null
         return updatedPosition
