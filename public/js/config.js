@@ -4,70 +4,93 @@
  * Zappware.
  **/
 
-const TAG_CONFIG_REF = {
-    pathEvo: 'http://10.11.1.250:8891/ext_dev_facade',
-    pathMW: 'http://10.11.1.250:8080/sdsmiddleware/A1/graphql/4.0'
+ const WIND_CONFIG_BRANCH1 = {
+  graphqlEndpoint: 'https://client.branch1.sdscloud.zappware.com/secure/v1/graphql',
+  sessionEndpoint: '',
+  awsIdentityPoolId: 'eu-west-1:3414929c-c29a-4b14-8959-d6669ec3a50f',
+  awsDomain: 'cboauth.eu.auth0.com',
+  awsRegion: 'eu-west-1',
+  awsAuthenticationType: 'AWS_IAM',
+  pathLic: 'https://lic.drmtoday.com/license-proxy-headerauth/drmtoday/RightsManager.asmx?assetId=$ASSET_ID$',
+  broadpeakHeartbeatInterval: 20, // in seconds
+  jwtToken: '',
+  deviceId: '',
+  householdId: '',
+  aesEncKey: '',
+  aesInitVector: ''
 };
 
-const TAG_CONFIG_JULIET = {
-    pathEvo: 'http://sdsevowebott.juliet.a1.net:8890/ext_dev_facade',
-    pathMW: 'http://sdsevowebott.juliet.a1.net:8080/sdsmiddleware/A1/graphql/4.0'
+ const WIND_CONFIG_DEV = {
+  graphqlEndpoint: 'https://client.dev.cbo.zappware.com/secure/v1/graphql',
+  sessionEndpoint: '',
+  awsIdentityPoolId: 'eu-west-1:fdc21ef4-4982-4102-bd18-d8508b9839a9',
+  awsDomain: 'cboauth.eu.auth0.com',
+  awsRegion: 'eu-west-1',
+  awsAuthenticationType: 'OID',
+  pathLic: 'https://lic.drmtoday.com/license-proxy-headerauth/drmtoday/RightsManager.asmx?assetId=$ASSET_ID$',
+  broadpeakHeartbeatInterval: 20, // in seconds
+  jwtToken: '',
+  deviceId: '',
+  householdId: '',
+  aesEncKey: '',
+  aesInitVector: ''
 };
 
-const TAG_CONFIG_ROMEO = {
-    pathEvo: 'https://sdsevowebott.romeo.a1.net:8890/ext_dev_facade',
-    pathMW: 'https://sdsevowebott.romeo.a1.net:8080/sdsmiddleware/A1/graphql/4.0',
-    pathLic: 'https://widevine.romeo.a1.net:8063?deviceId=$DEVICE_ID$'
+const WIND_CONFIG_STAGING = {
+    graphqlEndpoint: 'https://client.staging.tvclient.wind.gr/secure/v1/graphql',
+    sessionEndpoint: '',
+    awsIdentityPoolId: 'eu-west-1:29f9f02f-0ed0-4a71-8edf-d1f7871fafbb',
+    awsDomain: 'cboauth.eu.auth0.com',
+    awsRegion: 'eu-west-1',
+    awsAuthenticationType: 'OID',
+    pathLic: 'https://lic.drmtoday.com/license-proxy-headerauth/drmtoday/RightsManager.asmx?assetId=$ASSET_ID$',
+    broadpeakHeartbeatInterval: 20, // in seconds
+    jwtToken: '',
+    deviceId: '',
+    householdId: '',
+    aesEncKey: '',
+    aesInitVector: ''
 };
 
-const TAG_CONFIG_PROD = {
-    pathEvo: 'https://sdsevowebott.showtime.a1.net:8843/ext_dev_facade',
-    pathMW: 'https://sdsevowebott.showtime.a1.net:8443/sdsmiddleware/A1/graphql/4.0',
-    pathLic: 'https://widevine.showtime.a1.net:8063?deviceId=$DEVICE_ID$'
+const WIND_CONFIG_PROD = {
+
 };
 
-const TAG_CONFIG_MK_DEV = {
-    pathEvo: 'https://test-web.xploretv.mk:8843/ext_dev_facade',
-    pathMW:  'https://test-web.xploretv.mk:8443/sdsmiddleware/A1_Macedonia/graphql/4.0',
-    pathLic: 'https://widevine.xploretv.mk:8063?deviceId=$DEVICE_ID$'
-};
+// Assume the DEV configuration -> This can be overruled with setConfig.
+const WIND_CONFIG = WIND_CONFIG_DEV;
+const SDS_CLOUD_CONFIG = WIND_CONFIG;
+const CONFIG = SDS_CLOUD_CONFIG;
 
-// Assume the PROD configuration -> This can be overruled with setConfig.
-var TAG_CONFIG = TAG_CONFIG_PROD;
-var CONFIG = TAG_CONFIG;
+SDS_CLOUD_CONFIG.bookmarkInterval = 60; // in seconds
+SDS_CLOUD_CONFIG.offsetToLive = 5; // in seconds
+SDS_CLOUD_CONFIG.maxPLTVBufferSize = (3600 * 12); // in seconds
+SDS_CLOUD_CONFIG.sendKeepAliveMutation = false; // Toggle for sending the Keep Alive mutations
+SDS_CLOUD_CONFIG.adSkippingEnabled = false; // Toggle for ads skipping feature
+SDS_CLOUD_CONFIG.adSignallingTypeEnabled = false; // Toggle for ads signalling type
+SDS_CLOUD_CONFIG.trickplayBlockingEnabled = false; // Toggle for trickplay restriction
 
-TAG_CONFIG.bookmarkInterval = 300; // in seconds
-TAG_CONFIG.offsetToLive = 6; // in seconds
-TAG_CONFIG.maxPLTVBufferSize = 3600; // in seconds
-TAG_CONFIG.sendKeepAliveMutation = true; // Toggle for sending the Keep Alive mutations
-TAG_CONFIG.adSkippingEnabled = true; // Toggle for ads skipping feature
-TAG_CONFIG.adSignallingTypeEnabled = true; // Toggle for ads signalling type
-TAG_CONFIG.trickplayBlockingEnabled = true; // Toggle for trickplay restriction
-
-// Uncomment the line below for deployments with broadbeak (A1 Croatia):
-// TAG_CONFIG.broadpeakHeartbeatInterval = 20; // in seconds
 
 const DEFAULT_CONFIG = {
-    language: 'deu',
+    language: 'gre',
     showStatistics: !!DEBUG,
     bannerTimeout: 5,
     ageRating: 18,
     ageRatingLockWhenEqual: false,
     ampmDateFormat: false,
     playback: {
-      audioLanguagePreference: ['de', 'en'],
-      subtitleLanguagePreference: ['de', 'en'],
+      audioLanguagePreference: ['gr', 'en'],
+      subtitleLanguagePreference: ['gr', 'en'],
       hardOfHearing: false,
       visuallyImpaired: false
     },
     qos: {
       maxLoadDuration: 20000,
-      autoPauseDuration: 1,
-      autoResumeNumberOfSegments: 1,
+      autoPauseDuration: 0.2,
+      autoResumeDuration: 0.2,
       initialBandwidth: 600000
     },
     blackout: [],
     customData: {}
 };
 
-const FONTS = ['FontSans','FontSansBold','FontSerifBold','WebIcons'];
+const FONTS = ['FontSans','FontSansBold'];
