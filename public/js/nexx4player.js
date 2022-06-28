@@ -250,6 +250,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
         }
 
         initialize(config) {
+            console.log('bugg initialize nexx4Player:', config)
             super.initialize(config);
 
             if (config.customData) {

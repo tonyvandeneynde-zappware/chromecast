@@ -11,6 +11,7 @@ com.zappware.chromecast.WindPlayer = (function () {
     return class extends com.zappware.chromecast.SDSCloudPlayer {
 
         initialize(config) {
+            console.log('bugg initialize SDSCloud Player:')
             super.initialize(config);
 
             // Add custom error
