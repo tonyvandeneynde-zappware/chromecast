@@ -15,7 +15,6 @@ var CastlabsPlayer = /*#__PURE__*/_createClass(function CastlabsPlayer() {
   _classCallCheck(this, CastlabsPlayer);
 
   _defineProperty(this, "init", function () {
-    console.log('constructor CLPP:');
     _this.player = new clpp.Player('castPlayer', {
       license: '<your_license_key>'
     });
