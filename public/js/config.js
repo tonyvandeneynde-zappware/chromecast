@@ -42,6 +42,7 @@ TAG_CONFIG.maxPLTVBufferSize = 3600; // in seconds
 TAG_CONFIG.sendKeepAliveMutation = true; // Toggle for sending the Keep Alive mutations
 TAG_CONFIG.adSkippingEnabled = true; // Toggle for ads skipping feature
 TAG_CONFIG.adSignallingTypeEnabled = true; // Toggle for ads signalling type
+TAG_CONFIG.trickplayBlockingEnabled = true; // Toggle for trickplay restriction
 
 // Uncomment the line below for deployments with broadbeak (A1 Croatia):
 // TAG_CONFIG.broadpeakHeartbeatInterval = 20; // in seconds
