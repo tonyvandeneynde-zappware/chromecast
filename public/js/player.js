@@ -204,8 +204,8 @@ com.zappware.chromecast.Player = (function () {
         }
 
         // pause ///////////////////////////////////////////////////////////////////////////////////////
-        pause(userInitiated = false) {
-            if (this.canPause(null, userInitiated)) {
+        pause() {
+            if (this.canPause()) {
                 switch(this._state) {
                     case com.zappware.chromecast.PlayerState.SEEKING:
                     case com.zappware.chromecast.PlayerState.PAUSED:
@@ -368,13 +368,6 @@ com.zappware.chromecast.Player = (function () {
 
             if (!this.canSeek(mediaInfo, position)) {
                 DEBUG && log("setPosition(" + position + ") ignored: setPosition not supported.");
-                const isPaused = resumeState === com.zappware.chromecast.PlayerState.PAUSED
-               if (isPaused){
-                setTimeout(() => {
-                    playerManager.pause();
-                    }, 0);
-                    playerManager.play();
-               }
                 return;
             }
 
@@ -385,7 +378,7 @@ com.zappware.chromecast.Player = (function () {
             if (this.getMaxPosition() > this.getMinPosition()) {
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
-            position = com.zappware.chromecast.trickplayHandler.validateRequestedSeekPosition(position)
+            position = com.zappware.chromecast.adshandler.validateRequestedPlaybackPosition(position)
             // Fix the requested position in the _positionInfo to avoid positions jumping back and forth
             if (mediaInfo._positionInfo) {
                 mediaInfo._positionInfo.curPosition = position;
@@ -438,9 +431,10 @@ com.zappware.chromecast.Player = (function () {
 
             if (mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mediaInfo._playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
-                return this.isTimeshiftEnabled(mediaInfo) && com.zappware.chromecast.trickplayHandler.canSeek(position)
+                return this.isTimeshiftEnabled(mediaInfo) && com.zappware.chromecast.adshandler.canSeek(position)
             }
-            return com.zappware.chromecast.trickplayHandler.canSeek(position)
+
+            return com.zappware.chromecast.adshandler.canSeek(position)
         }
 
         // canJump //////////////////////////////////////////////////////////////////////////////////
@@ -492,8 +486,8 @@ com.zappware.chromecast.Player = (function () {
 
             // Update the position info and return it
             this._updatePositionInfo(mediaInfo);
-            com.zappware.chromecast.adsHandler.setTimingForViewedWindow(com.zappware.chromecast.util.getCurrentTime())
-            com.zappware.chromecast.adsHandler.checkAdEnterExit()
+            com.zappware.chromecast.adshandler.setTimingForViewedWindow(com.zappware.chromecast.util.getCurrentTime())
+            com.zappware.chromecast.adshandler.checkAdEnterExit()
             return mediaInfo._positionInfo;
         }
 
@@ -891,7 +885,6 @@ com.zappware.chromecast.Player = (function () {
                 DEBUG && log("calling seek " + position);
                 playerManager.seek(position);
                 promise = this._waitForEvent('SEEKED');
-
             }
 
             // If no or bad resumeState, assume it is PLAYING
@@ -917,16 +910,8 @@ com.zappware.chromecast.Player = (function () {
                 }
             }).then(function(event) {
                 if (media === that._currentMedia) {
-                    const isPaused = resumeState === com.zappware.chromecast.PlayerState.PAUSED
-                    if (isPaused){
-                        setTimeout(() => {
-                            playerManager.pause()
-                        }, 3000);
-                        playerManager.play()
-                    }
-                    that._state = resumeState
-                    com.zappware.chromecast.receiver.onSeeked()
-
+                    that._state = resumeState;
+                    com.zappware.chromecast.receiver.onSeeked();
                 }
             });
         }

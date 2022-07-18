@@ -40,8 +40,7 @@ const GLOBALTEXT =
                 formatProgressLong: "HH:mm:ss",
                 formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
                 blockSkipAd: "Forward skipping is not allowed during ad breaks.",
-                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel.",
-                trickPlayRestrictions: "Trick play is disabled on this channel.",
+                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel."
             },
             'german': {
                 contentLockedTitle: "PIN eingeben",
@@ -64,8 +63,7 @@ const GLOBALTEXT =
                 formatProgressLong: "HH:mm:ss",
                 formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
                 blockSkipAd: "Zeitsprünge sind während eines Werbeblocks nicht erlaubt.",
-                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel.",
-                trickPlayRestrictions: "Trick play is disabled on this channel.",
+                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel."
             },
             'croatian': {
                 contentLockedTitle: "Enter PIN",
@@ -88,8 +86,7 @@ const GLOBALTEXT =
                 formatProgressLong: "HH:mm:ss",
                 formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
                 blockSkipAd: "Forward skipping is not allowed during ad breaks.",
-                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel.",
-                trickPlayRestrictions: "Trick play is disabled on this channel.",
+                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel."
             },
             'slovenian': {
                 contentLockedTitle: "Enter PIN",
@@ -112,8 +109,7 @@ const GLOBALTEXT =
                 formatProgressLong: "HH:mm:ss",
                 formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
                 blockSkipAd: "Forward skipping is not allowed during ad breaks.",
-                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel.",
-                trickPlayRestrictions: "Trick play is disabled on this channel.",
+                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel."
             },
             'bulgarian': {
                 contentLockedTitle: "Enter PIN",
@@ -136,8 +132,7 @@ const GLOBALTEXT =
                 formatProgressLong: "HH:mm:ss",
                 formatProgressLongAMPM: "h:mm:ss\xa0A", // Use NO-BREAK SPACE to avoid collapsing space
                 blockSkipAd: "Forward skipping is not allowed during ad breaks.",
-                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel.",
-                trickPlayRestrictions: "Trick play is disabled on this channel.",
+                blockTrickPlayOnChannelLevel: "Forwarding is not allowed on this channel."
             }
         }
     };

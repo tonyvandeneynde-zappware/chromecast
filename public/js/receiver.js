@@ -674,11 +674,8 @@ com.zappware.chromecast.receiver = (function () {
      */
     function setCurrentPosition(params) {
         if (params.mediaSessionToken === mediaSessionToken) {
-            const playerState = com.zappware.chromecast.player.getState();
-            const resumeState =
-                (params.resumeState === 'PLAYBACK_PAUSE' || playerState === com.zappware.chromecast.PlayerState.PAUSED) ?
-                com.zappware.chromecast.PlayerState.PAUSED :
-                undefined;
+            var resumeState = (params.resumeState === 'PLAYBACK_PAUSE') ? com.zappware.chromecast.PlayerState.PAUSED : undefined;
+
             // Translate to absolute position; This is needed when the request comes in via cast.framework.messages.MessageType.SEEK
             if (mode === com.zappware.chromecast.PlaybackMode.LIVETV ||
                 mode === com.zappware.chromecast.PlaybackMode.PLTV   ){

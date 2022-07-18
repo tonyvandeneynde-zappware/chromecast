@@ -4,16 +4,22 @@
  * Zappware.
  **/
 
- com.zappware.chromecast.adsHandler = (function () {
-
-  const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+ com.zappware.chromecast.adshandler = (function () {
 
   let activeAd = null
+
   let adPolicy = null
+
   let signallingType = 'DEFAULT'
+
   let adsBlocks = []
+
+  let isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+
   let removedAds = {}
+
   let adSkippingWindows = []
+
   let playbackMode = ''
 
   //
@@ -29,14 +35,9 @@
   * clients must be able to ignore unknown AdPlaybackResctriction scenarios.
   * BLOCK_SKIP_AND_FAST_FORWARD => Indicates that fast forwarding through ads and skipping in ads is not allowed.
   */
-  const setPolicy = (adPlayBackRestrictions, adSignallingType) => {
+  const setAdPolicy = (adPlayBackRestrictions, adSignallingType) => {
     if (!isAdSkippingEnabled) return
-    /**
-     *If for a given timeshift mode and device category trick modes
-     are blocked on the channel level, all trick modes restrictions
-     on the ad level are dropped for this timeshift mode and device category.
-     */
-    _.forEach(adPlayBackRestrictions, res => {
+    _.map(adPlayBackRestrictions, res => {
       if (res === 'BLOCK_SKIP_AND_FAST_FORWARD') {
         adPolicy = {
           allow_skip: false
@@ -58,13 +59,14 @@
     else {
       signallingType = com.zappware.chromecast.AdSignallingTypes.UNKNOWN
     }
-  }
+
+}
 
   //
   // Check if the playback position needs to be forced to the start of an ads block.
   //
-  const validateRequestedSeekPosition = (time, currentTime) => {
-    if (!isAdSkippingEnabled) return time
+  const validateRequestedPlaybackPosition = (time) => {
+    if (!isAdSkippingEnabled) return
     console.log('adsHandler - Validating requested playback position', time, '...')
     const mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
@@ -76,10 +78,10 @@
     if (adPolicy) {
       // skipping not allowed
       if (!activeAd) {
-        const jumpedBackward = currentTime >= time
+        const jumpedBackward = getCurrentTimeSec() >= time
         // ad blocks
         if (!jumpedBackward) {
-          const firstAdsBlock = findFirstAdsBlock(time, currentTime)
+          const firstAdsBlock = findFirstAdsBlock(time, getCurrentTimeSec())
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
             updatedTime = firstAdsBlock.adStartTime + 0.2 // +0.2 because when jumping to adStartTime exactly the player hangs for some currently unknown reason
@@ -92,7 +94,7 @@
 
   const checkAdEnterExit = () => {
     if (!isAdSkippingEnabled) return
-    const currentTime = com.zappware.chromecast.trickplayHandler.getCurrentTimeSec();
+    const currentTime = getCurrentTimeSec();
     if (activeAd && activeAd.adEndTime < currentTime) {
       handleAdsBlockExitEvent(activeAd);
     }
@@ -112,23 +114,21 @@
     }
   }
 
-  const canSeek = (newPosition, currentTime) => {
-    if (!isAdSkippingEnabled) return true
+  const canSeek = (position) => {
+    if (!isAdSkippingEnabled) return
+    const currentTime = getCurrentTimeSec()
     const media = playerManager.getMediaInformation()
     const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
-
     if (signallingType === 'UNKNOWN') { // Block on channel-level
-        if (isVod) return true
-
-        if (position > currentTime) {
-          com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('blockTrickPlayOnChannelLevel')
-          return false
+        if (!isVod) {
+          const shouldBlockTrickPlay =  blockTrickPlay(position, currentTime)
+          return shouldBlockTrickPlay ? false : true
         } else {
           return true
         }
     } else {
-      if (activeAd && newPosition > currentTime ) {
-        com.zappware.chromecast.trickplayHandler.showBlockTrickplayMessage('blockSkipAd')
+      if (activeAd && position > currentTime ) {
+        showAdSkippingMessage()
         return false
       }
     }
@@ -136,6 +136,7 @@
   }
 
   const handleAdsBlockEnterEvent = (adsBlock) => {
+    if (!isAdSkippingEnabled) return
     if (adPolicy) {
       activeAd = adsBlock
       console.log('adsHandler - Entered SCTE35 ad block:', adsBlock)
@@ -143,6 +144,7 @@
   }
 
   const handleAdsBlockExitEvent = (adsBlock) => {
+    if (!isAdSkippingEnabled) return
     console.log('adsHandler - Exiting and removing SCTE35 ad block:', adsBlock)
     removedAds[adsBlock.adId] = true
     removeAdsBlock(adsBlock)
@@ -153,7 +155,13 @@
     adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adId != adsBlockToRemove.adId)
   }
 
+  const removePastAdsBlocks = () => {
+    const currentTime = getCurrentTimeSec()
+    adsBlocks = adsBlocks.filter(adsBlock => adsBlock.adEndTime > currentTime)
+  }
+
   const  removeAdsBlocksInWindow = () => {
+    if (!isAdSkippingEnabled) return
     if (adPolicy && adPolicy.allow_skip) return
     console.log('adsHandler - Removing all ads blocks in live viewed window')
     _.remove(adsBlocks, (adsBlock) => {
@@ -161,7 +169,19 @@
     })
   }
 
+  const showAdSkippingMessage = () => {
+    if (!isAdSkippingEnabled) return
+    if (document.querySelector('#adInfo').innerText === '')
+    {
+      document.querySelector('#adInfo').innerText = com.zappware.chromecast.globaltext.getString('blockSkipAd');
+      setTimeout(() => {
+        document.querySelector('#adInfo').innerText = '';
+      }, 7000);
+    }
+  }
+
   const addAdsBlock = (adId, adStartTime, adEndTime, adType) => {
+    if (!isAdSkippingEnabled) return
     if(!adId) return
     if(removedAds[adId]) return  // already viewed ads block
     mediaInfo = playerManager.getMediaInformation()
@@ -201,6 +221,7 @@
 
   const setAdsBlocks = (newAdBlocks) => {
     adsBlocks = []
+    if (!isAdSkippingEnabled) return
     if (!newAdBlocks) return
     _.map(newAdBlocks, (ad) => {
       if (!ad) return
@@ -224,20 +245,34 @@
   // AD BLOCK HELPERS
   //
   const findFirstAdsBlock = (time, currentTime) => {
+    if (!isAdSkippingEnabled) return
     console.log('adsHandler - Finding ads before', time)
     return _.find(adsBlocks, (adsBlock) => (time > adsBlock.adStartTime && adsBlock.adEndTime > currentTime))
   }
 
   const findAdsBlock = (startTime, endTime, adId) => _.find(adsBlocks, (adsBlock) => ((!adId || adsBlock.adId === adId) && adsBlock.adStartTime === startTime && adsBlock.adEndTime === endTime))
 
+  const getAdsBlockForTime = (time) => _.find(adsBlocks, (adsBlock) => (adsBlock.adStartTime <= time && time <= adsBlock.adEndTime))
+
   const logAdsBlocks = () => { console.log('adsHandler - Ads Blocks', adsBlocks) }
 
+  const getCurrentTimeSec = () => {
+    const playbackMode = getPlaybackMode()
+    let currentTime
+    if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) {
+      currentTime = playerManager.getMediaInformation().startAbsoluteTime + playerManager.getCurrentTimeSec()
+    } else {
+      currentTime = playerManager.getCurrentTimeSec()
+    }
+    return currentTime
+  }
+
   const reset = () => {
-    console.log('adsHandler - RESET ads:')
+    console.log('adshandler - RESET ads:')
+    if (!isAdSkippingEnabled) return
     adsBlocks = [];
     activeAd = null;
     adPolicy = null;
-    trickplayPolicy = null;
     removedAds = {}
     let playerState = com.zappware.chromecast.player.getState();
     if (playerState === com.zappware.chromecast.PlayerState.STOPPED) {
@@ -245,27 +280,50 @@
     }
   }
 
+  /** Trickplay block on channel-level */
+  const showBlockTrickplayMessage = () => {
+    const blocktrickPlayInfo = document.querySelector('#blocktrickplayInfo')
+    if (blocktrickPlayInfo.innerText === '') {
+      blocktrickPlayInfo.innerText = com.zappware.chromecast.globaltext.getString('blockTrickPlayOnChannelLevel');
+      setTimeout(() => {
+        blocktrickPlayInfo.innerText = '';
+      }, 7000);
+    }
+    return blocktrickPlayInfo
+  }
+
+  const blockTrickPlay = (position, currentTime) => {
+    if (position > currentTime) {
+      showBlockTrickplayMessage()
+      return true
+    } else {
+      return false
+    }
+  }
+
   const getAdSignallingType = () => {
     return signallingType
   }
 
-  const init = () => {
+  const initAdsHandler = () => {
     if (!isAdSkippingEnabled) return
     reset()
     let playbackMode = getPlaybackMode()
-    console.log('adsHandler - init')
+    console.log('adshandler - initAdsHandler ')
     if (playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV) {
       adSkippingWindows = [{}]
     }
+
   }
 
   const getPlaybackMode = () => {
-    const media = playerManager.getMediaInformation()
+    let media = playerManager.getMediaInformation()
     playbackMode = media._playbackMode
     return playbackMode
   }
 
   const  setTimingForViewedWindow = (currentTime) => {
+    if (!isAdSkippingEnabled) return
     const windowForAdskipping = _.last(adSkippingWindows)
     let playbackMode = getPlaybackMode()
     if (playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV) {
@@ -280,22 +338,27 @@
     }
   }
 
+
   /* return the public functions */
   return {
-    validateRequestedSeekPosition: validateRequestedSeekPosition,
+    validateRequestedPlaybackPosition: validateRequestedPlaybackPosition,
     canSeek: canSeek,
     checkAdEnterExit: checkAdEnterExit,
-    setPolicy: setPolicy,
+    setAdPolicy: setAdPolicy,
     setAdsBlocks: setAdsBlocks,
     getAdsBlocks: getAdsBlocks,
+    reset: reset,
     getAdSignallingType: getAdSignallingType,
-    init: init,
+    initAdsHandler: initAdsHandler,
     setTimingForViewedWindow: setTimingForViewedWindow
   }
+
 }())
 
 com.zappware.chromecast.AdSignallingTypes = {
   DEFAULT: 'DEFAULT',
   SCTE35_ZW_1: 'SCTE35_ZW_1',
   UNKNOWN: 'UNKNOWN'
-}
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
