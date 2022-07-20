@@ -362,7 +362,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \*************************************************/
 /***/ ((module) => {
 
-eval("module.exports = \"mutation playChannel($input: PlayChannelInput!, $profileId: ID!) {\\n  playChannel(input: $input) {\\n    playbackInfo {\\n      sessionId\\n      url\\n      playbackRestrictions {\\n        ... on EventConcurrencyPlaybackRestriction {\\n          message\\n        }\\n      }\\n      adPlaybackRestrictions\\n      trickplayRestrictions\\n      adSignallingType\\n      channel {\\n        id\\n        kind\\n      }\\n      heartbeat {\\n        ... on HttpHeartbeat {\\n          url\\n          interval\\n          includeAuthHeaders\\n        }\\n      }\\n    }\\n  }\\n}\\n\"\n\n//# sourceURL=webpack://my-webpack-project/./src/graphql/queries/playChannel.graphql?");
+eval("module.exports = \"mutation playChannel($input: PlayChannelInput!) {\\n  playChannel(input: $input) {\\n    playbackInfo {\\n      sessionId\\n      url\\n      playbackRestrictions {\\n        ... on EventConcurrencyPlaybackRestriction {\\n          message\\n        }\\n      }\\n      adPlaybackRestrictions\\n      trickplayRestrictions\\n      adSignallingType\\n      channel {\\n        id\\n        kind\\n      }\\n      heartbeat {\\n        ... on HttpHeartbeat {\\n          url\\n          interval\\n          includeAuthHeaders\\n        }\\n      }\\n    }\\n  }\\n}\\n\"\n\n//# sourceURL=webpack://my-webpack-project/./src/graphql/queries/playChannel.graphql?");
 
 /***/ }),
 
