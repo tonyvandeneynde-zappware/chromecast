@@ -406,6 +406,7 @@ com.zappware.chromecast.Player = (function () {
                 }
             }
 
+            console.log('adsh seek to position:', position)
             return this._seek(position, resumeState);
         }
 
