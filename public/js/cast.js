@@ -174,6 +174,7 @@ com.zappware.chromecast.cast.init = function(playbackConfig) {
                 } else {
                     newPosition = playerManager.getCurrentTimeSec()
                 }
+                console.log('adsh set newPosition:', newPosition)
                 data.currentTime = newPosition
             }
         }
