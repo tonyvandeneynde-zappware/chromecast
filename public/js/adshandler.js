@@ -30,8 +30,7 @@
   * clients must be able to ignore unknown AdPlaybackResctriction scenarios.
   * BLOCK_SKIP_AND_FAST_FORWARD => Indicates that fast forwarding through ads and skipping in ads is not allowed.
   */
-  const setPolicy = (adPlayBackRestrictions, adSignallingType, adPlaybackPreRoll) => {
-    console.log('adshandler - setpolicy adPlaybackPreRoll:', adPlaybackPreRoll)
+  const setPolicy = (adPlayBackRestrictions, adSignallingType, preRoll) => {
     if (!isAdSkippingEnabled) return
     /**
      *If for a given timeshift mode and device category trick modes
@@ -61,7 +60,7 @@
       signallingType = com.zappware.chromecast.AdSignallingTypes.UNKNOWN
     }
 
-    adPlaybackPreRoll = adPlaybackPreRoll
+    adPlaybackPreRoll = preRoll
   }
 
   //
