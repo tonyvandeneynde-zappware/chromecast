@@ -31,6 +31,7 @@
   * BLOCK_SKIP_AND_FAST_FORWARD => Indicates that fast forwarding through ads and skipping in ads is not allowed.
   */
   const setPolicy = (adPlayBackRestrictions, adSignallingType, adPlaybackPreRoll) => {
+    console.log('adshandler - setpolicy adPlaybackPreRoll:', adPlaybackPreRoll)
     if (!isAdSkippingEnabled) return
     /**
      *If for a given timeshift mode and device category trick modes
