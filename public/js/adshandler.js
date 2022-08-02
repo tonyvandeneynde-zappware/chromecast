@@ -82,7 +82,7 @@
       if (!firstAdsBlock) return time
       const returnTime = _.min([firstAdsBlock.adStartTime, time - adPlaybackPreRoll])
       console.log('adsHandler returnTime:', returnTime)
-      return returnTime
+      return 20
     }
     let updatedTime = time
 
