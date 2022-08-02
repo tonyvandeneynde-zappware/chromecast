@@ -6,6 +6,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
   }
 
   const setPolicies = (adPlayBackRestrictions, adSignallingType, trickplayPolicy, adPlaybackPreRoll) => {
+    console.log('adshandler - setpolicies - adPlaybackPreRoll:', adPlaybackPreRoll)
     com.zappware.chromecast.trickplayPolicyHandler.setPolicy(trickplayPolicy)
     com.zappware.chromecast.adsHandler.setPolicy(adPlayBackRestrictions, adSignallingType, adPlaybackPreRoll)
   }
