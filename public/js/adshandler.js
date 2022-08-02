@@ -80,9 +80,8 @@
       const firstAdsBlock = findFirstAdsBlockInInterval(time - adPlaybackPreRoll, time)
       console.log('adsHandler - firstAdsBlock:', firstAdsBlock)
       if (!firstAdsBlock) return time
-      console.log('returnTime before:')
       const returnTime = _.min([firstAdsBlock.adStartTime, time - adPlaybackPreRoll])
-      console.log('returnTime:', returnTime)
+      console.log('adsHandler returnTime:', returnTime)
       return returnTime
     }
     let updatedTime = time
@@ -243,7 +242,7 @@
   }
 
   const findFirstAdsBlockInInterval = (startInterval, endInterval) => {
-    console.log('adsHandler - Finding in interval before', startInterval, endInterval)
+    console.log('adsHandler - Finding ads in interval', startInterval, endInterval)
     return _.find(adsBlocks, (adsBlock) => adsBlock.adEndTime >= startInterval && adsBlock.adStartTime <= endInterval)
   }
 
