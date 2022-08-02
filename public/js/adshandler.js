@@ -72,10 +72,13 @@
     const mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
     const isInitialSeek = customData && time === customData.startOverTVBeforeTime
+    console.log('adsHandler - isInitialSeek:', isInitialSeek)
+    console.log('adsHandler - adPlaybackPreRoll:', adPlaybackPreRoll)
 
     if (isInitialSeek) {
       if (!adPlaybackPreRoll) return time
       const firstAdsBlock = findFirstAdsBlockInInterval(time - adPlaybackPreRoll, time)
+      console.log('adsHandler - firstAdsBlock:', firstAdsBlock)
       if (!firstAdsBlock) return time
       return _.min([firstAdsBlock.adStartTime, time - adPlaybackPreRoll])
     }
