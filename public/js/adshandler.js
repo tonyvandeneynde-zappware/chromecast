@@ -80,7 +80,7 @@
       const firstAdsBlock = findFirstAdsBlockInInterval(time - adPlaybackPreRoll, time)
       console.log('adsHandler - firstAdsBlock:', firstAdsBlock)
       if (!firstAdsBlock) return time
-      let newTime = _.min([firstAdsBlock.adStartTime, time - adPlaybackPreRoll])
+      let newTime = _.max([firstAdsBlock.adStartTime, time - adPlaybackPreRoll])
       if (newTime === 0) newTime += 0.2
       console.log('adsHandler returnTime:', newTime)
       return newTime
