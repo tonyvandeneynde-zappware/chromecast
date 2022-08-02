@@ -71,8 +71,13 @@
     console.log('adsHandler - Validating requested playback position', time, '...')
     const mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
-    if (customData && customData.startOverTVBeforeTime) {
-      if (time === customData.startOverTVBeforeTime) return time
+    const isInitialSeek = customData && time === customData.startOverTVBeforeTime
+
+    if (isInitialSeek) {
+      if (!adPlaybackPreRoll) return time
+      const firstAdsBlock = findFirstAdsBlockInInterval(time - adPlaybackPreRoll, time)
+      if (!firstAdsBlock) return time
+      return _.min([firstAdsBlock.adStartTime, time - adPlaybackPreRoll])
     }
     let updatedTime = time
 
@@ -81,7 +86,7 @@
       if (!activeAd) {
         const jumpedBackward = currentTime >= time
         // ad blocks
-        if (!jumpedBackward) {
+        if (!jumpedBackward || isInitialSeek) {
           const firstAdsBlock = findFirstAdsBlock(time, currentTime)
           if (firstAdsBlock) {
             console.log('... found a unseen ads block, jumping to it.', firstAdsBlock)
@@ -229,6 +234,11 @@
   const findFirstAdsBlock = (time, currentTime) => {
     console.log('adsHandler - Finding ads before', time)
     return _.find(adsBlocks, (adsBlock) => (time > adsBlock.adStartTime && adsBlock.adEndTime > currentTime))
+  }
+
+  const findFirstAdsBlockInInterval = (startInterval, endInterval) => {
+    console.log('adsHandler - Finding in interval before', startInterval, endInterval)
+    return _.find(adsBlocks, (adsBlock) => adsBlock.adEndTime >= startInterval && adsBlock.adStartTime <= endInterval)
   }
 
   const findAdsBlock = (startTime, endTime, adId) => _.find(adsBlocks, (adsBlock) => ((!adId || adsBlock.adId === adId) && adsBlock.adStartTime === startTime && adsBlock.adEndTime === endTime))
