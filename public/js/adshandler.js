@@ -228,6 +228,7 @@
     })
     const playbackMode = getPlaybackMode()
     if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) removeAdsBlocksInWindow()
+    if (adsBlocks.length > 0) adsBlocks[0].adStartTime += 60
 
   }
 

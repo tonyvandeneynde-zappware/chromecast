@@ -403,7 +403,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
                 const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
                 const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
-                playbackInfo.adPlaybackPreRoll = 240
+                playbackInfo.adPlaybackPreRoll = 298
                 restrictionsEnabled && playbackInfo && com.zappware.chromecast.trickplayHandler.setPolicies(playbackInfo.adPlaybackRestrictions, isAdSignallingTypeEnabled ? playbackInfo.adSignallingType : null, playbackInfo.trickplayRestrictions, playbackInfo.adPlaybackPreRoll)
                 if (media !== that._currentMedia) {
                     media._playbackInfo = playbackInfo; // Save the playbackInfo so we can use the returned
