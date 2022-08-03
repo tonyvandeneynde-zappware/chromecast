@@ -71,6 +71,7 @@
     console.log('adsHandler - Validating requested playback position', time, '...')
     const mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
+    console.log('adhandler customData:', customData)
     const isInitialSeek = customData && time === customData.startOverTVBeforeTime
     console.log('adsHandler - isInitialSeek:', isInitialSeek)
     console.log('adsHandler - adPlaybackPreRoll:', adPlaybackPreRoll)
@@ -81,7 +82,7 @@
       console.log('adsHandler - firstAdsBlock:', firstAdsBlock)
       if (!firstAdsBlock) return time
       let newTime = _.max([firstAdsBlock.adStartTime, time - adPlaybackPreRoll])
-      newTime += 0.2 // +0.2 because when jumping to adStartTime exactly the player hangs for some currently unknown reason
+      // newTime += 0.2 // +0.2 because when jumping to adStartTime exactly the player hangs for some currently unknown reason
       console.log('adsHandler returnTime:', newTime)
       return newTime
     }
