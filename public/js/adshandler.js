@@ -81,7 +81,7 @@
       console.log('adsHandler - firstAdsBlock:', firstAdsBlock)
       if (!firstAdsBlock) return time
       let newTime = _.max([firstAdsBlock.adStartTime, time - adPlaybackPreRoll])
-      if (newTime === 0) newTime += 0.2
+      newTime += 0.2 // +0.2 because when jumping to adStartTime exactly the player hangs for some currently unknown reason
       console.log('adsHandler returnTime:', newTime)
       return newTime
     }
