@@ -4,58 +4,70 @@
  * Zappware.
  **/
 
-var ORANGE_IMCONFIG_LAB = {
-    pathPlaybackSession: "/idtvserver/lab/Mobistar/OperatorApp/OperatorModule/PlaybackSession/CSMobistar/MobistarOperator",
-    pathClientTransaction: "/idtvserver/lab/Mobistar/OperatorApp/OperatorModule/ClientTransaction/CSMobistar/MobistarOperator",
-    pathLicenser: "/twintv3mstar_proxy/la/",
-    readKey: "J96J7MOBRRQTH9IFU20GQSUXJM9ZNAJC",
-    writeKey: "2GVSJGH4TEDAJN47AFP91LNAGC5QVGPE"
+const TAG_CONFIG_REF = {
+    pathEvo: 'http://10.11.1.250:8891/ext_dev_facade',
+    pathMW: 'http://10.11.1.250:8080/sdsmiddleware/A1/graphql/4.0'
 };
 
-var ORANGE_IMCONFIG_FUT = {
-    pathPlaybackSession: "/idtvserver/fut/Mobistar/OperatorApp/OperatorModule/PlaybackSession/CSMobistar/MobistarOperator",
-    pathClientTransaction: "/idtvserver/fut/Mobistar/OperatorApp/OperatorModule/ClientTransaction/CSMobistar/MobistarOperator",
-    pathLicenser: "/twintv3mstar_proxy/la/",
-    readKey: "J96J7MOBRRQTH9IFU20GQSUXJM9ZNAJC",
-    writeKey: "2GVSJGH4TEDAJN47AFP91LNAGC5QVGPE"
+const TAG_CONFIG_JULIET = {
+    pathEvo: 'http://sdsevowebott.juliet.a1.net:8890/ext_dev_facade',
+    pathMW: 'http://sdsevowebott.juliet.a1.net:8080/sdsmiddleware/A1/graphql/4.0'
 };
 
-var ORANGE_IMCONFIG_PROD = {
-    pathPlaybackSession: "/idtvserver/lab/Mobistar/OperatorApp/OperatorModule/PlaybackSession/CSMobistar/MobistarOperator",
-    pathClientTransaction: "/idtvserver/lab/Mobistar/OperatorApp/OperatorModule/ClientTransaction/CSMobistar/MobistarOperator",
-    pathLicenser: "/twintv3mstar_proxy/la/",
-    readKey: "J96J7MOBRRQTH9IFU20GQSUXJM9ZNAJC",
-    writeKey: "2GVSJGH4TEDAJN47AFP91LNAGC5QVGPE"
+const TAG_CONFIG_ROMEO = {
+    pathEvo: 'https://sdsevowebott.romeo.a1.net:8890/ext_dev_facade',
+    pathMW: 'https://sdsevowebott.romeo.a1.net:8080/sdsmiddleware/A1/graphql/4.0',
+    pathLic: 'https://widevine.romeo.a1.net:8063?deviceId=$DEVICE_ID$'
 };
 
-// If a configuration is specified in the URL, use that one (ZCR-20), if none specified assume ORANGE_IMCONFIG_LAB
-const ORANGE_IMCONFIG = (function() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var _config = urlParams.get('ORANGE_IMCONFIG');
-    return (_config && window[_config]) ? window[_config] : ORANGE_IMCONFIG_LAB;
-})();
+const TAG_CONFIG_PROD = {
+    pathEvo: 'https://sdsevowebott.showtime.a1.net:8843/ext_dev_facade',
+    pathMW: 'https://sdsevowebott.showtime.a1.net:8443/sdsmiddleware/A1/graphql/4.0',
+    pathLic: 'https://widevine.showtime.a1.net:8063?deviceId=$DEVICE_ID$'
+};
+
+const TAG_CONFIG_MK_DEV = {
+    pathEvo: 'https://test-web.xploretv.mk:8843/ext_dev_facade',
+    pathMW:  'https://test-web.xploretv.mk:8443/sdsmiddleware/A1_Macedonia/graphql/4.0',
+    pathLic: 'https://widevine.xploretv.mk:8063?deviceId=$DEVICE_ID$'
+};
+
+// Assume the PROD configuration -> This can be overruled with setConfig.
+var TAG_CONFIG = TAG_CONFIG_PROD;
+var CONFIG = TAG_CONFIG;
+
+TAG_CONFIG.bookmarkInterval = 300; // in seconds
+TAG_CONFIG.offsetToLive = 6; // in seconds
+TAG_CONFIG.maxPLTVBufferSize = 3600; // in seconds
+TAG_CONFIG.sendKeepAliveMutation = true; // Toggle for sending the Keep Alive mutations
+TAG_CONFIG.adSkippingEnabled = true; // Toggle for ads skipping feature
+TAG_CONFIG.adSignallingTypeEnabled = true; // Toggle for ads signalling type
+TAG_CONFIG.trickplayBlockingEnabled = true; // Toggle for trickplay restriction
+
+// Uncomment the line below for deployments with broadbeak (A1 Croatia):
+// TAG_CONFIG.broadpeakHeartbeatInterval = 20; // in seconds
 
 const DEFAULT_CONFIG = {
-    language: 'fra',
+    language: 'deu',
     showStatistics: !!DEBUG,
     bannerTimeout: 5,
     ageRating: 18,
-    ageRatingLockWhenEqual: true,
+    ageRatingLockWhenEqual: false,
     ampmDateFormat: false,
     playback: {
-      audioLanguagePreference: ['fra', 'eng', 'nld'],
-      subtitleLanguagePreference: ['fra', 'eng', 'nld'],
+      audioLanguagePreference: ['de', 'en'],
+      subtitleLanguagePreference: ['de', 'en'],
       hardOfHearing: false,
       visuallyImpaired: false
     },
     qos: {
       maxLoadDuration: 20000,
-      autoPauseDuration: 0.2,
-      autoResumeDuration: 0.2,
-      initialBandwidth: 500000
+      autoPauseDuration: 1,
+      autoResumeNumberOfSegments: 1,
+      initialBandwidth: 600000
     },
     blackout: [],
     customData: {}
 };
 
-const FONTS = ['TTFontBold','TTFontThin','TTFont'];
+const FONTS = ['FontSans','FontSansBold','FontSerifBold','WebIcons'];
