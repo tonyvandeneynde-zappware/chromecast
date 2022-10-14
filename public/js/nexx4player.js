@@ -72,6 +72,11 @@ com.zappware.chromecast.Nexx4Player = (function () {
             "operationName": "getCurrentEvent",
             "variables": { },
             "query": "query getCurrentEvent($channelId: ID!, $time: Date!) {\n  channel(id: $channelId) {\n    eventsAt(time: $time, previous: 0, following: 0) {\n      id\n      expiry\n      items {\n        ...nowPlayingEventFragment\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\n\nfragment nowPlayingEventFragment on Event {\n  ...eventInfoBasicFragment\n  __typename\n}\n\nfragment eventInfoBasicFragment on Event {\n  id\n  title\n  start\n  end\n  __typename\n}\n"
+        },
+        getTransmissionId: {
+            "operationName":"getTransmissionId",
+            "variables":{},
+            "query":"query getTransmissionId($recordingId: ID! $start: Date!, $duration: Int!){\n    recording(id: $recordingId){\n channel {\n     id      \n events(start: $start, duration: $duration){\n items {\n      id\n       eventId\n       start\n       end\n       startOverTVBeforeTime\n       startOverTVAfterTime\n       transmissionId\n      \n} \n} \n}\n} \n}\n"
         }
     };
     var tempQueries = {
@@ -139,6 +144,11 @@ com.zappware.chromecast.Nexx4Player = (function () {
             "operationName": "getCurrentEvent",
             "variables": { },
             "query": "query getCurrentEvent($channelId: ID!, $time: Date!) {\n  channel(id: $channelId) {\n    eventsAt(time: $time, previous: 0, following: 0) {\n      id\n      expiry\n      items {\n        ...nowPlayingEventFragment\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\n\nfragment nowPlayingEventFragment on Event {\n  ...eventInfoBasicFragment\n  __typename\n}\n\nfragment eventInfoBasicFragment on Event {\n  id\n  title\n  start\n  end\n  __typename\n}\n"
+        },
+        getTransmissionId: {
+            "operationName":"getTransmissionId",
+            "variables":{},
+            "query":"query getTransmissionId($recordingId: ID! $start: Date!, $duration: Int!){\n    recording(id: $recordingId){\n channel {\n     id      \n events(start: $start, duration: $duration){\n items {\n      id\n       eventId\n       start\n       end\n       startOverTVBeforeTime\n       startOverTVAfterTime\n       transmissionId\n      \n} \n} \n}\n} \n}\n"
         }
     };
     var tempQueriesWithAdSignallingType = {
@@ -206,6 +216,11 @@ com.zappware.chromecast.Nexx4Player = (function () {
             "operationName": "getCurrentEvent",
             "variables": { },
             "query": "query getCurrentEvent($channelId: ID!, $time: Date!) {\n  channel(id: $channelId) {\n    eventsAt(time: $time, previous: 0, following: 0) {\n      id\n      expiry\n      items {\n        ...nowPlayingEventFragment\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\n\nfragment nowPlayingEventFragment on Event {\n  ...eventInfoBasicFragment\n  __typename\n}\n\nfragment eventInfoBasicFragment on Event {\n  id\n  title\n  start\n  end\n  __typename\n}\n"
+        },
+        getTransmissionId: {
+            "operationName":"getTransmissionId",
+            "variables":{},
+            "query":"query getTransmissionId($recordingId: ID! $start: Date!, $duration: Int!){\n    recording(id: $recordingId){\n channel {\n     id      \n events(start: $start, duration: $duration){\n items {\n      id\n       eventId\n       start\n       end\n       startOverTVBeforeTime\n       startOverTVAfterTime\n       transmissionId\n      \n} \n} \n}\n} \n}\n"
         }
     };
 
@@ -468,12 +483,7 @@ com.zappware.chromecast.Nexx4Player = (function () {
             let media = playerManager.getMediaInformation() || this._currentMedia;
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
             try {
-                const isVod = media && media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
-                const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
-                const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
-                const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
-                const  { adBlocks } =  restrictionsEnabled && !isVod && media && manifest && com.zappware.chromecast.manifestParserHelper.parseManifest(manifest)
-                restrictionsEnabled && !isVod && media && manifest && com.zappware.chromecast.adsHandler.setAdsBlocks(adBlocks)
+                com.zappware.chromecast.manifestParserHelper.setAdMarkers(manifest, media)
             } catch (error) {
                   console.log(error)
             }
@@ -956,6 +966,8 @@ com.zappware.chromecast.Nexx4Player = (function () {
                     DEBUG && log("response = " + JSON.stringify(response));
                     if (response) {
                         if (response.data && response.data[query.operationName]) {
+                            // for transmissionId
+                            that._getTransmissionId(response, query, media)
                             resolve(response.data[query.operationName].playbackInfo);
                         }
                         if (response.errors) {
@@ -1356,6 +1368,37 @@ com.zappware.chromecast.Nexx4Player = (function () {
                 manifest = manifest.replace(scteTag, '')
             }
             return manifest
+        }
+
+        /*********************************** */
+        //  GET TRANSMISSION ID METHOD => Retrieve transmissionId from event
+        /*********************************** */
+        _getTransmissionId(response, query, media) {
+            if (query && query.operationName === 'playRecording') {
+                const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+                const isAdSignallingTypeEnabled = CONFIG.adSignallingTypeEnabled || false
+                const queryResponse = response.data[query.operationName].playbackInfo.recording
+                const start = queryResponse.start
+                const end = queryResponse.end
+                media = media || playerManager.getMediaInformation() || this._currentMedia;
+                const eventQuery = isAdSkippingEnabled ? (isAdSignallingTypeEnabled ? tempQueriesWithAdSignallingType.getTransmissionId : tempQueries.getTransmissionId) : queries.getTransmissionId;
+                const duration =  (new Date(end).getTime() - new Date(start).getTime()) / 1000
+                eventQuery.variables = {
+                    "start": start,
+                    "duration": duration,
+                    "recordingId": media._assetId
+                };
+                DEBUG && log("_getTransmissionId(); query: " + JSON.stringify(eventQuery));
+                return this._graphql(eventQuery, media).then(function(response) {
+                    DEBUG && log("response = " + JSON.stringify(response));
+                    const result = response && response.data && response.data.recording &&  response.data.recording.channel && response.data.recording.channel.events
+                    media._playbackInfo.eventInfo = result
+                    return result
+                });
+
+            } else {
+                return null
+            }
         }
 
     };

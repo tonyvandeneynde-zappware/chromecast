@@ -7,6 +7,9 @@
 //      AD SKIPPING LOGIC
 /*************************************** */
 com.zappware.chromecast.manifestParserHelper = (function () {
+  const isAdSkippingEnabled = CONFIG.adSkippingEnabled || false
+  const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
+  const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
 
   function parseManifest(manifest) {
     // type = static, dynamic
@@ -36,27 +39,32 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     if (validateManifest !== true) console.log(validateManifest.err);
     var jsonManifestObj = parser.parse(manifest, options);
     let adBlocks = [];
+    let spliceInfoSections = []
 
     if (jsonManifestObj) {
       let mdp = jsonManifestObj.MPD[0];
       let period = mdp && mdp.Period;
       if (period && period.some((obj) => Object.keys(obj).includes("EventStream"))) {
-        period.map((per) => {
+        _.forEach(period, (per) => {
           if (per.EventStream && per.EventStream[0].schemeIdUri.indexOf("scte")) {
+            const eStream = per.EventStream[0].Event[0]
+            const isSpliceInfoSectionPresent =  eStream && eStream.Signal[0] &&  eStream.Signal[0].SpliceInfoSection
+            if (isSpliceInfoSectionPresent) {
+              const spliceInfoSection = getSpliceInfoSection(per.EventStream, per)
+              spliceInfoSections = [... spliceInfoSection, ... spliceInfoSections]
+            } else {
             let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
             let adsInfo = getAdsBlockInfo(per, per.EventStream[0], typeManifest, mdp);
             adsInfo && adBlocks.push(adsInfo);
-          } else {
-            console.log("");
+            }
           }
         });
-      } else {
-        console.log("");
       }
     }
     return {
       jsonManifestObj,
       adBlocks,
+      spliceInfoSections
     };
   }
 
@@ -223,9 +231,120 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     return adsStartTime;
   }
 
+  /************************************************************** */
+  //     Ad skipping's parsing logic
+  /************************************************************** */
+  const getSpliceInfoSection = (eventStream, period) => {
+    if (!eventStream) return
+    const start = period && period.start
+    const startTime = getTimeInSeconds(start)
+    const adsInfo = []
+    _.forEach(eventStream, (es) => {
+      _.forEach(es.Event, (ev) => {
+        const spliceInfoSection =  ev.Signal[0] &&  ev.Signal[0].SpliceInfoSection[0]
+        const duration = ev.Signal[0] && ev.Signal[0].SpliceInfoSection[0].SegmentationDescriptor[0].segmentationDuration || 0
+        const endTime = parseInt(getTimeInSeconds(duration) - startTime)
+        adsInfo.push({
+          duration: getTimeInSeconds(duration),
+          segmentationTypeId: spliceInfoSection && spliceInfoSection.SegmentationDescriptor[0].segmentationTypeId,
+          upId: spliceInfoSection && spliceInfoSection.SegmentationDescriptor[0].segmentationUpidContent,
+          upIdType: spliceInfoSection && spliceInfoSection.SegmentationDescriptor[0].segmentationUpidType,
+          adId: spliceInfoSection && spliceInfoSection.SegmentationDescriptor[0].segmentationEventId,
+          adStartTime: startTime || 0,
+          adEndTime: endTime,
+          adType: "TYPE_SCTE35"
+        })
+      })
+    })
+    return adsInfo
+  }
+
+  /************************************************************************************* */
+ // Method to filter the  SCTE 35 markers from the manifest with the same ids as the events’s transmissionIds
+ /************************************************************************************* */
+  const filterMarkersWithSameTransmissionIds = (upidsFromManifest, upidsFromEvents) => {
+    //sort the ad markers chronologically by start time
+    const sortedUpidsFromManifest = upidsFromManifest.sort((a,b) => a.startTime - b.startTime)
+    const result = []
+   _.forEach(upidsFromEvents, (event) => {
+     const sameTransmissionId = _.find(sortedUpidsFromManifest, (man) =>  man.upId === event.transmissionId)
+     if (sameTransmissionId){
+      result.push(sameTransmissionId)
+     }
+   })
+    return result
+ }
 
 
+ /************************************************************************************* */
+ // Method to calculate start and duration of an ad
+ // Possibilites for startTime and duration => "PT3H14M15S", "PT14M15S", "PT15M", "PT15S"
+ /************************************************************************************* */
+ const getTimeInSeconds = (data) => {
+  if (!data || _.isEmpty(data)) return
 
+  const hourSearch = data.indexOf("H");
+  const minutesSearch = data.indexOf("M");
+  const secondsSearch = data.indexOf("S");
+
+  const hourSeconds = hourSearch > -1 ? data.substring(2, hourSearch) * 3600 : 0
+  const minutesSeconds = minutesSearch > -1 && data.substring(hourSearch > -1 ? hourSearch + 1 : 2 , minutesSearch) * 60 || 0
+  const secondsCalculation = calculateSeconds(data, hourSearch, minutesSearch, secondsSearch)
+  const seconds = secondsSearch > -1 ?  secondsCalculation : 0
+  const result = (parseInt(hourSeconds) + parseInt(minutesSeconds) + parseInt(seconds))
+
+  return result
+}
+
+const calculateSeconds = (data, hourSearch, minutesSearch, secondsSearch) => {
+  if (!data || _.isEmpty(data)) return
+
+  // Check for hours and minutes availability
+  const isHourAvailableOnly = hourSearch > -1 && minutesSearch <= -1
+  const isHourMinutesAvailable = hourSearch > -1 && minutesSearch > -1
+  const isMinutesAvailableOnly = hourSearch <= -1 && minutesSearch > -1
+  const noHourNoMinuteAvailable = hourSearch <= -1 && minutesSearch <= -1
+
+  if (isHourAvailableOnly) {
+   return data.substring(hourSearch + 1, data.length -1)
+  } else if (isHourMinutesAvailable || isMinutesAvailableOnly) {
+    return data.substring(minutesSearch + 1, data.length -1)
+  } else if (noHourNoMinuteAvailable) {
+    return data.substring(2, data.length -1)
+  } else {
+    return data.substring(2, secondsSearch)
+  }
+}
+
+/**
+* Check for segmentationTypeId PROVIDER_ADVERTISEMENT_END ==> 49
+* and if that is the same then we have found the correct ad marker
+*/
+const getMarkersWithProviderAdEnd = (upidFromManifest, upidFromEvent) => {
+  const markers = filterMarkersWithSameTransmissionIds(upidFromManifest, upidFromEvent)
+  if (!markers) return
+  const adMarkers = []
+  const providerAdEnd = com.zappware.chromecast.AdMarkersType.PROVIDER_ADVERTISEMENT_END
+  _.find(markers, (marker) => {
+    if (marker.segmentationId === providerAdEnd) {
+      const adjustedStarTime = marker.adEndTime - CONFIG.adPlaybackPreRoll
+      marker['adStarTime'] = adjustedStarTime
+      adMarkers.push(marker)
+    }
+ })
+ return adMarkers
+}
+
+const setAdMarkers = (manifest, media) =>  {
+  if (!restrictionsEnabled) return
+  if (!manifest || !media) return
+  const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
+  const  { adBlocks, spliceInfoSections } = !isVod && parseManifest(manifest)
+  const eventInfo  =  media._playbackInfo.eventInfo && media._playbackInfo.eventInfo.items
+  const spliceInfoSectionsBlocks = spliceInfoSections && getMarkersWithProviderAdEnd(spliceInfoSections, eventInfo)
+  let adMarkers = spliceInfoSections ? spliceInfoSectionsBlocks : adBlocks
+  !isVod && com.zappware.chromecast.adsHandler.setAdsBlocks(adMarkers)
+}
   /************************************** */
   // END AD SKIPPING
   /***************************************************** */
@@ -241,6 +360,9 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     calculateStartTimeForDynamicStream,
     checkForPresentationTime,
     calculateWhenPresentationTimeIsNotZero,
-    dynamicLogicForNonZeroPTime
+    dynamicLogicForNonZeroPTime,
+    filterMarkersWithSameTransmissionIds,
+    getMarkersWithProviderAdEnd,
+    setAdMarkers
   };
 })();

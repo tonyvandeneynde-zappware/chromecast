@@ -890,7 +890,9 @@ com.zappware.chromecast.Player = (function () {
             if (position !== playerManager.getCurrentTimeSec()) {
                 DEBUG && log("calling seek " + position);
                 playerManager.seek(position);
-                promise = this._waitForEvent('SEEKED');
+                setTimeout(() => {
+                    promise = this._waitForEvent('SEEKED');
+                }, 500);
 
             }
 

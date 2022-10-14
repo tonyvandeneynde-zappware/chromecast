@@ -4,70 +4,87 @@
  * Zappware.
  **/
 
-const TAG_CONFIG_REF = {
-    pathEvo: 'http://10.11.1.250:8891/ext_dev_facade',
-    pathMW: 'http://10.11.1.250:8080/sdsmiddleware/A1/graphql/4.0'
+const ORANGE_NEXX4_CONFIG_INT = {
+  graphqlEndpoint: 'https://client.sirius.sdscloud.orange.be/secure/v1/graphql',
+  sessionEndpoint: '',
+  awsIdentityPoolId: 'eu-west-1:ce5fb270-43a4-4ad4-b643-0394b4cf3031',
+  awsDomain: 'cboauth.eu.auth0.com',
+  awsRegion: 'eu-west-1',
+  awsAuthenticationType: 'OID',
+  pathLic: 'https://drm.sdsproxy.orange.be/getLicense?drm=com.widevine.alpha&url=$URL$',
+  altPathLic: '',
+  altPathLicMatch: '',
+  jwtToken: '',
+  deviceId: '',
+  householdId: ''
 };
 
-const TAG_CONFIG_JULIET = {
-    pathEvo: 'http://sdsevowebott.juliet.a1.net:8890/ext_dev_facade',
-    pathMW: 'http://sdsevowebott.juliet.a1.net:8080/sdsmiddleware/A1/graphql/4.0'
+const ORANGE_NEXX4_CONFIG_STAGING = {
+  graphqlEndpoint: 'https://client.bordet.sdscloud.orange.be/secure/v1/graphql',
+  sessionEndpoint: '',
+  awsIdentityPoolId: 'eu-west-1:ce5fb270-43a4-4ad4-b643-0394b4cf3031',
+  awsDomain: 'cboauth.eu.auth0.com',
+  awsRegion: 'eu-west-1',
+  awsAuthenticationType: 'OID',
+  pathLic: 'https://drm.sdsproxy.orange.be/getLicense?drm=com.widevine.alpha&url=$URL$',
+  altPathLic: '',
+  altPathLicMatch: '',
+  jwtToken: '',
+  deviceId: '',
+  householdId: ''
 };
 
-const TAG_CONFIG_ROMEO = {
-    pathEvo: 'https://sdsevowebott.romeo.a1.net:8890/ext_dev_facade',
-    pathMW: 'https://sdsevowebott.romeo.a1.net:8080/sdsmiddleware/A1/graphql/4.0',
-    pathLic: 'https://widevine.romeo.a1.net:8063?deviceId=$DEVICE_ID$'
+const ORANGE_NEXX4_CONFIG_PROD = {
+  graphqlEndpoint: 'https://client.titan.sdscloud.orange.be/secure/v1/graphql',
+  sessionEndpoint: '',
+  awsIdentityPoolId: 'eu-west-1:ce5fb270-43a4-4ad4-b643-0394b4cf3031',
+  awsDomain: 'cboauth.eu.auth0.com',
+  awsRegion: 'eu-west-1',
+  awsAuthenticationType: 'OID',
+  pathLic: 'https://drm.sdsproxy.orange.be/getLicense?drm=com.widevine.alpha&url=$URL$',
+  altPathLic: '',
+  altPathLicMatch: '',
+  jwtToken: '',
+  deviceId: '',
+  householdId: ''
 };
 
-const TAG_CONFIG_PROD = {
-    pathEvo: 'https://sdsevowebott.showtime.a1.net:8843/ext_dev_facade',
-    pathMW: 'https://sdsevowebott.showtime.a1.net:8443/sdsmiddleware/A1/graphql/4.0',
-    pathLic: 'https://widevine.showtime.a1.net:8063?deviceId=$DEVICE_ID$'
-};
+// Assume the INT configuration -> This can be overruled with setConfig.
+const ORANGE_NEXX4_CONFIG = ORANGE_NEXX4_CONFIG_INT
+const SDS_CLOUD_CONFIG = ORANGE_NEXX4_CONFIG;
+const CONFIG = SDS_CLOUD_CONFIG;
 
-const TAG_CONFIG_MK_DEV = {
-    pathEvo: 'https://test-web.xploretv.mk:8843/ext_dev_facade',
-    pathMW:  'https://test-web.xploretv.mk:8443/sdsmiddleware/A1_Macedonia/graphql/4.0',
-    pathLic: 'https://widevine.xploretv.mk:8063?deviceId=$DEVICE_ID$'
-};
+SDS_CLOUD_CONFIG.bookmarkInterval = 60; // in seconds
+SDS_CLOUD_CONFIG.offsetToLive = 5; // in seconds
+SDS_CLOUD_CONFIG.maxPLTVBufferSize = (3600); // in seconds
+SDS_CLOUD_CONFIG.sendKeepAliveMutation = false; // Toggle for sending the Keep Alive mutations
+SDS_CLOUD_CONFIG.adSkippingEnabled = false; // Toggle for ads skipping feature
+SDS_CLOUD_CONFIG.adSignallingTypeEnabled = false; // Toggle for ads signalling type
+SDS_CLOUD_CONFIG.trickplayBlockingEnabled = false; // Toggle for trickplay restriction
+SDS_CLOUD_CONFIG.adPlaybackPreRoll = 60; // Configurable Ad block duration
 
-// Assume the PROD configuration -> This can be overruled with setConfig.
-var TAG_CONFIG = TAG_CONFIG_PROD;
-var CONFIG = TAG_CONFIG;
-
-TAG_CONFIG.bookmarkInterval = 300; // in seconds
-TAG_CONFIG.offsetToLive = 6; // in seconds
-TAG_CONFIG.maxPLTVBufferSize = 3600; // in seconds
-TAG_CONFIG.sendKeepAliveMutation = true; // Toggle for sending the Keep Alive mutations
-TAG_CONFIG.adSkippingEnabled = true; // Toggle for ads skipping feature
-TAG_CONFIG.adSignallingTypeEnabled = true; // Toggle for ads signalling type
-TAG_CONFIG.trickplayBlockingEnabled = true; // Toggle for trickplay restriction
-
-// Uncomment the line below for deployments with broadbeak (A1 Croatia):
-// TAG_CONFIG.broadpeakHeartbeatInterval = 20; // in seconds
 
 const DEFAULT_CONFIG = {
-    language: 'deu',
-    showStatistics: !!DEBUG,
+    language: 'eng',
+    showStatistics: !!SHOW_STATISTICS,
     bannerTimeout: 5,
     ageRating: 18,
-    ageRatingLockWhenEqual: false,
+    ageRatingLockWhenEqual: true,
     ampmDateFormat: false,
     playback: {
-      audioLanguagePreference: ['de', 'en'],
-      subtitleLanguagePreference: ['de', 'en'],
+      audioLanguagePreference: ['en', 'nl', 'fr', 'de'],
+      subtitleLanguagePreference: ['en', 'nl', 'fr', 'de'],
       hardOfHearing: false,
       visuallyImpaired: false
     },
     qos: {
       maxLoadDuration: 20000,
-      autoPauseDuration: 1,
-      autoResumeNumberOfSegments: 1,
+      autoPauseDuration: 0.2,
+      autoResumeDuration: 0.2,
       initialBandwidth: 600000
     },
     blackout: [],
     customData: {}
 };
 
-const FONTS = ['FontSans','FontSansBold','FontSerifBold','WebIcons'];
+const FONTS = ['TTFontBold','TTFontThin','TTFont'];
