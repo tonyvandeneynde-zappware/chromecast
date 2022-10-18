@@ -270,6 +270,8 @@ com.zappware.chromecast.manifestParserHelper = (function () {
  // Method to filter the  SCTE 35 markers from the manifest with the same ids as the events’s transmissionIds
  /************************************************************************************* */
   const filterMarkersWithSameTransmissionIds = (upidsFromManifest, upidsFromEvents) => {
+    console.log('upidsFromEvents:', upidsFromEvents)
+    console.log('upidsFromManifest:', upidsFromManifest)
     //sort the ad markers chronologically by start time
     const sortedUpidsFromManifest = upidsFromManifest.sort((a,b) => a.startTime - b.startTime)
     const result = []
@@ -348,8 +350,9 @@ const setAdMarkers = (manifest, media) =>  {
   if (!manifest || !media) return
   const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
   const  { adBlocks, spliceInfoSections } = !isVod && parseManifest(manifest)
-  console.log('buggg adBlocks:', adBlocks)
+  console.log('buggg spliceInfoSections:', spliceInfoSections)
   const eventInfo  =  media._playbackInfo.eventInfo && media._playbackInfo.eventInfo.items
+  console.log('buggg eventInfo:', eventInfo)
   const spliceInfoSectionsBlocks = spliceInfoSections && getMarkersWithProviderAdEnd(spliceInfoSections, eventInfo)
   console.log('buggg spliceInfoSectionsBlocks:', spliceInfoSectionsBlocks)
   let adMarkers = spliceInfoSections ? spliceInfoSectionsBlocks : adBlocks
