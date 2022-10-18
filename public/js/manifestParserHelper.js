@@ -59,11 +59,13 @@ com.zappware.chromecast.manifestParserHelper = (function () {
             } else {
             let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
             let adsInfo = getAdsBlockInfo(per, per.EventStream[0], typeManifest, mdp);
+            console.log('buggg adsInfo:', adsInfo)
             adsInfo && adBlocks.push(adsInfo);
             }
           }
         });
       }
+      console.log('buggg adsblocks', adBlocks)
     }
     return {
       jsonManifestObj,
