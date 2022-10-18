@@ -329,13 +329,14 @@ const calculateSeconds = (data, hourSearch, minutesSearch, secondsSearch) => {
 */
 const getMarkersWithProviderAdEnd = (upidFromManifest, upidFromEvent) => {
   const markers = filterMarkersWithSameTransmissionIds(upidFromManifest, upidFromEvent)
+  console.log('buggg markers:', markers)
   if (!markers) return
   const adMarkers = []
   const providerAdEnd = com.zappware.chromecast.AdMarkersType.PROVIDER_ADVERTISEMENT_END
   _.find(markers, (marker) => {
     if (marker.segmentationId === providerAdEnd) {
-      const adjustedStarTime = marker.adEndTime - CONFIG.adPlaybackPreRoll
-      marker['adStarTime'] = adjustedStarTime
+      const adjustedStartTime = marker.adEndTime - CONFIG.adPlaybackPreRoll
+      marker['adStartTime'] = adjustedStartTime
       adMarkers.push(marker)
     }
  })
@@ -350,6 +351,7 @@ const setAdMarkers = (manifest, media) =>  {
   console.log('buggg adBlocks:', adBlocks)
   const eventInfo  =  media._playbackInfo.eventInfo && media._playbackInfo.eventInfo.items
   const spliceInfoSectionsBlocks = spliceInfoSections && getMarkersWithProviderAdEnd(spliceInfoSections, eventInfo)
+  console.log('buggg spliceInfoSectionsBlocks:', spliceInfoSectionsBlocks)
   let adMarkers = spliceInfoSections ? spliceInfoSectionsBlocks : adBlocks
   console.log('buggg adMarkers:', adMarkers)
   !isVod && com.zappware.chromecast.adsHandler.setAdsBlocks(adMarkers)
