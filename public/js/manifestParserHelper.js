@@ -340,9 +340,11 @@ const setAdMarkers = (manifest, media) =>  {
   if (!manifest || !media) return
   const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
   const  { adBlocks, spliceInfoSections } = !isVod && parseManifest(manifest)
+  console.log('buggg adBlocks:', adBlocks)
   const eventInfo  =  media._playbackInfo.eventInfo && media._playbackInfo.eventInfo.items
   const spliceInfoSectionsBlocks = spliceInfoSections && getMarkersWithProviderAdEnd(spliceInfoSections, eventInfo)
   let adMarkers = spliceInfoSections ? spliceInfoSectionsBlocks : adBlocks
+  console.log('buggg adMarkers:', adMarkers)
   !isVod && com.zappware.chromecast.adsHandler.setAdsBlocks(adMarkers)
 }
   /************************************** */
