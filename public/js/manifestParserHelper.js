@@ -46,11 +46,15 @@ com.zappware.chromecast.manifestParserHelper = (function () {
       let period = mdp && mdp.Period;
       if (period && period.some((obj) => Object.keys(obj).includes("EventStream"))) {
         _.forEach(period, (per) => {
+          console.log('buggg per:', per)
           if (per.EventStream && per.EventStream[0].schemeIdUri.indexOf("scte")) {
             const eStream = per.EventStream[0].Event[0]
+            console.log('buggg eStream:', eStream)
             const isSpliceInfoSectionPresent =  eStream && eStream.Signal[0] &&  eStream.Signal[0].SpliceInfoSection
+            console.log('buggg isSpliceInfoSectionPresent:', isSpliceInfoSectionPresent)
             if (isSpliceInfoSectionPresent) {
               const spliceInfoSection = getSpliceInfoSection(per.EventStream, per)
+              console.log('buggg spliceInfoSection:', spliceInfoSection)
               spliceInfoSections = [... spliceInfoSection, ... spliceInfoSections]
             } else {
             let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
@@ -235,6 +239,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
   //     Ad skipping's parsing logic
   /************************************************************** */
   const getSpliceInfoSection = (eventStream, period) => {
+    console.log('buggg getSpliceInfoSection eventStream:', eventStream, period)
     if (!eventStream) return
     const start = period && period.start
     const startTime = getTimeInSeconds(start)
