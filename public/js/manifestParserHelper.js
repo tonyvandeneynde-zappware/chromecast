@@ -49,7 +49,6 @@ com.zappware.chromecast.manifestParserHelper = (function () {
             const eStream = per.EventStream[0].Event[0]
             console.log('buggg eStream:', eStream)
             const hasSpliceInfoSection =  eStream && eStream.Signal[0] &&  eStream.Signal[0].SpliceInfoSection
-            console.log('buggg isSpliceInfoSectionPresent:', isSpliceInfoSectionPresent)
             if (hasSpliceInfoSection) {
               const spliceInfoSection = getSpliceInfoSection(per.EventStream, per)
 
