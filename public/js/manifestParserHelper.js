@@ -52,7 +52,6 @@ com.zappware.chromecast.manifestParserHelper = (function () {
             if (hasSpliceInfoSection) {
               const spliceInfoSections = getSpliceInfoSections(per.EventStream, per)
 
-              console.log('buggg spliceInfoSection:', spliceInfoSections)
               // spliceInfoSections = [... spliceInfoSection, ... spliceInfoSections]
               adBlocks = _.concat(adBlocks, spliceInfoSections)
             } else {
@@ -336,12 +335,7 @@ const setAdMarkers = (manifest, media) =>  {
   const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
   const currentEvent  =  media._playbackInfo.eventInfo && media._playbackInfo.eventInfo.items[1]
   const  { adBlocks } = !isVod && parseManifest(manifest, currentEvent)
-  console.log('buggg spliceInfoSections:', spliceInfoSections)
-  console.log('buggg eventInfo:', eventInfo)
   const spliceInfoSectionsBlocks = spliceInfoSections && getMarkersWithProviderAdEnd(spliceInfoSections, currentEvent)
-  console.log('buggg spliceInfoSectionsBlocks:', spliceInfoSectionsBlocks)
-  let adMarkers = spliceInfoSections ? spliceInfoSectionsBlocks : adBlocks
-  console.log('buggg adMarkers:', adMarkers)
   !isVod && com.zappware.chromecast.adsHandler.setAdsBlocks(adMarkers)
 }
   /************************************** */
