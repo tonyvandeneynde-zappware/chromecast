@@ -11,7 +11,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
   const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
   const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
 
-  function parseManifest(manifest) {
+  function parseManifest(manifest, currentEvent) {
     // type = static, dynamic
     if (!manifest) return;
     var options = {
@@ -39,23 +39,23 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     if (validateManifest !== true) console.log(validateManifest.err);
     var jsonManifestObj = parser.parse(manifest, options);
     let adBlocks = [];
-    let spliceInfoSections = []
 
     if (jsonManifestObj) {
       let mdp = jsonManifestObj.MPD[0];
       let period = mdp && mdp.Period;
       if (period && period.some((obj) => Object.keys(obj).includes("EventStream"))) {
         _.forEach(period, (per) => {
-          console.log('buggg per:', per)
           if (per.EventStream && per.EventStream[0].schemeIdUri.indexOf("scte")) {
             const eStream = per.EventStream[0].Event[0]
             console.log('buggg eStream:', eStream)
-            const isSpliceInfoSectionPresent =  eStream && eStream.Signal[0] &&  eStream.Signal[0].SpliceInfoSection
+            const hasSpliceInfoSection =  eStream && eStream.Signal[0] &&  eStream.Signal[0].SpliceInfoSection
             console.log('buggg isSpliceInfoSectionPresent:', isSpliceInfoSectionPresent)
-            if (isSpliceInfoSectionPresent) {
+            if (hasSpliceInfoSection) {
               const spliceInfoSection = getSpliceInfoSection(per.EventStream, per)
+
               console.log('buggg spliceInfoSection:', spliceInfoSection)
-              spliceInfoSections = [... spliceInfoSection, ... spliceInfoSections]
+              // spliceInfoSections = [... spliceInfoSection, ... spliceInfoSections]
+              adBlocks.push(spliceInfoSection)
             } else {
             let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
             let adsInfo = getAdsBlockInfo(per, per.EventStream[0], typeManifest, mdp);
@@ -65,12 +65,12 @@ com.zappware.chromecast.manifestParserHelper = (function () {
           }
         });
       }
+      const adsBlocksFromSpliceInfo = getAdBlocksFromSpliceInfoSections(spliceInfoSections, currentEvent)
       console.log('buggg adsblocks', adBlocks)
     }
     return {
       jsonManifestObj,
-      adBlocks,
-      spliceInfoSections
+      adBlocks
     };
   }
 
@@ -250,7 +250,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
       _.forEach(es.Event, (ev) => {
         const spliceInfoSection =  ev.Signal[0] &&  ev.Signal[0].SpliceInfoSection[0]
         const duration = ev.Signal[0] && ev.Signal[0].SpliceInfoSection[0].SegmentationDescriptor[0].segmentationDuration || 0
-        const endTime = parseInt(getTimeInSeconds(duration) - startTime)
+        const endTime = parseInt(getTimeInSeconds(duration) + startTime)
         adsInfo.push({
           duration: getTimeInSeconds(duration),
           segmentationTypeId: spliceInfoSection && spliceInfoSection.SegmentationDescriptor[0].segmentationTypeId,
@@ -266,23 +266,6 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     return adsInfo
   }
 
-  /************************************************************************************* */
- // Method to filter the  SCTE 35 markers from the manifest with the same ids as the events’s transmissionIds
- /************************************************************************************* */
-  const filterMarkersWithSameTransmissionIds = (upidsFromManifest, upidsFromEvents) => {
-    console.log('upidsFromEvents:', upidsFromEvents)
-    console.log('upidsFromManifest:', upidsFromManifest)
-    //sort the ad markers chronologically by start time
-    const sortedUpidsFromManifest = upidsFromManifest.sort((a,b) => a.startTime - b.startTime)
-    const result = []
-   _.forEach(upidsFromEvents, (event) => {
-     const sameTransmissionId = _.find(sortedUpidsFromManifest, (man) =>  man.upId === event.transmissionId)
-     if (sameTransmissionId){
-      result.push(sameTransmissionId)
-     }
-   })
-    return result
- }
 
 
  /************************************************************************************* */
@@ -325,35 +308,39 @@ const calculateSeconds = (data, hourSearch, minutesSearch, secondsSearch) => {
   }
 }
 
-/**
-* Check for segmentationTypeId PROVIDER_ADVERTISEMENT_END ==> 49
-* and if that is the same then we have found the correct ad marker
-*/
-const getMarkersWithProviderAdEnd = (upidFromManifest, upidFromEvent) => {
-  const markers = filterMarkersWithSameTransmissionIds(upidFromManifest, upidFromEvent)
-  console.log('buggg markers:', markers)
-  if (!markers) return
-  const adMarkers = []
-  const providerAdEnd = com.zappware.chromecast.AdMarkersType.PROVIDER_ADVERTISEMENT_END
-  _.find(markers, (marker) => {
-    if (marker.segmentationId === providerAdEnd) {
-      const adjustedStartTime = marker.adEndTime - CONFIG.adPlaybackPreRoll
-      marker['adStartTime'] = adjustedStartTime
-      adMarkers.push(marker)
+const getAdBlocksFromSpliceInfoSections = (spliceInfoSections, event) => {
+  const ads = []
+
+  spliceInfoSections = _.filter(spliceInfoSections, spliceInfoSection => spliceInfoSection.upId === event.transmissionId)
+  spliceInfoSections = _.orderBy(spliceInfoSections, ['startTime'], ['asc'])
+
+  console.log('buggg spliceinfosections for event:', spliceInfoSections)
+  const {startMarkers, endMarkers} = _reduce(spliceInfoSections, (markers, spliceInfo) => {
+    if (spliceInfo.segmentationId === com.zappware.chromecast.AdMarkersType.PROVIDER_ADVERTISEMENT_END) {
+      markers.endMarkers.push(spliceInfo)
     }
- })
- return adMarkers
+    if (spliceInfo.segmentationId === com.zappware.chromecast.AdMarkersType.PROVIDER_ADVERTISEMENT_START) {
+      markers.startMarkers.push(spliceInfo)
+    }
+    return markers
+  }, {startMarkers: [], endMarkers: []})
+
+  const adMarkers = _zipWith(startMarkers, endMarkers, (start, end) => {
+    return {}
+  })
+
+  return adMarkers
 }
 
 const setAdMarkers = (manifest, media) =>  {
   if (!restrictionsEnabled) return
   if (!manifest || !media) return
   const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
-  const  { adBlocks, spliceInfoSections } = !isVod && parseManifest(manifest)
+  const currentEvent  =  media._playbackInfo.eventInfo && media._playbackInfo.eventInfo.items[1]
+  const  { adBlocks } = !isVod && parseManifest(manifest, currentEvent)
   console.log('buggg spliceInfoSections:', spliceInfoSections)
-  const eventInfo  =  media._playbackInfo.eventInfo && media._playbackInfo.eventInfo.items
   console.log('buggg eventInfo:', eventInfo)
-  const spliceInfoSectionsBlocks = spliceInfoSections && getMarkersWithProviderAdEnd(spliceInfoSections, eventInfo)
+  const spliceInfoSectionsBlocks = spliceInfoSections && getMarkersWithProviderAdEnd(spliceInfoSections, currentEvent)
   console.log('buggg spliceInfoSectionsBlocks:', spliceInfoSectionsBlocks)
   let adMarkers = spliceInfoSections ? spliceInfoSectionsBlocks : adBlocks
   console.log('buggg adMarkers:', adMarkers)
@@ -364,7 +351,6 @@ const setAdMarkers = (manifest, media) =>  {
   /***************************************************** */
 
   return {
-    parseManifest,
     getAdsBlockInfo,
     convertMinutesToSeconds,
     checkKeyPresenceInArray,
@@ -376,7 +362,6 @@ const setAdMarkers = (manifest, media) =>  {
     calculateWhenPresentationTimeIsNotZero,
     dynamicLogicForNonZeroPTime,
     filterMarkersWithSameTransmissionIds,
-    getMarkersWithProviderAdEnd,
     setAdMarkers
   };
 })();
