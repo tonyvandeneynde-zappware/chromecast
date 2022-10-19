@@ -52,7 +52,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
             if (hasSpliceInfoSection) {
               const spliceInfoSections = getSpliceInfoSections(per.EventStream, per)
 
-              console.log('buggg spliceInfoSection:', spliceInfoSection)
+              console.log('buggg spliceInfoSection:', spliceInfoSections)
               // spliceInfoSections = [... spliceInfoSection, ... spliceInfoSections]
               adBlocks = _.concat(adBlocks, spliceInfoSections)
             } else {
