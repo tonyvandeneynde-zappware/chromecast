@@ -351,17 +351,6 @@ const setAdMarkers = (manifest, media) =>  {
   /***************************************************** */
 
   return {
-    getAdsBlockInfo,
-    convertMinutesToSeconds,
-    checkKeyPresenceInArray,
-    fetchManifestUtcTime,
-    convertDateToSeconds,
-    toDateTime,
-    calculateStartTimeForDynamicStream,
-    checkForPresentationTime,
-    calculateWhenPresentationTimeIsNotZero,
-    dynamicLogicForNonZeroPTime,
-    filterMarkersWithSameTransmissionIds,
     setAdMarkers
   };
 })();
