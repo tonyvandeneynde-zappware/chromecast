@@ -35,9 +35,9 @@ com.zappware.chromecast.manifestParserHelper = (function () {
       //     //skipLike: /\+[0-9]{10}/
       //   }
     };
-    var validateManifest = parser.validate(manifest);
+    const validateManifest = parser.validate(manifest);
     if (validateManifest !== true) console.log(validateManifest.err);
-    var jsonManifestObj = parser.parse(manifest, options);
+    const jsonManifestObj = parser.parse(manifest, options);
     let adBlocks = [];
 
     if (jsonManifestObj) {
@@ -50,11 +50,11 @@ com.zappware.chromecast.manifestParserHelper = (function () {
             console.log('buggg eStream:', eStream)
             const hasSpliceInfoSection =  eStream && eStream.Signal[0] &&  eStream.Signal[0].SpliceInfoSection
             if (hasSpliceInfoSection) {
-              const spliceInfoSection = getSpliceInfoSection(per.EventStream, per)
+              const spliceInfoSections = getSpliceInfoSections(per.EventStream, per)
 
               console.log('buggg spliceInfoSection:', spliceInfoSection)
               // spliceInfoSections = [... spliceInfoSection, ... spliceInfoSections]
-              adBlocks.push(spliceInfoSection)
+              adBlocks = _.concat(adBlocks, spliceInfoSections)
             } else {
             let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
             let adsInfo = getAdsBlockInfo(per, per.EventStream[0], typeManifest, mdp);
@@ -238,7 +238,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
   /************************************************************** */
   //     Ad skipping's parsing logic
   /************************************************************** */
-  const getSpliceInfoSection = (eventStream, period) => {
+  const getSpliceInfoSections = (eventStream, period) => {
     console.log('buggg getSpliceInfoSection eventStream:', eventStream, period)
     if (!eventStream) return
     const start = period && period.start
