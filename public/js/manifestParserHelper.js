@@ -64,7 +64,6 @@ com.zappware.chromecast.manifestParserHelper = (function () {
           }
         });
       }
-      const adsBlocksFromSpliceInfo = getAdBlocksFromSpliceInfoSections(spliceInfoSections, currentEvent)
       console.log('buggg adsblocks', adBlocks)
     }
     return {
