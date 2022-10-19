@@ -335,7 +335,6 @@ const setAdMarkers = (manifest, media) =>  {
   const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
   const currentEvent  =  media._playbackInfo.eventInfo && media._playbackInfo.eventInfo.items[1]
   const  { adBlocks } = !isVod && parseManifest(manifest, currentEvent)
-  const spliceInfoSectionsBlocks = spliceInfoSections && getMarkersWithProviderAdEnd(spliceInfoSections, currentEvent)
   !isVod && com.zappware.chromecast.adsHandler.setAdsBlocks(adMarkers)
 }
   /************************************** */
