@@ -11,7 +11,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
   const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
   const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
 
-  function parseManifest(manifest, currentEvent) {
+  function parseManifest(manifest) {
     // type = static, dynamic
     if (!manifest) return;
     var options = {
@@ -63,10 +63,9 @@ com.zappware.chromecast.manifestParserHelper = (function () {
           }
         });
       }
-      console.log('buggg adsblocks', adBlocks)
+      console.log('buggg return adsblocks', adBlocks)
     }
     return {
-      jsonManifestObj,
       adBlocks
     };
   }
@@ -329,19 +328,7 @@ const getAdBlocksFromSpliceInfoSections = (spliceInfoSections, event) => {
   return adMarkers
 }
 
-const setAdMarkers = (manifest, media) =>  {
-  if (!restrictionsEnabled) return
-  if (!manifest || !media) return
-  const isVod = media._playbackMode === com.zappware.chromecast.PlaybackMode.VOD
-  const currentEvent  =  media._playbackInfo.eventInfo && media._playbackInfo.eventInfo.items[1]
-  const  { adBlocks } = !isVod && parseManifest(manifest, currentEvent)
-  !isVod && com.zappware.chromecast.adsHandler.setAdsBlocks(adMarkers)
-}
-  /************************************** */
-  // END AD SKIPPING
-  /***************************************************** */
-
   return {
-    setAdMarkers
+    parseManifest
   };
 })();
