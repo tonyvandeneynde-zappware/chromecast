@@ -26,8 +26,7 @@ com.zappware.chromecast.trickplayHandler = (function () {
     if (com.zappware.chromecast.trickplayPolicyHandler.hasRestrictions()) {
       return com.zappware.chromecast.trickplayPolicyHandler.canPause()
     } else {
-      const canPause = com.zappware.chromecast.adsHandler.canPause()
-      return canPause
+      return true
     }
   }
 
