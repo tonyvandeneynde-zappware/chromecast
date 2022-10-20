@@ -5,9 +5,9 @@ com.zappware.chromecast.trickplayHandler = (function () {
     com.zappware.chromecast.adsHandler.init()
   }
 
-  const setPolicies = (adPlayBackRestrictions, adSignallingType, trickplayPolicy) => {
+  const setPolicies = (adPlayBackRestrictions, adSignallingType, trickplayPolicy, adPlaybackPreRoll) => {
     com.zappware.chromecast.trickplayPolicyHandler.setPolicy(trickplayPolicy)
-    com.zappware.chromecast.adsHandler.setPolicy(adPlayBackRestrictions, adSignallingType)
+    com.zappware.chromecast.adsHandler.setPolicy(adPlayBackRestrictions, adSignallingType, adPlaybackPreRoll)
   }
 
   const canSeek = (newPosition) => {
