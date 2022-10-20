@@ -88,6 +88,8 @@
     const isInitialSeek = customData && time === customData.startOverTVBeforeTime
 
     if (isInitialSeek) {
+      console.log('buggg isInitialSeek:', isInitialSeek)
+      console.log('buggg adsBlocks', adsBlocks)
       if (!adPlaybackPreRoll) return time
       const firstAdsBlock = findFirstAdsBlockInInterval(time - adPlaybackPreRoll, time)
       if (!firstAdsBlock) return time
