@@ -244,7 +244,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
         const spliceInfoSection =  ev.Signal[0] &&  ev.Signal[0].SpliceInfoSection[0].SegmentationDescriptor[0]
         console.log('buggg spliceInfoSection:', spliceInfoSection)
         console.log('buggg event', event)
-        if (spliceInfoSection && spliceInfoSection.segmentationUpidContent === event.transmissionId) {
+        if (spliceInfoSection && spliceInfoSection.segmentationUpidContent.toString() === event.transmissionId.toString()) {
           const duration = spliceInfoSection.segmentationDuration || 0
           const endTime = parseInt(getTimeInSeconds(duration) + startTime)
           adsInfo.push({
