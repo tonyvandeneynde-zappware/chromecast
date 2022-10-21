@@ -85,11 +85,12 @@
     console.log('adsHandler - Validating requested playback position', time, '...')
     const mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
-    const isInitialSeek = customData && time === customData.startOverTVBeforeTime
+    const isInitialSeek = true // = customData && time === customData.startOverTVBeforeTime UNDOOO
 
     if (isInitialSeek) {
       console.log('buggg isInitialSeek:', isInitialSeek)
       console.log('buggg adsBlocks', adsBlocks)
+      console.log('buggg adPlaybackPreRoll:', adPlaybackPreRoll)
       if (!adPlaybackPreRoll) return time
       const firstAdsBlock = findFirstAdsBlockInInterval(time - adPlaybackPreRoll, time)
       if (!firstAdsBlock) return time
