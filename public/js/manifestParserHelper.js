@@ -241,21 +241,23 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     _.forEach(eventStream, (es) => {
       _.forEach(es.Event, (ev) => {
         
-        const spliceInfoSection =  ev.Signal[0] &&  ev.Signal[0].SpliceInfoSection[0]
+        const spliceInfoSection =  ev.Signal[0] &&  ev.Signal[0].SpliceInfoSection[0].SegmentationDescriptor[0]
         console.log('buggg spliceInfoSection:', spliceInfoSection)
-        console.log('buggg event')
-        const duration = ev.Signal[0] && ev.Signal[0].SpliceInfoSection[0].SegmentationDescriptor[0].segmentationDuration || 0
-        const endTime = parseInt(getTimeInSeconds(duration) + startTime)
-        adsInfo.push({
-          duration: getTimeInSeconds(duration),
-          segmentationTypeId: spliceInfoSection && spliceInfoSection.SegmentationDescriptor[0].segmentationTypeId,
-          upId: spliceInfoSection && spliceInfoSection.SegmentationDescriptor[0].segmentationUpidContent,
-          upIdType: spliceInfoSection && spliceInfoSection.SegmentationDescriptor[0].segmentationUpidType,
-          adId: spliceInfoSection && spliceInfoSection.SegmentationDescriptor[0].segmentationEventId,
-          adStartTime: startTime || 0,
-          adEndTime: endTime,
-          adType: "TYPE_SCTE35"
-        })
+        console.log('buggg event', event)
+        if (spliceInfoSection && spliceInfoSection.segmentationUpidContent === event.transmissionId) {
+          const duration = spliceInfoSection.segmentationDuration || 0
+          const endTime = parseInt(getTimeInSeconds(duration) + startTime)
+          adsInfo.push({
+            duration: getTimeInSeconds(duration),
+            segmentationTypeId: spliceInfoSection && spliceInfoSection.segmentationTypeId,
+            upId: spliceInfoSection && spliceInfoSection.segmentationUpidContent,
+            upIdType: spliceInfoSection && spliceInfoSection.segmentationUpidType,
+            adId: spliceInfoSection && spliceInfoSection.segmentationEventId,
+            adStartTime: startTime || 0,
+            adEndTime: endTime,
+            adType: "TYPE_SCTE35"
+          })
+        }
       })
     })
     return adsInfo
