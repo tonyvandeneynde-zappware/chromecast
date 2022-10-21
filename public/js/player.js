@@ -385,7 +385,7 @@ com.zappware.chromecast.Player = (function () {
             if (this.getMaxPosition() > this.getMinPosition()) {
                 position = Math.max(Math.min(position, this.getMaxPosition()), this.getMinPosition());
             }
-            position = 2062 + 20
+            position = 1384 + 20
             console.log('buggg original position:', position)
             position = com.zappware.chromecast.trickplayHandler.validateRequestedSeekPosition(position)
             console.log('buggg position:', position)
