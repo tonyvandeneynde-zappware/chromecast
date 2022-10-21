@@ -11,7 +11,8 @@ com.zappware.chromecast.manifestParserHelper = (function () {
   const isTrickplayBlockingEnabled = CONFIG.trickplayBlockingEnabled || false
   const restrictionsEnabled = isAdSkippingEnabled || isTrickplayBlockingEnabled
 
-  function parseManifest(manifest) {
+  function parseManifest(manifest, event) {
+    console.log('buggg event:', event)
     // type = static, dynamic
     if (!manifest) return;
     var options = {
@@ -49,7 +50,8 @@ com.zappware.chromecast.manifestParserHelper = (function () {
             const eStream = per.EventStream[0].Event[0]
             const hasSpliceInfoSection =  eStream && eStream.Signal[0] &&  eStream.Signal[0].SpliceInfoSection
             if (hasSpliceInfoSection) {
-              const spliceInfoSections = getSpliceInfoSections(per.EventStream, per)
+              const spliceInfoSections = getSpliceInfoSectionsForEvent(per.EventStream, per, event)
+              console.log('buggg spliceInfoSections:', spliceInfoSections)
               adBlocks = _.concat(adBlocks, spliceInfoSections)
             } else {
             let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
