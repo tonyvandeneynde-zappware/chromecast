@@ -231,12 +231,12 @@
       if (!ad) return
       if (ad instanceof Array) { // for A1Now Channel
         ad.map((a) => {
-          if (!adPolicy || (adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
+          if (!adPolicy || !adPolicy.allow_skip_first_ad || (adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
             addAdsBlock(a.adId, a.adStartTime, a.adEndTime, a.adType)
           }
         })
       }
-      if (!adPolicy || (adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
+      if (!adPolicy || !adPolicy.allow_skip_first_ad || (adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
         addAdsBlock(ad.adId, ad.adStartTime, ad.adEndTime, ad.adType)
       }
     })
@@ -324,7 +324,7 @@
     if (adsBlock.adStartTime <= preroll.end && adsBlock.adEndTime >= adsBlock.start) {
       return true
     } else {
-      return false
+      return true
     }
   }
 
