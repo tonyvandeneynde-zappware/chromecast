@@ -226,17 +226,18 @@
 
   const setAdsBlocks = (newAdBlocks) => {
     adsBlocks = []
+    console.log('bugg adPolicy:', adPolicy)
     if (!newAdBlocks) return
     _.map(newAdBlocks, (ad) => {
       if (!ad) return
       if (ad instanceof Array) { // for A1Now Channel
         ad.map((a) => {
-          if (!adPolicy || !adPolicy.allow_skip_first_ad || (adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
+          if (!adPolicy || adPolicy.allow_skip_first_ad || (!adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
             addAdsBlock(a.adId, a.adStartTime, a.adEndTime, a.adType)
           }
         })
       }
-      if (!adPolicy || !adPolicy.allow_skip_first_ad || (adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
+      if (!adPolicy || adPolicy.allow_skip_first_ad || (!adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
         addAdsBlock(ad.adId, ad.adStartTime, ad.adEndTime, ad.adType)
       }
     })
