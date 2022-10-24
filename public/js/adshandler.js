@@ -315,7 +315,7 @@
     }
   }
 
-  const isAdsBlockInPreroll = (adsBlock, adPlaybackPreRoll=adPlaybackPreRoll) => {
+  const isAdsBlockInPreroll = (adsBlock) => {
     console.log('buggg isAdsBlockInPreroll:')
     const beforeTime = 1404 // customData && time === customData.startOverTVBeforeTime
     const preroll = {
