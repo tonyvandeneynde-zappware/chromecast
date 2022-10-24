@@ -237,7 +237,7 @@
           }
         })
       }
-      if (!adPolicy || adPolicy.allow_skip_first_ad || (!adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
+      if (!adPolicy || adPolicy.allow_skip_first_ad || (!adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(ad))) {
         addAdsBlock(ad.adId, ad.adStartTime, ad.adEndTime, ad.adType)
       }
     })
