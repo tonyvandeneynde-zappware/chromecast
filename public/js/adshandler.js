@@ -74,7 +74,7 @@
       signallingType = com.zappware.chromecast.AdSignallingTypes.UNKNOWN
     }
 
-    adPlaybackPreRoll = CONFIG.adPlaybackPreRoll || preRoll
+    adPlaybackPreRoll = (!adPolicy.allow_skip_first_ad && CONFIG.adPlaybackPreRoll) || preRoll
   }
 
   //
@@ -231,10 +231,14 @@
       if (!ad) return
       if (ad instanceof Array) { // for A1Now Channel
         ad.map((a) => {
-          addAdsBlock(a.adId, a.adStartTime, a.adEndTime, a.adType)
+          if (!adPolicy || adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a)) {
+            addAdsBlock(a.adId, a.adStartTime, a.adEndTime, a.adType)
+          }
         })
       }
-      addAdsBlock(ad.adId, ad.adStartTime, ad.adEndTime, ad.adType)
+      if (!adPolicy || adPolicy.allow_skip_first_ad && isAdsBlockInPreroll) {
+        addAdsBlock(ad.adId, ad.adStartTime, ad.adEndTime, ad.adType)
+      }
     })
     const playbackMode = getPlaybackMode()
     if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) removeAdsBlocksInWindow()
@@ -295,7 +299,7 @@
     return playbackMode
   }
 
-  const  setTimingForViewedWindow = (currentTime) => {
+  const setTimingForViewedWindow = (currentTime) => {
     const windowForAdskipping = _.last(adSkippingWindows)
     let playbackMode = getPlaybackMode()
     if (playbackMode === com.zappware.chromecast.PlaybackMode.LIVETV) {
@@ -307,6 +311,20 @@
           windowForAdskipping.endTime = currentTime
         }
       }
+    }
+  }
+
+  const isAdsBlockInPreroll = (adsBlock, adPlaybackPreRoll=adPlaybackPreRoll) => {
+    const beforeTime = customData && time === customData.startOverTVBeforeTime
+    const preroll = {
+      start : beforeTime - adPlaybackPreRoll,
+      end : beforeTime
+    }
+
+    if (adsBlock.adStartTime <= preroll.end && adsBlock.adEndTime >= adsBlock.start) {
+      return true
+    } else {
+      return false
     }
   }
 
