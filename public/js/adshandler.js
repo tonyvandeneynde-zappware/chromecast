@@ -325,7 +325,7 @@
 
     console.log('buggg preroll:', preroll)
     console.log('buggg adsBlock:', adsBlock)
-    if (adsBlock.adStartTime <= preroll.end && adsBlock.adEndTime >= adsBlock.start) {
+    if (adsBlock.adStartTime <= preroll.end && adsBlock.adEndTime >= preroll.start) {
       return true
     } else {
       return false
