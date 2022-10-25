@@ -310,14 +310,14 @@
   }
 
   const addAdInPreroll = (adsBlocks) => {
-    const beforeTime = 1404 // customData && time === customData.startOverTVBeforeTime
+    const beforeTime = 1404 // customData && time === customData.startOverTVBeforeTime UNDOOO
     const preroll = {
       start : beforeTime - adPlaybackPreRoll,
       end : beforeTime
     }
 
     console.log('buggg preroll:', preroll)
-    console.log('buggg adsBlock:', adsBlock)
+    console.log('buggg adsBlock:', adsBlocks)
     _.forEach(adsBlocks, adsBlock => {
       if (adsBlock.adStartTime <= preroll.end && adsBlock.adEndTime >= preroll.start) {
         const adStart = _.max([ad.adStartTime, preroll.start])
