@@ -320,11 +320,10 @@
     console.log('buggg adsBlock:', adsBlocks)
     _.forEach(adsBlocks, adsBlock => {
       if (adsBlock.adStartTime <= preroll.end && adsBlock.adEndTime >= preroll.start) {
-        const adStart = _.max([ad.adStartTime, preroll.start])
-        addAdsBlock(ad.adId, adStart, preroll.end, ad.adType)
+        const adStart = _.max([adsBlock.adStartTime, preroll.start])
+        addAdsBlock(adsBlock.adId, adStart, preroll.end, adsBlock.adType)
       }
     })
-
   }
 
   /* return the public functions */
