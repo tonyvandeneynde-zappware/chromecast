@@ -228,22 +228,16 @@
     adsBlocks = []
     console.log('bugg adPolicy:', adPolicy)
     if (!newAdBlocks) return
-    _.map(newAdBlocks, (ad) => {
-      if (!ad) return
-      if (ad instanceof Array) { // for A1Now Channel
-        ad.map((a) => {
-          if (!adPolicy || adPolicy.allow_skip_first_ad || (!adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(a))) {
-            addAdsBlock(a.adId, a.adStartTime, a.adEndTime, a.adType)
-          }
-        })
-      }
-      if (!adPolicy || adPolicy.allow_skip_first_ad || (!adPolicy.allow_skip_first_ad && isAdsBlockInPreroll(ad))) {
+
+    if (adPolicy && !adPolicy.allow_skip_first_ad) {
+      addAdInPreroll(newAdBlocks)
+    } else {
+      _.forEach(newAdBlocks, ad => {
         addAdsBlock(ad.adId, ad.adStartTime, ad.adEndTime, ad.adType)
-      }
-    })
+      })
+    }
     const playbackMode = getPlaybackMode()
     if (playbackMode === com.zappware.chromecast.PlaybackMode.PLTV) removeAdsBlocksInWindow()
-
   }
 
   const getAdsBlocks = () => {
@@ -315,8 +309,7 @@
     }
   }
 
-  const isAdsBlockInPreroll = (adsBlock) => {
-    console.log('buggg isAdsBlockInPreroll:')
+  const addAdInPreroll = (adsBlocks) => {
     const beforeTime = 1404 // customData && time === customData.startOverTVBeforeTime
     const preroll = {
       start : beforeTime - adPlaybackPreRoll,
@@ -325,11 +318,13 @@
 
     console.log('buggg preroll:', preroll)
     console.log('buggg adsBlock:', adsBlock)
-    if (adsBlock.adStartTime <= preroll.end && adsBlock.adEndTime >= preroll.start) {
-      return true
-    } else {
-      return false
-    }
+    _.forEach(adsBlocks, adsBlock => {
+      if (adsBlock.adStartTime <= preroll.end && adsBlock.adEndTime >= preroll.start) {
+        const adStart = _.max([ad.adStartTime, preroll.start])
+        addAdsBlock(ad.adId, adStart, preroll.end, ad.adType)
+      }
+    })
+
   }
 
   /* return the public functions */

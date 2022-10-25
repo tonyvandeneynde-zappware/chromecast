@@ -62,6 +62,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
         });
       }
     }
+    adBlocks = _.flatten(adBlocks)
     return {
       adBlocks
     };
