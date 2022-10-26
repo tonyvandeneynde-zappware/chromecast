@@ -16,6 +16,7 @@
   let adSkippingWindows = []
   let playbackMode = ''
   let adPlaybackPreRoll
+  let programStart
 
   //
   // AD RESTRICTIONS
@@ -77,6 +78,10 @@
     adPlaybackPreRoll = (!adPolicy.allow_skip_first_ad && CONFIG.adPlaybackPreRoll) || preRoll
   }
 
+  const setProgramStart = (start) => {
+    programStart = start
+  }
+
   //
   // Check if the playback position needs to be forced to the start of an ads block.
   //
@@ -85,12 +90,11 @@
     console.log('adsHandler - Validating requested playback position', time, '...')
     const mediaInfo = playerManager.getMediaInformation()
     const customData = mediaInfo && mediaInfo.metadata && mediaInfo.metadata.customData && JSON.parse(mediaInfo.metadata.customData).customData
-    const isInitialSeek = true // = customData && time === customData.startOverTVBeforeTime UNDOOO
+    const isInitialSeek = customData && time === customData.startOverTVBeforeTime
 
     if (isInitialSeek) {
       console.log('buggg isInitialSeek:', isInitialSeek)
       console.log('buggg adsBlocks', adsBlocks)
-      console.log('buggg adPlaybackPreRoll:', adPlaybackPreRoll)
       if (!adPlaybackPreRoll) return time
       const firstAdsBlock = findFirstAdsBlockInInterval(time - adPlaybackPreRoll, time)
       if (!firstAdsBlock) return time
@@ -310,14 +314,11 @@
   }
 
   const addAdInPreroll = (adsBlocks) => {
-    const beforeTime = 1404 // customData && time === customData.startOverTVBeforeTime UNDOOO
     const preroll = {
-      start : beforeTime - adPlaybackPreRoll,
-      end : beforeTime
+      start : programStart - adPlaybackPreRoll,
+      end : programStart
     }
 
-    console.log('buggg preroll:', preroll)
-    console.log('buggg adsBlock:', adsBlocks)
     _.forEach(adsBlocks, adsBlock => {
       if (adsBlock.adStartTime <= preroll.end && adsBlock.adEndTime >= preroll.start) {
         const adStart = _.max([adsBlock.adStartTime, preroll.start])
@@ -336,7 +337,8 @@
     getAdsBlocks: getAdsBlocks,
     getAdSignallingType: getAdSignallingType,
     init: init,
-    setTimingForViewedWindow: setTimingForViewedWindow
+    setTimingForViewedWindow: setTimingForViewedWindow,
+    setProgramStart
   }
 }())
 

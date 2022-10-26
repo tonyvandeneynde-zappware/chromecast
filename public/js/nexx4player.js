@@ -483,8 +483,10 @@ com.zappware.chromecast.Nexx4Player = (function () {
             let media = playerManager.getMediaInformation() || this._currentMedia;
             // Parsing the manifest file in order to get the adsblock info if adskipping is enabled.
             try {
-                const { adBlocks } = com.zappware.chromecast.manifestParserHelper.parseManifest(manifest, media._playbackInfo.eventInfo.items[1])
+                const { adBlocks, programStart } = com.zappware.chromecast.manifestParserHelper.parseManifest(manifest, media._playbackInfo.eventInfo.items[1])
+                console.log('buggg programStart:', programStart)
                 com.zappware.chromecast.adsHandler.setAdsBlocks(adBlocks)
+                com.zappware.chromecast.adsHandler.setProgramStart(programStart)
             } catch (error) {
                 console.log(error)
             }

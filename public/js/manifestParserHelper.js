@@ -40,6 +40,7 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     if (validateManifest !== true) console.log(validateManifest.err);
     const jsonManifestObj = parser.parse(manifest, options);
     let adBlocks = [];
+    let programStart
 
     if (jsonManifestObj) {
       let mdp = jsonManifestObj.MPD[0];
@@ -51,12 +52,13 @@ com.zappware.chromecast.manifestParserHelper = (function () {
             const hasSpliceInfoSection =  eStream && eStream.Signal[0] &&  eStream.Signal[0].SpliceInfoSection
             if (hasSpliceInfoSection) {
               const spliceInfoSections = getSpliceInfoSectionsForEvent(per.EventStream, per, event)
-              console.log('buggg spliceInfoSections:', spliceInfoSections)
-              adBlocks = _.concat(adBlocks, spliceInfoSections)
+              const adBlocksFromSpliceInfo = getAdBlocksFromSpliceInfo(spliceInfoSections)
+              programStart = getProgramStart(spliceInfoSections)
+              adBlocks = _.concat(adBlocks, adBlocksFromSpliceInfo)
             } else {
-            let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
-            let adsInfo = getAdsBlockInfo(per, per.EventStream[0], typeManifest, mdp);
-            adsInfo && adBlocks.push(adsInfo);
+              let typeManifest = manifest.indexOf('type="dynamic"') > 0 ? "dynamic" : "static";
+              let adsInfo = getAdsBlockInfo(per, per.EventStream[0], typeManifest, mdp);
+              adsInfo && adBlocks.push(adsInfo);
             }
           }
         });
@@ -64,7 +66,8 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     }
     adBlocks = _.flatten(adBlocks)
     return {
-      adBlocks
+      adBlocks,
+      programStart
     };
   }
 
@@ -238,30 +241,48 @@ com.zappware.chromecast.manifestParserHelper = (function () {
     if (!eventStream) return
     const start = period && period.start
     const startTime = getTimeInSeconds(start)
-    const adsInfo = []
+    const spliceInfo = []
     _.forEach(eventStream, (es) => {
       _.forEach(es.Event, (ev) => {
-        
         const spliceInfoSection =  ev.Signal[0] &&  ev.Signal[0].SpliceInfoSection[0].SegmentationDescriptor[0]
-        console.log('buggg spliceInfoSection:', spliceInfoSection)
-        console.log('buggg event', event)
         if (spliceInfoSection && spliceInfoSection.segmentationUpidContent.toString() === event.transmissionId.toString()) {
           const duration = spliceInfoSection.segmentationDuration || 0
           const endTime = parseInt(getTimeInSeconds(duration) + startTime)
-          adsInfo.push({
+          spliceInfo.push({
             duration: getTimeInSeconds(duration),
             segmentationTypeId: spliceInfoSection && spliceInfoSection.segmentationTypeId,
             upId: spliceInfoSection && spliceInfoSection.segmentationUpidContent,
             upIdType: spliceInfoSection && spliceInfoSection.segmentationUpidType,
-            adId: spliceInfoSection && spliceInfoSection.segmentationEventId,
-            adStartTime: startTime || 0,
-            adEndTime: endTime,
-            adType: "TYPE_SCTE35"
+            id: spliceInfoSection && spliceInfoSection.segmentationEventId,
+            startTime: startTime || 0,
+            endTime: endTime
           })
         }
       })
     })
-    return adsInfo
+    return spliceInfo
+  }
+
+  const getAdBlocksFromSpliceInfo = (spliceInfoSections) => {
+    _.reduce(spliceInfoSections, (adsBlocks, spliceInfo) => {
+      if (spliceInfo.upIdType === adMarkersType.PROVIDER_ADVERTISEMENT_START) {
+        adsBlocks.push({
+          duration: spliceInfo.duration,
+          segmentationTypeId: spliceInfo.segmentationTypeId,
+          upId: spliceInfo.upId,
+          upIdType: spliceInfo.upIdType,
+          adId: spliceInfo.id,
+          adStartTime: spliceInfo.startTime,
+          adEndTime: spliceInfo.endTime,
+          adType: "TYPE_SCTE35"
+        })
+      }
+      return adsBlocks
+    }, [])
+  }
+  
+  const getProgramStart = (spliceInfoSections) => {
+    return _.find(spliceInfoSections, spliceInfo.upIdType === adMarkersType.PROGRAM_START)
   }
 
 
@@ -304,6 +325,13 @@ const calculateSeconds = (data, hourSearch, minutesSearch, secondsSearch) => {
   } else {
     return data.substring(2, secondsSearch)
   }
+}
+
+const adMarkersType = {
+  PROVIDER_ADVERTISEMENT_START: 48,
+  PROVIDER_ADVERTISEMENT_END: 49,
+  PROGRAM_START: 16,
+  PROGRAM_END: 17
 }
 
 
